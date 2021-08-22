@@ -4,12 +4,14 @@ import numpy as np
 from .constants import (
     Bucket,
     BucketArray,
+    BucketDType,
     FloatArray,
     FloatDType,
     FLOAT_MAX,
     FLOAT_MIN,
     IntArray,
     IntDType,
+    INT_MAX,
     Node,
     NodeArray,
     NodeDType,
@@ -24,7 +26,7 @@ def create_node(ptr: int, size: int, dim: bool) -> Node:
 
 
 @nb.njit(inline="always")
-def push(nodes: NodeArray, node: Node, index: int) -> int:
+def push_node(nodes: NodeArray, node: Node, index: int) -> int:
     """
     Push to the end of the array.
     """
@@ -92,7 +94,7 @@ def stable_partition(
     bb_coords: FloatArray,
     begin: int,
     end: int,
-    bucket: np.void,
+    bucket: BucketDType,
     dim: int,
 ) -> int:
     """
@@ -150,7 +152,7 @@ def sort_bbox_indices(
     bb_indices: IntArray,
     bb_coords: FloatArray,
     buckets: BucketArray,
-    node: np.void,
+    node: NodeDType,
     dim: int,
 ):
     current = node.ptr
@@ -330,8 +332,8 @@ def build(
         left_child = create_node(root.ptr, 1, not dim)
         right_child = create_node(root.ptr + 1, 1, not dim)
         nodes[root_index]["child"] = node_index
-        node_index = push(nodes, left_child, node_index)
-        node_index = push(nodes, right_child, node_index)
+        node_index = push_node(nodes, left_child, node_index)
+        node_index = push_node(nodes, right_child, node_index)
 
     while buckets[0].size == 0:
         b = buckets[1]
@@ -390,8 +392,8 @@ def build(
     right_child = create_node(right_index, right_size, not dim)
     nodes[root_index]["child"] = node_index
     child_ind = node_index
-    node_index = push(nodes, left_child, node_index)
-    node_index = push(nodes, right_child, node_index)
+    node_index = push_node(nodes, left_child, node_index)
+    node_index = push_node(nodes, right_child, node_index)
     node_index = build(
         nodes,
         node_index,
@@ -429,7 +431,7 @@ def initialize(
 
     # Insert first node
     node = create_node(0, bb_indices.size, False)
-    node_index = push(nodes, node, 0)
+    node_index = push_node(nodes, node, 0)
 
     # Recursively build the tree.
     node_index = build(
