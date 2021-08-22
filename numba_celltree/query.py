@@ -26,7 +26,7 @@ def nb_allocate_stack():
 
 
 # Make sure everything still works when calling as non-compiled Python code:
-if os.environment["NUMBA_DISABLE_JIT"] == "1":
+if os.environ.get("NUMBA_DISABLE_JIT", "0") == "1":
     allocate_stack = np_allocate_stack
 else:
     allocate_stack = nb_allocate_stack
