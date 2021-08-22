@@ -93,11 +93,13 @@ NumbaIntDType = nb.from_dtype(IntDType)
 NumbaNodeDType = nb.from_dtype(NodeDType)
 
 NumbaCellTreeData = nbtypes.Tuple(
-    NumbaIntDType[:, :],  # faces
-    NumbaFloatDType[:, :],  # vertices
-    NumbaNodeDType[:],  # nodes
-    NumbaIntDType[:],  # bb_indices
-    nb.int32,  # cells_per_leaf
+    (
+        NumbaIntDType[:, :],  # faces
+        NumbaFloatDType[:, :],  # vertices
+        NumbaNodeDType[:],  # nodes
+        NumbaIntDType[:],  # bb_indices
+        nb.int32,  # cells_per_leaf
+    )
 )
 
 FLOAT_MIN = np.finfo(FloatDType).min
