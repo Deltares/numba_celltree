@@ -1,5 +1,6 @@
 from setuptools import find_packages, setup
-from numba_celltree.compiled import cc
+
+# from numba_celltree.compiled import cc
 
 with open("README.md") as f:
     long_description = f.read()
@@ -14,7 +15,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     package_dir={"numba_celltree": "numba_celltree"},
-    ext_modules=[cc.distutils_extension()],  # AOT compilation
+    # ext_modules=[cc.distutils_extension()],  # AOT compilation
     test_suite="tests",
     use_scm_version=True,
     setup_requires=["setuptools_scm"],
