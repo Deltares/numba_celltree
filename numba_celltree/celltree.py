@@ -1,9 +1,8 @@
 from typing import Tuple
-from .constants import FloatDType, FloatArray, IntDType, IntArray, CellTreeData
-from .creation import initialize
-from .query import locate_points, locate_bboxes
 
-# from . import compiled_celltree as ct
+from .constants import CellTreeData, FloatArray, FloatDType, IntArray, IntDType
+from .creation import initialize
+from .query import locate_bboxes, locate_points
 
 
 class CellTree2d:
@@ -15,6 +14,17 @@ class CellTree2d:
         cells_per_leaf: int = 2,
         jit=False,
     ):
+        if jit:
+            self._initialize = initialize
+            self._locate_points = locate_points
+            self._locate_bboxes = locate_bboxes
+        else:
+            from . import aot_compiled
+
+            self._initialize = aot_compiled.initialize
+            self._locate_points = aot_compiled.locate_points
+            self._locate_bboxes = aot_compiled.locate_bboxes
+
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
@@ -23,17 +33,7 @@ class CellTree2d:
         vertices = vertices.astype(FloatDType)
         faces = faces.astype(IntDType)
 
-        if jit:
-            self._locate_points = locate_points
-            self._locate_bboxes = locate_bboxes
-            nodes, bb_indices = initialize(vertices, faces, n_buckets, cells_per_leaf)
-        else:
-            self._locate_points = ct.locate_points
-            self._locate_bboxes = ct.locate_bboxes
-            nodes, bb_indices = ct.initialize(
-                vertices, faces, n_buckets, cells_per_leaf
-            )
-
+        nodes, bb_indices = initialize(vertices, faces, n_buckets, cells_per_leaf)
         self.vertices = vertices
         self.faces = faces
         self.n_buckets = n_buckets

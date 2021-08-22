@@ -1,23 +1,25 @@
 from typing import Tuple
+
 import numba as nb
 import numpy as np
+
 from .constants import (
+    FLOAT_MAX,
+    FLOAT_MIN,
+    INT_MAX,
+    NDIM,
     Bucket,
     BucketArray,
     BucketDType,
     FloatArray,
     FloatDType,
-    FLOAT_MAX,
-    FLOAT_MIN,
     IntArray,
     IntDType,
-    INT_MAX,
     Node,
     NodeArray,
     NodeDType,
-    PARALLEL,
-    NDIM,
 )
+from .utils import allocate_stack, pop, push
 
 
 @nb.njit(inline="always")
@@ -60,7 +62,7 @@ def bounding_box(
     return (xmin, xmax, ymin, ymax)
 
 
-@nb.njit(parallel=PARALLEL)
+@nb.njit
 def build_bboxes(
     faces: IntArray,
     vertices: FloatArray,
@@ -261,159 +263,146 @@ def build(
     bb_coords: FloatArray,
     n_buckets: int,
     cells_per_leaf: int,
-    root_index: int,
-    dim: int,
 ):
-    """
-    Recursively build the CellTree.
-    """
-    dim_flag = dim
-    if dim < 0:
-        dim += 2
+    # Cannot compile ahead of time with Numba and recursion
+    # Just use a stack based approach instead
+    root_stack = allocate_stack()
+    dim_stack = allocate_stack()
+    root_stack[0] = 0
+    dim_stack[0] = 0
+    size_root = 1
+    size_dim = 1
 
-    root = Node(
-        nodes[root_index]["child"],
-        nodes[root_index]["Lmax"],
-        nodes[root_index]["Rmin"],
-        nodes[root_index]["ptr"],
-        nodes[root_index]["size"],
-        nodes[root_index]["dim"],
-    )
+    while size_root > 0:
+        root_index, size_root = pop(root_stack, size_root)
+        dim, size_dim = pop(dim_stack, size_dim)
 
-    # Is it a leaf? if so, we're done, otherwise split.
-    if root.size <= cells_per_leaf:
-        return node_index
+        dim_flag = dim
+        if dim < 0:
+            dim += 2
 
-    # Find bounding range of node's entire dataset in dimension 0 (x-axis).
-    range_Rmin, range_Lmax = get_bounds(
-        root.ptr,
-        root.size,
-        bb_coords,
-        bb_indices,
-        dim,
-    )
-    bucket_length = (range_Lmax - range_Rmin) / n_buckets
+        # Fetch this root node
+        root = Node(
+            nodes[root_index]["child"],
+            nodes[root_index]["Lmax"],
+            nodes[root_index]["Rmin"],
+            nodes[root_index]["ptr"],
+            nodes[root_index]["size"],
+            nodes[root_index]["dim"],
+        )
 
-    # Create buckets
-    buckets = []
-    # Specify ranges on the buckets
-    for i in range(n_buckets):
-        buckets.append(
-            Bucket(
-                (i + 1) * bucket_length + range_Rmin,  # Max
-                i * bucket_length + range_Rmin,  # Min
-                -1.0,  # Rmin
-                -1.0,  # Lmax
-                -1,  # index
-                0,  # size
+        # Is it a leaf? if so, we're done, otherwise split.
+        if root.size <= cells_per_leaf:
+            continue
+
+        # Find bounding range of node's entire dataset in dimension 0 (x-axis).
+        range_Rmin, range_Lmax = get_bounds(
+            root.ptr,
+            root.size,
+            bb_coords,
+            bb_indices,
+            dim,
+        )
+        bucket_length = (range_Lmax - range_Rmin) / n_buckets
+
+        # Create buckets
+        buckets = []
+        # Specify ranges on the buckets
+        for i in range(n_buckets):
+            buckets.append(
+                Bucket(
+                    (i + 1) * bucket_length + range_Rmin,  # Max
+                    i * bucket_length + range_Rmin,  # Min
+                    -1.0,  # Rmin
+                    -1.0,  # Lmax
+                    -1,  # index
+                    0,  # size
+                )
             )
-        )
-    # NOTA BENE: do not change the default size (0) given to the bucket here
-    # it is used to detect empty buckets later on.
+        # NOTA BENE: do not change the default size (0) given to the bucket here
+        # it is used to detect empty buckets later on.
 
-    # Now that the buckets are setup, sort them
-    sort_bbox_indices(bb_indices, bb_coords, buckets, root, dim)
+        # Now that the buckets are setup, sort them
+        sort_bbox_indices(bb_indices, bb_coords, buckets, root, dim)
 
-    # Determine Lmax and Rmin for each bucket
-    for i in range(n_buckets):
-        Rmin, Lmax = get_bounds(
-            buckets[i].index, buckets[i].size, bb_coords, bb_indices, dim
-        )
-        b = buckets[i]
-        buckets[i] = Bucket(b.Max, b.Min, Rmin, Lmax, b.index, b.size)
+        # Determine Lmax and Rmin for each bucket
+        for i in range(n_buckets):
+            Rmin, Lmax = get_bounds(
+                buckets[i].index, buckets[i].size, bb_coords, bb_indices, dim
+            )
+            b = buckets[i]
+            buckets[i] = Bucket(b.Max, b.Min, Rmin, Lmax, b.index, b.size)
 
-    # Special case: 2 bounding boxes share the same centroid, but boxes_per_leaf
-    # is 1 This will break most of the usual bucketing code. Unless the grid has
-    # overlapping triangles (which it shouldn't!). This is the only case to deal
-    # with
-    if (cells_per_leaf == 1) and (root.size == 2):
-        nodes[root_index]["Lmax"] = range_Lmax
-        nodes[root_index]["Rmin"] = range_Rmin
-        left_child = create_node(root.ptr, 1, not dim)
-        right_child = create_node(root.ptr + 1, 1, not dim)
+        # Special case: 2 bounding boxes share the same centroid, but boxes_per_leaf
+        # is 1. This will break most of the usual bucketing code. Unless the grid has
+        # overlapping triangles (which it shouldn't!). This is the only case to deal
+        # with
+        if (cells_per_leaf == 1) and (root.size == 2):
+            nodes[root_index]["Lmax"] = range_Lmax
+            nodes[root_index]["Rmin"] = range_Rmin
+            left_child = create_node(root.ptr, 1, not dim)
+            right_child = create_node(root.ptr + 1, 1, not dim)
+            nodes[root_index]["child"] = node_index
+            node_index = push_node(nodes, left_child, node_index)
+            node_index = push_node(nodes, right_child, node_index)
+
+        while buckets[0].size == 0:
+            b = buckets[1]
+            buckets[1] = Bucket(b.Max, buckets[0].Min, b.Rmin, b.Lmax, b.index, b.size)
+            buckets.pop(0)
+
+        i = 1
+        while i < len(buckets):
+            next_bucket = buckets[i]
+            # if a empty bucket is encountered, merge it with the previous one and
+            # continue as normal. As long as the ranges of the merged buckets are
+            # still proper, calcualting cost for empty buckets can be avoided, and
+            # the split will still happen in the right place
+            if next_bucket.size == 0:
+                b = buckets[i - 1]
+                buckets[i - 1] = Bucket(
+                    next_bucket.Max, b.Min, b.Rmin, b.Lmax, b.index, b.size
+                )
+                buckets.pop(i)
+            else:
+                i += 1
+
+        # Check if all the cells are in one bucket. If so, restart and switch
+        # dimension.
+        for bucket in buckets:
+            if bucket.size == root.size:
+                if dim_flag >= 0:
+                    dim_flag = (not dim) - 2
+                    nodes[root_index]["dim"] = not root.dim
+                    size_root = push(root_stack, root_index, size_root)
+                    size_dim = push(dim_stack, dim_flag, size_dim)
+                else:  # Already split once, convert to leaf.
+                    nodes[root_index]["Lmax"] = -1
+                    nodes[root_index]["Rmin"] = -1
+                continue
+
+        # plane is the separation line to split on:
+        # 0 [bucket0] 1 [bucket1] 2 [bucket2] 3 [bucket3]
+        plane = split_plane(buckets, root, range_Lmax, range_Rmin, bucket_length)
+
+        right_index = buckets[plane].index
+        right_size = root.ptr + root.size - right_index
+        left_index = root.ptr
+        left_size = root.size - right_size
+        nodes[root_index]["Lmax"] = buckets[plane - 1].Lmax
+        nodes[root_index]["Rmin"] = buckets[plane].Rmin
+        left_child = create_node(left_index, left_size, not dim)
+        right_child = create_node(right_index, right_size, not dim)
         nodes[root_index]["child"] = node_index
+        child_ind = node_index
         node_index = push_node(nodes, left_child, node_index)
         node_index = push_node(nodes, right_child, node_index)
 
-    while buckets[0].size == 0:
-        b = buckets[1]
-        buckets[1] = Bucket(b.Max, buckets[0].Min, b.Rmin, b.Lmax, b.index, b.size)
-        buckets.pop(0)
+        size_root = push(root_stack, child_ind, size_root)
+        size_dim = push(dim_stack, left_child.dim, size_dim)
+        size_root = push(root_stack, child_ind + 1, size_root)
+        size_dim = push(dim_stack, right_child.dim, size_dim)
 
-    i = 1
-    while i < len(buckets):
-        next_bucket = buckets[i]
-        # if a empty bucket is encountered, merge it with the previous one and
-        # continue as normal. As long as the ranges of the merged buckets are
-        # still proper, calcualting cost for empty buckets can be avoided, and
-        # the split will still happen in the right place
-        if next_bucket.size == 0:
-            b = buckets[i - 1]
-            buckets[i - 1] = Bucket(
-                next_bucket.Max, b.Min, b.Rmin, b.Lmax, b.index, b.size
-            )
-            buckets.pop(i)
-        else:
-            i += 1
-
-    # Check if all the cells are in one bucket. If so, restart and switch
-    # dimension.
-    for bucket in buckets:
-        if bucket.size == root.size:
-            if dim_flag >= 0:
-                dim_flag = (not dim) - 2
-                nodes[root_index]["dim"] = not root.dim
-                node_index = build(
-                    nodes,
-                    node_index,
-                    bb_indices,
-                    bb_coords,
-                    n_buckets,
-                    cells_per_leaf,
-                    root_index,
-                    dim_flag,
-                )
-            else:  # Already split once, convert to leaf.
-                nodes[root_index]["Lmax"] = -1
-                nodes[root_index]["Rmin"] = -1
-            return node_index
-
-    # plane is the separation line to split on:
-    # 0 [bucket0] 1 [bucket1] 2 [bucket2] 3 [bucket3]
-    plane = split_plane(buckets, root, range_Lmax, range_Rmin, bucket_length)
-
-    right_index = buckets[plane].index
-    right_size = root.ptr + root.size - right_index
-    left_index = root.ptr
-    left_size = root.size - right_size
-    nodes[root_index]["Lmax"] = buckets[plane - 1].Lmax
-    nodes[root_index]["Rmin"] = buckets[plane].Rmin
-    left_child = create_node(left_index, left_size, not dim)
-    right_child = create_node(right_index, right_size, not dim)
-    nodes[root_index]["child"] = node_index
-    child_ind = node_index
-    node_index = push_node(nodes, left_child, node_index)
-    node_index = push_node(nodes, right_child, node_index)
-    node_index = build(
-        nodes,
-        node_index,
-        bb_indices,
-        bb_coords,
-        n_buckets,
-        cells_per_leaf,
-        child_ind,
-        left_child.dim,
-    )
-    node_index = build(
-        nodes,
-        node_index,
-        bb_indices,
-        bb_coords,
-        n_buckets,
-        cells_per_leaf,
-        child_ind + 1,
-        right_child.dim,
-    )
     return node_index
 
 
@@ -433,7 +422,6 @@ def initialize(
     node = create_node(0, bb_indices.size, False)
     node_index = push_node(nodes, node, 0)
 
-    # Recursively build the tree.
     node_index = build(
         nodes,
         node_index,
@@ -441,9 +429,7 @@ def initialize(
         bb_coords,
         n_buckets,
         cells_per_leaf,
-        0,  # root_ind
-        0,  # dim
     )
 
-    # Remove the unused part in nodes.
+    ## Remove the unused part in nodes.
     return nodes[:node_index], bb_indices

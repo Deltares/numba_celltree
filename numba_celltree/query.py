@@ -1,35 +1,17 @@
+import os
+
 import numba as nb
 import numpy as np
-import os
-from .constants import Point, IntArray, IntDType, FloatArray, CellTreeData, PARALLEL
-from .utils import stack_empty, pop, push
 
-
-# Recursion in numba is somewhat slow in this case.
-# Avoid recursing by manually maintaining a stack.
-# Maximum tree depth is hereby defined as 32.
-# This equals 2.1E9 cells if 1 cell per node; should be sufficient.
-MAX_TREE_DEPTH = 32
-
-
-def np_allocate_stack():
-    return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
-
-
-@nb.njit(inline="always")
-def nb_allocate_stack():
-    arr_ptr = stack_empty(
-        MAX_TREE_DEPTH, IntDType
-    )  # pylint: disable=no-value-for-parameter
-    arr = nb.carray(arr_ptr, MAX_TREE_DEPTH, dtype=IntDType)
-    return arr
-
-
-# Make sure everything still works when calling as non-compiled Python code:
-if os.environ.get("NUMBA_DISABLE_JIT", "0") == "1":
-    allocate_stack = np_allocate_stack
-else:
-    allocate_stack = nb_allocate_stack
+from .constants import (
+    PARALLEL,
+    CellTreeData,
+    FloatArray,
+    IntArray,
+    IntDType,
+    Point,
+)
+from .utils import allocate_stack, pop, push
 
 
 # Point search functions

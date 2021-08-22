@@ -1,5 +1,6 @@
-import pytest
 import numpy as np
+import pytest
+
 from numba_celltree import CellTree2d
 
 
@@ -21,7 +22,7 @@ def triangle_mesh():
 
 def test_init_locate_points(triangle_mesh):
     vertices, faces, _ = triangle_mesh
-    tree = CellTree2d(vertices, faces, jit=True)
+    tree = CellTree2d(vertices, faces)
     points = np.array(
         [
             [0.5, 0.5],
