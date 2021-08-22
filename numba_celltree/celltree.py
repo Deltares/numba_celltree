@@ -2,10 +2,11 @@ from typing import Tuple
 from .constants import FloatDType, FloatArray, IntDType, IntArray, CellTreeData
 from .creation import initialize
 from .query import locate_points, locate_bboxes
-from . import compiled_celltree as ct
+
+# from . import compiled_celltree as ct
 
 
-class CellTree2D:
+class CellTree2d:
     def __init__(
         self,
         vertices: FloatArray,

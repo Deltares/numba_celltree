@@ -1,1 +1,1 @@
-from .celltree import CellTree2D
+from .celltree import CellTree2d
