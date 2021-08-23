@@ -4,6 +4,7 @@ import numba as nb
 import numpy as np
 
 from .constants import (
+    FILL_VALUE,
     FLOAT_MAX,
     FLOAT_MIN,
     INT_MAX,
@@ -50,7 +51,7 @@ def bounding_box(
     ymin = ymax = first_vertex[1]
     for i in range(1, max_n_verts):
         index = polygon[i]
-        if index == -1:
+        if index == FILL_VALUE:
             break
         vertex = vertices[index]
         x = vertex[0]
@@ -414,7 +415,7 @@ def build(
         child_ind = node_index
         node_index = push_node(nodes, left_child, node_index)
         node_index = push_node(nodes, right_child, node_index)
-        
+
         size = push_both(root_stack, dim_stack, child_ind + 1, right_child.dim, size)
         size = push_both(root_stack, dim_stack, child_ind, left_child.dim, size)
 

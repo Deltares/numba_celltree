@@ -106,6 +106,7 @@ PARALLEL = True
 # 2D is still rather hard-baked in, so changing this alone to 3 will NOT
 # suffice to generalize it to a 3D CellTree.
 NDIM = 2
+FILL_VALUE = -1
 # Recursion in numba is somewhat slow (in case of querying), or unsupported for
 # AOT-compilation when creating. We can avoid recursing by manually maintaining
 # a stack, and pushing and popping. To estimate worst case, let's assume every

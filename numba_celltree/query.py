@@ -1,7 +1,15 @@
 import numba as nb
 import numpy as np
 
-from .constants import PARALLEL, CellTreeData, FloatArray, IntArray, IntDType, Point
+from .constants import (
+    FILL_VALUE,
+    PARALLEL,
+    CellTreeData,
+    FloatArray,
+    IntArray,
+    IntDType,
+    Point,
+)
 from .utils import allocate_stack, pop, push
 
 
@@ -14,6 +22,7 @@ def point_in_polygon(
     vertices: FloatArray,
 ) -> bool:
     face = faces[bbox_index]
+    face = face[face != FILL_VALUE]
     polygon_length = face.size
 
     c = False
