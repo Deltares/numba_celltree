@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List, Tuple
 
 import numba as nb
 import numpy as np
@@ -210,7 +210,7 @@ def get_bounds(
 
 @nb.njit(inline="always")
 def split_plane(
-    buckets: BucketArray,
+    buckets: List[Bucket],
     root: np.void,
     range_Lmax: float,
     range_Rmin: float,
@@ -369,8 +369,10 @@ def build(
 
         # Check if all the cells are in one bucket. If so, restart and switch
         # dimension.
+        needs_continue = False
         for bucket in buckets:
             if bucket.size == root.size:
+                needs_continue = True
                 if dim_flag >= 0:
                     dim_flag = (not dim) - 2
                     nodes[root_index]["dim"] = not root.dim
@@ -379,7 +381,9 @@ def build(
                 else:  # Already split once, convert to leaf.
                     nodes[root_index]["Lmax"] = -1
                     nodes[root_index]["Rmin"] = -1
-                continue
+                break
+        if needs_continue:
+            continue
 
         # plane is the separation line to split on:
         # 0 [bucket0] 1 [bucket1] 2 [bucket2] 3 [bucket3]
@@ -398,10 +402,10 @@ def build(
         node_index = push_node(nodes, left_child, node_index)
         node_index = push_node(nodes, right_child, node_index)
 
-        size_root = push(root_stack, child_ind, size_root)
-        size_dim = push(dim_stack, left_child.dim, size_dim)
         size_root = push(root_stack, child_ind + 1, size_root)
         size_dim = push(dim_stack, right_child.dim, size_dim)
+        size_root = push(root_stack, child_ind, size_root)
+        size_dim = push(dim_stack, left_child.dim, size_dim)
 
     return node_index
 
