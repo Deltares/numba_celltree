@@ -104,6 +104,7 @@ def stable_partition(
     the elements for which a predicate returns True precede all those for which it
     returns False. The relative order in each group is maintained.
     In this case, the predicate is a `centroid_test`.
+
     Parameters
     ----------
     bb_indices: np.ndarray of ints
@@ -255,6 +256,20 @@ def pessimistic_n_nodes(n_polys: int):
     return n_nodes + 1
 
 
+@nb.njit(inline="always")
+def push_both(root_stack, dim_stack, root, dim, size):
+    size_root = push(root_stack, root, size)
+    _ = push(dim_stack, dim, size)
+    return size_root
+
+
+@nb.njit(inline="always")
+def pop_both(root_stack, dim_stack, size):
+    root, size_root = pop(root_stack, size)
+    dim, _ = pop(dim_stack, size)
+    return root, dim, size_root
+
+
 @nb.njit
 def build(
     nodes: NodeArray,
@@ -270,12 +285,10 @@ def build(
     dim_stack = allocate_stack()
     root_stack[0] = 0
     dim_stack[0] = 0
-    size_root = 1
-    size_dim = 1
+    size = 1
 
-    while size_root > 0:
-        root_index, size_root = pop(root_stack, size_root)
-        dim, size_dim = pop(dim_stack, size_dim)
+    while size > 0:
+        root_index, dim, size = pop_both(root_stack, dim_stack, size)
 
         dim_flag = dim
         if dim < 0:
@@ -345,6 +358,7 @@ def build(
             nodes[root_index]["child"] = node_index
             node_index = push_node(nodes, left_child, node_index)
             node_index = push_node(nodes, right_child, node_index)
+            continue
 
         while buckets[0].size == 0:
             b = buckets[1]
@@ -356,7 +370,7 @@ def build(
             next_bucket = buckets[i]
             # if a empty bucket is encountered, merge it with the previous one and
             # continue as normal. As long as the ranges of the merged buckets are
-            # still proper, calcualting cost for empty buckets can be avoided, and
+            # still proper, calculating cost for empty buckets can be avoided, and
             # the split will still happen in the right place
             if next_bucket.size == 0:
                 b = buckets[i - 1]
@@ -376,8 +390,7 @@ def build(
                 if dim_flag >= 0:
                     dim_flag = (not dim) - 2
                     nodes[root_index]["dim"] = not root.dim
-                    size_root = push(root_stack, root_index, size_root)
-                    size_dim = push(dim_stack, dim_flag, size_dim)
+                    size = push_both(root_stack, dim_stack, root_index, dim_flag, size)
                 else:  # Already split once, convert to leaf.
                     nodes[root_index]["Lmax"] = -1
                     nodes[root_index]["Rmin"] = -1
@@ -401,11 +414,9 @@ def build(
         child_ind = node_index
         node_index = push_node(nodes, left_child, node_index)
         node_index = push_node(nodes, right_child, node_index)
-
-        size_root = push(root_stack, child_ind + 1, size_root)
-        size_dim = push(dim_stack, right_child.dim, size_dim)
-        size_root = push(root_stack, child_ind, size_root)
-        size_dim = push(dim_stack, left_child.dim, size_dim)
+        
+        size = push_both(root_stack, dim_stack, child_ind + 1, right_child.dim, size)
+        size = push_both(root_stack, dim_stack, child_ind, left_child.dim, size)
 
     return node_index
 
