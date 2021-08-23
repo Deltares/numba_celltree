@@ -13,6 +13,16 @@ from .constants import (
 from .utils import allocate_stack, pop, push
 
 
+@nb.njit(inline="always")
+def polygon_length(face: IntArray) -> int:
+    # A minimal polygon is a triangle
+    n = face.size
+    for i in range(3, n):
+        if face[i] == FILL_VALUE:
+            return i
+    return n
+
+
 # Point search functions
 @nb.njit(inline="always")
 def point_in_polygon(
@@ -22,11 +32,10 @@ def point_in_polygon(
     vertices: FloatArray,
 ) -> bool:
     face = faces[bbox_index]
-    face = face[face != FILL_VALUE]
-    polygon_length = face.size
+    n_vertex = polygon_length(face)
 
     c = False
-    for i in range(polygon_length):
+    for i in range(n_vertex):
         v1 = vertices[face[i - 1]]
         v2 = vertices[face[i]]
         # Do not split this in two conditionals: if the first conditional fails,
