@@ -1,16 +1,7 @@
-import os
-
 import numba as nb
 import numpy as np
 
-from .constants import (
-    PARALLEL,
-    CellTreeData,
-    FloatArray,
-    IntArray,
-    IntDType,
-    Point,
-)
+from .constants import PARALLEL, CellTreeData, FloatArray, IntArray, IntDType, Point
 from .utils import allocate_stack, pop, push
 
 

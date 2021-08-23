@@ -4,6 +4,16 @@ from .constants import CellTreeData, FloatArray, FloatDType, IntArray, IntDType
 from .creation import initialize
 from .query import locate_bboxes, locate_points
 
+try:
+    from . import aot_compiled
+except ImportError:
+    import warnings
+
+    warnings.warn(
+        "Could not import ahead-of-time compiled celltree. Reinstall package "
+        "or use jit=True."
+    )
+
 
 class CellTree2d:
     def __init__(
@@ -19,8 +29,6 @@ class CellTree2d:
             self._locate_points = locate_points
             self._locate_bboxes = locate_bboxes
         else:
-            from . import aot_compiled
-
             self._initialize = aot_compiled.initialize
             self._locate_points = aot_compiled.locate_points
             self._locate_bboxes = aot_compiled.locate_bboxes
