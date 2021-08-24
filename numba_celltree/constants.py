@@ -28,20 +28,11 @@ import numpy as np
 
 IntDType = np.intp
 FloatDType = np.float64
+BoolArray = np.ndarray
 IntArray = np.ndarray
 FloatArray = np.ndarray
 BucketArray = np.ndarray
 NodeArray = np.ndarray
-
-
-class Point(NamedTuple):
-    x: FloatDType
-    y: FloatDType
-
-
-class Vector(NamedTuple):
-    x: FloatDType
-    y: FloatDType
 
 
 class Node(NamedTuple):
@@ -67,6 +58,8 @@ class CellTreeData(NamedTuple):
     vertices: FloatArray
     nodes: NodeArray
     bb_indices: IntArray
+    bb_coords: FloatArray
+    bbox: FloatArray
     cells_per_leaf: int
 
 
@@ -106,6 +99,7 @@ PARALLEL = True
 # 2D is still rather hard-baked in, so changing this alone to 3 will NOT
 # suffice to generalize it to a 3D CellTree.
 NDIM = 2
+MAX_N_VERTEX = 32
 FILL_VALUE = -1
 # Recursion in numba is somewhat slow (in case of querying), or unsupported for
 # AOT-compilation when creating. We can avoid recursing by manually maintaining
@@ -114,6 +108,7 @@ FILL_VALUE = -1
 # that can be included is given by 2 ** (depth of stack - 1).
 MAX_N_FACE = 2e9  # 2e9 results in a depth of 32
 MAX_TREE_DEPTH = int(math.ceil(math.log(MAX_N_FACE, 2))) + 1
+
 
 # Derived types & constants
 NumbaFloatDType = nb.from_dtype(FloatDType)
@@ -127,6 +122,8 @@ NumbaCellTreeData = nbtypes.NamedTuple(
         NumbaFloatDType[:, :],  # vertices
         NumbaNodeDType[:],  # nodes
         NumbaIntDType[:],  # bb_indices
+        NumbaFloatDType[:, :],  # bb_coords
+        NumbaFloatDType[:],  # bbox
         NumbaIntDType,  # cells_per_leaf
     ),
     CellTreeData,

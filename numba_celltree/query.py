@@ -8,19 +8,9 @@ from .constants import (
     FloatArray,
     IntArray,
     IntDType,
-    Point,
 )
+from .geometry_utils import Box, Point, boxes_intersect, polygon_length
 from .utils import allocate_stack, pop, push
-
-
-@nb.njit(inline="always")
-def polygon_length(face: IntArray) -> int:
-    # A minimal polygon is a triangle
-    n = face.size
-    for i in range(3, n):
-        if face[i] == FILL_VALUE:
-            return i
-    return n
 
 
 # Point search functions
@@ -58,31 +48,31 @@ def locate_point(point: Point, tree: CellTreeData):
 
     while size > 0:
         node_index, size = pop(stack, size)
-        current = tree.nodes[node_index]
+        node = tree.nodes[node_index]
 
         # Check if it's a leaf
-        if current["child"] == -1:
-            for i in range(current["ptr"], current["ptr"] + current["size"]):
+        if node["child"] == -1:
+            for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
                 if point_in_polygon(bbox_index, point, tree.faces, tree.vertices):
                     return bbox_index
             continue
 
-        dim = 1 if current["dim"] else 0
-        left = point[dim] <= current["Lmax"]
-        right = point[dim] >= current["Rmin"]
+        dim = 1 if node["dim"] else 0
+        left = point[dim] <= node["Lmax"]
+        right = point[dim] >= node["Rmin"]
 
         if left and right:
-            if (current["Lmax"] - point[dim]) < (point[dim] - current["Rmin"]):
-                size = push(stack, current["child"], size)
-                size = push(stack, current["child"] + 1, size)
+            if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
+                size = push(stack, node["child"], size)
+                size = push(stack, node["child"] + 1, size)
             else:
-                size = push(stack, current["child"] + 1, size)
-                size = push(stack, current["child"], size)
+                size = push(stack, node["child"] + 1, size)
+                size = push(stack, node["child"], size)
         elif left:
-            size = push(stack, current["child"], size)
+            size = push(stack, node["child"], size)
         elif right:
-            size = push(stack, current["child"] + 1, size)
+            size = push(stack, node["child"] + 1, size)
 
     return return_value
 
@@ -100,96 +90,97 @@ def locate_points(
     return result
 
 
-# Bounding box search functions
 @nb.njit(inline="always")
-def count_bbox(bbox: FloatArray, tree: CellTreeData):
+def box_from_array(arr: FloatArray) -> Box:
+    return Box(
+        arr[0],
+        arr[1],
+        arr[2],
+        arr[3],
+    )
+
+
+@nb.njit(inline="always")
+def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: bool):
+    if not boxes_intersect(box, tree.bbox):
+        return 0
     stack = allocate_stack()
     stack[0] = 0
-    count = 0
     size = 1
+    count = 0
 
     while size > 0:
         node_index, size = pop(stack, size)
-        current = tree.nodes[node_index]
-
+        print(size)
+        node = tree.nodes[node_index]
         # Check if it's a leaf
-        if current["child"] == -1:
-            count += current["size"]
+        if node["child"] == -1:
+            # Iterate over the bboxes in the leaf
+            for i in range(node["ptr"], node["ptr"] + node["size"]):
+                bbox_index = tree.bb_indices[i]
+                leaf_box = tree.bb_coords[bbox_index]
+                if boxes_intersect(box, leaf_box):
+                    if store_indices:
+                        indices[count] = bbox_index
+                    count += 1
+        else:
+            dim = 1 if node["dim"] else 0
+            minimum = 2 * dim
+            maximum = 2 * dim + 1
+            left = box[maximum] <= node["Lmax"]
+            right = box[minimum] >= node["Rmin"]
 
-        dim = 1 if current["dim"] else 0
-        left = bbox[dim * 2 + 1] <= current["Lmax"]
-        right = bbox[dim * 2] >= current["Rmin"]
-
-        if left and right:
-            size = push(stack, current["child"], size)
-            size = push(stack, current["child"] + 1, size)
-        elif left:
-            size = push(stack, current["child"], size)
-        elif right:
-            size = push(stack, current["child"] + 1, size)
+            if left and right:
+                size = push(stack, node["child"], size)
+                size = push(stack, node["child"] + 1, size)
+            elif left:
+                size = push(stack, node["child"], size)
+            elif right:
+                size = push(stack, node["child"] + 1, size)
 
     return count
 
 
-@nb.njit(inline="always")
-def locate_bbox(bbox: FloatArray, tree: CellTreeData, indices: IntArray):
-    stack = allocate_stack()
-    stack[0] = 0
-    count = 0
-    size = 1
-    count = 0
-
-    while size > 0:
-        node_index, size = pop(stack, size)
-        current = tree.nodes[node_index]
-
-        # Check if it's a leaf
-        if current["child"] == -1:
-            for i in range(current["ptr"], current["ptr"] + current["size"]):
-                bbox_index = tree.bb_indices[i]
-                indices[count] = bbox_index
-                count += 1
-
-        dim = 1 if current["dim"] else 0
-        left = bbox[dim * 2 + 1] <= current["Lmax"]
-        right = bbox[dim * 2] >= current["Rmin"]
-
-        if left and right:
-            size = push(stack, current["child"], size)
-            size = push(stack, current["child"] + 1, size)
-        elif left:
-            size = push(stack, current["child"], size)
-        elif right:
-            size = push(stack, current["child"] + 1, size)
-
-    return
-
-
-@nb.njit(parallel=PARALLEL)
-def locate_bboxes(
-    bbox_coords: FloatArray,
+@nb.njit
+def locate_boxes(
+    box_coords: FloatArray,
     tree: CellTreeData,
 ):
-    n_bbox = bbox_coords.shape[0]
-    counts = np.empty(n_bbox + 1, dtype=IntDType)
+    # Numba does not support a concurrent list or bag like stucture:
+    # https://github.com/numba/numba/issues/5878
+    # (Standard list are not thread safe.)
+    # To support parallel execution, we're stuck with numpy arrays therefore.
+    # Since we don't know the number of contained bounding boxes, we traverse
+    # the tree twice: first to count, then allocate, then another time to
+    # actually store the indices.
+    # The cost of traversing twice is roughly a factor two. Since many
+    # computers can parallellize over more than two threads, counting first --
+    # which enables parallelization -- should still result in a net speed up.
+    n_box = box_coords.shape[0]
+    counts = np.empty(n_box + 1, dtype=IntDType)
+    dummy = np.empty((), dtype=IntDType)
     counts[0] = 0
-    for i in nb.prange(n_bbox):  # pylint: disable=not-an-iterable
-        counts[i + 1] = count_bbox(bbox_coords[i], tree)
+    # First run a count so we can allocate afterwards
+    for i in nb.prange(n_box):  # pylint: disable=not-an-iterable
+        box = box_from_array(box_coords[i])
+        counts[i + 1] = locate_box(box, tree, dummy, False)
 
     # Run a cumulative sum
     total = 0
-    for i in range(1, n_bbox + 1):
+    for i in range(1, n_box + 1):
         total += counts[i]
         counts[i] = total
 
+    # Now allocate appropriately
     ii = np.empty(total, dtype=IntDType)
     jj = np.empty(total, dtype=IntDType)
-    for i in nb.prange(n_bbox):  # pylint: disable=not-an-iterable
+    for i in nb.prange(n_box):  # pylint: disable=not-an-iterable
         start = counts[i]
         end = counts[i + 1]
         ii[start:end] = i
         indices = jj[start:end]
         # locate_bbox_helper(bbox_coords[i], 0, tree, 0, indices)
-        locate_bbox(bbox_coords[i], tree, indices)
+        box = box_from_array(box_coords[i])
+        locate_box(box, tree, indices, True)
 
     return ii, jj

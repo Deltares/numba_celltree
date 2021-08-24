@@ -20,6 +20,7 @@ from .constants import (
     NodeArray,
     NodeDType,
 )
+from .geometry_utils import build_bboxes
 from .utils import allocate_stack, pop, push
 
 
@@ -40,45 +41,6 @@ def push_node(nodes: NodeArray, node: Node, index: int) -> int:
     nodes[index]["size"] = node.size
     nodes[index]["dim"] = node.dim
     return index + 1
-
-
-@nb.njit(inline="always")
-def bounding_box(
-    polygon: IntArray, vertices: FloatArray, max_n_verts: int
-) -> Tuple[float, float, float, float]:
-    first_vertex = vertices[polygon[0]]
-    xmin = xmax = first_vertex[0]
-    ymin = ymax = first_vertex[1]
-    for i in range(1, max_n_verts):
-        index = polygon[i]
-        if index == FILL_VALUE:
-            break
-        vertex = vertices[index]
-        x = vertex[0]
-        y = vertex[1]
-        xmin = min(xmin, x)
-        xmax = max(xmax, x)
-        ymin = min(ymin, y)
-        ymax = max(ymax, y)
-    return (xmin, xmax, ymin, ymax)
-
-
-@nb.njit
-def build_bboxes(
-    faces: IntArray,
-    vertices: FloatArray,
-) -> Tuple[BucketArray, IntArray]:
-    # Make room for the bounding box of every polygon.
-    n_polys, max_n_verts = faces.shape
-    bbox_indices = np.empty(n_polys, IntDType)
-    bbox_coords = np.empty((n_polys, NDIM * 2), FloatDType)
-
-    for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
-        polygon = faces[i]
-        bbox_coords[i] = bounding_box(polygon, vertices, max_n_verts)
-        bbox_indices[i] = i
-
-    return bbox_coords, bbox_indices
 
 
 @nb.njit(inline="always")
@@ -427,7 +389,8 @@ def initialize(
     vertices: FloatArray, faces: IntArray, n_buckets: int = 4, cells_per_leaf: int = 2
 ) -> Tuple[NodeArray, IntArray]:
     # Prepare bounding boxes for tree building.
-    bb_coords, bb_indices = build_bboxes(faces, vertices)
+    bb_coords = build_bboxes(faces, vertices)
+    bb_indices = np.arange(len(faces), dtype=IntDType)
 
     # Pre-allocate the space for the tree.
     n_polys, _ = faces.shape
@@ -448,4 +411,4 @@ def initialize(
     )
 
     ## Remove the unused part in nodes.
-    return nodes[:node_index], bb_indices
+    return nodes[:node_index], bb_indices, bb_coords
