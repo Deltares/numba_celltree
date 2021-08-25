@@ -4,7 +4,7 @@ import numba as nb
 import numpy as np
 
 from ..constants import FLOAT_MAX, FLOAT_MIN, PARALLEL, BoolArray, FloatArray, IntArray
-from ..geometry_utils import Point, Vector, copy_vertices, dot_product
+from ..geometry_utils import Point, Vector, as_point, copy_vertices, dot_product
 
 
 @nb.njit(inline="always")
@@ -14,7 +14,7 @@ def extrema_projected(
     min_proj = FLOAT_MAX
     max_proj = FLOAT_MIN
     for i in range(length):
-        proj = dot_product(Point(polygon[i][0], polygon[i][1]), norm)
+        proj = dot_product(as_point(polygon[i]), norm)
         min_proj = min(min_proj, proj)
         max_proj = max(max_proj, proj)
     return min_proj, max_proj
@@ -36,15 +36,15 @@ def is_separating_axis(
 def separating_axes(a: Sequence[Point], b: Sequence[Point]) -> bool:
     length_a = len(a)
     length_b = len(b)
-    p = Point(a[length_a - 1][0], a[length_a - 1][1])
+    p = as_point(a[length_a - 1])
     for i in range(length_a):
-        q = Point(a[i][0], a[i][1])
+        q = as_point(a[i])
         norm = Vector(p.y - q.y, q.x - p.x)
+        p = q
         if norm.x == 0.0 and norm.y == 0.0:
             continue
         if is_separating_axis(norm, a, b, length_a, length_b):
             return False
-        p = q
     return True
 
 

@@ -1,5 +1,4 @@
 import numpy as np
-
 from numba_celltree.algorithms.separating_axis import (
     polygons_intersect,
     separating_axes,
@@ -158,3 +157,30 @@ def test_polygons_intersect():
     )
     expected = np.array([True, False])
     assert np.array_equal(actual, expected)
+
+
+def test_triangles_intersect_hanging_nodes():
+    # Identity
+    a = np.array(
+        [
+            [0.0, 0.0],
+            [0.5, 0.5],
+            [0.0, 1.0],
+            [1.0, 1.0],
+        ]
+    )
+    b = a
+    assert separating_axes(a, b)
+    assert separating_axes(b, a)
+
+    # No overlap
+    b = np.array(
+        [
+            [2.0, 0.0],
+            [3.0, 1.0],
+            [2.5, 1.0],
+            [2.0, 1.0],
+        ]
+    )
+    assert not separating_axes(a, b)
+    assert not separating_axes(b, a)
