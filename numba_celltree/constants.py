@@ -35,6 +35,28 @@ BucketArray = np.ndarray
 NodeArray = np.ndarray
 
 
+class Point(NamedTuple):
+    x: float
+    y: float
+
+
+class Vector(NamedTuple):
+    x: float
+    y: float
+
+
+class Interval(NamedTuple):
+    xmin: float
+    xmax: float
+
+
+class Box(NamedTuple):
+    xmin: float
+    xmax: float
+    ymin: float
+    ymax: float
+
+
 class Node(NamedTuple):
     child: IntDType
     Lmax: FloatDType
@@ -115,6 +137,15 @@ NumbaFloatDType = nb.from_dtype(FloatDType)
 NumbaIntDType = nb.from_dtype(IntDType)
 NumbaNodeDType = nb.from_dtype(NodeDType)
 NumbaBucketDType = nb.from_dtype(BucketDType)
+NumbaBox = nbtypes.NamedTuple(
+    (
+        NumbaFloatDType,
+        NumbaFloatDType,
+        NumbaFloatDType,
+        NumbaFloatDType,
+    ),
+    Box,
+)
 
 NumbaCellTreeData = nbtypes.NamedTuple(
     (
@@ -123,7 +154,7 @@ NumbaCellTreeData = nbtypes.NamedTuple(
         NumbaNodeDType[:],  # nodes
         NumbaIntDType[:],  # bb_indices
         NumbaFloatDType[:, :],  # bb_coords
-        NumbaFloatDType[:],  # bbox
+        NumbaBox,  # bbox
         NumbaIntDType,  # cells_per_leaf
     ),
     CellTreeData,

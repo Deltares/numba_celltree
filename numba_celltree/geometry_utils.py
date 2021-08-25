@@ -1,32 +1,30 @@
-from typing import NamedTuple, Sequence, Tuple
+from typing import Sequence, Tuple
 
 import numba as nb
 import numpy as np
 
-from .constants import FILL_VALUE, NDIM, FloatArray, FloatDType, IntArray, IntDType
+from .constants import (
+    FILL_VALUE,
+    NDIM,
+    Box,
+    FloatArray,
+    FloatDType,
+    IntArray,
+    IntDType,
+    Point,
+    Vector,
+)
 from .utils import allocate_polygon, copy
 
 
-class Point(NamedTuple):
-    x: float
-    y: float
+@nb.njit(inline="always")
+def to_vector(a: Point, b: Point) -> Vector:
+    return Vector(b.x - a.x, b.y - a.y)
 
 
-class Vector(NamedTuple):
-    x: float
-    y: float
-
-
-class Interval(NamedTuple):
-    xmin: float
-    xmax: float
-
-
-class Box(NamedTuple):
-    xmin: float
-    xmax: float
-    ymin: float
-    ymax: float
+@nb.njit(inline="always")
+def to_point(t: float, a: Point, V: Vector) -> Point:
+    return Point(a.x + t * V.x, a.y + t * V.y)
 
 
 @nb.njit(inline="always")
@@ -95,10 +93,10 @@ def polygon_area(polygon: Sequence, length: int) -> float:
     area = 0.0
     a = Point(polygon[0][0], polygon[0][1])
     b = Point(polygon[1][0], polygon[1][1])
-    U = Vector(b.x - a.x, b.y - a.y)
+    U = to_vector(a, b)
     for i in range(2, length):
         c = Point(polygon[i][0], polygon[i][1])
-        V = Vector(a.x - c.x, a.y - c.y)
+        V = to_vector(c, a)
         area += abs(cross_product(U, V))
         b = c
         U = V
@@ -215,3 +213,8 @@ def copy_vertices(vertices: FloatArray, face: IntArray) -> Tuple[FloatArray, int
     out = allocate_polygon()
     copy(vertices[face], out, length)
     return out, length
+
+
+@nb.njit(inline="always")
+def point_inside_box(a: Point, box: Box):
+    return box.xmin < a.x and a.x < box.xmax and box.ymin < a.y and a.y < box.ymax

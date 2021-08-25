@@ -249,7 +249,6 @@ def test_multipoint():
 
 
 def test_box_lookup():
-    # A simple quad grid
     nodes = np.array(
         [
             [0.0, 0.0],  # 0
@@ -273,12 +272,17 @@ def test_box_lookup():
     tree = CellTree2d(nodes, faces, n_buckets=2, cells_per_leaf=1)
     box_coords = np.array(
         [
-            [1.0, 2.0, 1.0, 2.0],
-            [4.0, 5.0, 2.0, 3.0],
+            [1.0, 2.0, 1.0, 2.0],  # in face 0
+            [4.0, 5.0, 0.0, 1.0],  # in face 2
+            [4.0, 5.0, 2.0, 3.0],  # in face 1
+            [-1.0, 0.0, 0.0, 4.0],  # out of bounds x
+            [6.0, 8.0, 0.0, 4.0],  # out of bounds x
+            [0.0, 6.0, -1.0, 0.0],  # out of bounds y
+            [0.0, 6.0, 4.0, 5.0],  # out of bounds y
         ]
     )
     actual_i, actual_j = tree.locate_boxes(box_coords)
-    expected_i = np.array([0, 1])
-    expected_j = np.array([0, 1])
+    expected_i = np.array([0, 1, 2])
+    expected_j = np.array([0, 2, 1])
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
