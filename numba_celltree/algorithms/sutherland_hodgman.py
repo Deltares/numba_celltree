@@ -63,7 +63,14 @@ def intersection(a: Point, V: Vector, r: Point, N: Vector) -> Tuple[bool, Point]
 
 
 @nb.njit(inline="always")
-def clip_polygons(polygon: Sequence, clipper: Sequence) -> float:
+def push_point(polygon: FloatArray, size: int, p: Point) -> int:
+    polygon[size][0] = p.x
+    polygon[size][1] = p.y
+    return size + 1
+
+
+@nb.njit(inline="always")
+def polygon_polygon_clip_area(polygon: Sequence, clipper: Sequence) -> float:
     n_output = len(polygon)
     n_clip = len(clipper)
     subject = allocate_clip_polygon()
@@ -102,15 +109,15 @@ def clip_polygons(polygon: Sequence, clipper: Sequence) -> float:
                 if not a_inside:  # out, or on the edge
                     succes, point = intersection(a, V, r, N)
                     if succes:
-                        n_output = push(output, n_output, point)
-                n_output = push(output, n_output, b)
+                        n_output = push_point(output, n_output, point)
+                n_output = push_point(output, n_output, b)
             elif a_inside:
                 succes, point = intersection(a, V, r, N)
                 if succes:
-                    n_output = push(output, n_output, point)
+                    n_output = push_point(output, n_output, point)
                 else:  # Floating point failure
                     b_inside = True  # flip it for consistency, will be set as a
-                    n_output = push(output, n_output, b)  # push b instead
+                    n_output = push_point(output, n_output, b)  # push b instead
 
             # Advance to next polygon edge
             a = b
@@ -137,11 +144,11 @@ def area_of_intersection(
     indices_b: IntArray,
 ) -> FloatArray:
     n_intersection = indices_a.size
-    area = np.empyt(n_intersection, dtype=FloatDType)
+    area = np.empty(n_intersection, dtype=FloatDType)
     for i in nb.prange(n_intersection):
-        face_a = faces_a[indices_a]
-        face_b = faces_b[indices_b]
+        face_a = faces_a[indices_a[i]]
+        face_b = faces_b[indices_b[i]]
         a = copy_vertices(vertices_a, face_a)
         b = copy_vertices(vertices_b, face_b)
-        area[i] = clip_polygons(a, b)
+        area[i] = polygon_polygon_clip_area(a, b)
     return area

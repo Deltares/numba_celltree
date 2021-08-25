@@ -23,6 +23,11 @@ def to_vector(a: Point, b: Point) -> Vector:
 
 
 @nb.njit(inline="always")
+def as_point(a: FloatArray) -> Point:
+    return Point(a[0], a[1])
+
+
+@nb.njit(inline="always")
 def to_point(t: float, a: Point, V: Vector) -> Point:
     return Point(a.x + t * V.x, a.y + t * V.y)
 
@@ -115,10 +120,8 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
     length = len(poly)
     c = False
     for i in range(length):
-        v0 = poly[i][0], poly[i][1]
-        v1 = poly[(i + 1) % length]
-        v0 = Point(v0[0], v0[1])
-        v1 = Point(v1[0], v1[1])
+        v0 = as_point(poly[i])
+        v1 = as_point(poly[(i + 1) % length])
         # Do not split this in two conditionals: if the first conditional fails,
         # the second will not be executed in Python's (and C's) execution model.
         # This matters because the second can result in division by zero.

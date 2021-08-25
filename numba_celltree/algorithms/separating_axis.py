@@ -58,10 +58,11 @@ def polygons_intersect(
     indices_b: IntArray,
 ) -> BoolArray:
     n_shortlist = indices_a.size
-    intersects = np.empty(n_shortlist, dtype=np.bool)
+    intersects = np.empty(n_shortlist, dtype=np.bool_)
     for i in nb.prange(n_shortlist):
         face_a = faces_a[indices_a[i]]
         face_b = faces_b[indices_b[i]]
         a = copy_vertices(vertices_a, face_a)
         b = copy_vertices(vertices_b, face_b)
-        intersects[i] = separating_axes(a, b) and separating_axes(b, a)
+        intersects[i] = separating_axes(a, b)
+    return intersects

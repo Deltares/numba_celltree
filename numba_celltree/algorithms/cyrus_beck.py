@@ -19,13 +19,7 @@ import numba as nb
 import numpy as np
 
 from ..constants import Point, Vector
-from ..geometry_utils import cross_product, dot_product, to_point, to_vector
-
-DUMMY = Point(np.nan, np.nan)
-NONE = 0
-ENTER = 1
-LEAVE = 2
-ENTER_LEAVE = 3
+from ..geometry_utils import as_point, cross_product, dot_product, to_point, to_vector
 
 
 @nb.njit(inline="always")
@@ -56,16 +50,20 @@ def intersections(
     # Note: polygon must be counter-clockwise
 
     # A single intersection found, could be entering, could be leaving
+    v0 = as_point(poly[i0])
+    v01 = as_point(poly[(i0 + 1) % length])
     if k == 1:
-        enters0, t = compute_intersection(a, s, poly[i0], poly[(i0 + 1) % length])
+        enters0, t = compute_intersection(a, s, v0, v01)
         if enters0:
             return t, 1
         else:
             return 0, t
     # Entering and leaving intersection found
     else:  # k == 2:  # Entering and leaving
-        enters0, t0 = compute_intersection(a, s, poly[i0], poly[(i0 + 1) % length])
-        enters1, t1 = compute_intersection(a, s, poly[i1], poly[(i1 + 1) % length])
+        v1 = as_point(poly[i1])
+        v11 = as_point(poly[(i1 + 1) % length])
+        enters0, t0 = compute_intersection(a, s, v0, v01)
+        enters1, t1 = compute_intersection(a, s, v1, v11)
         if enters1:  # Swap them
             return t1, t0
         else:
@@ -106,7 +104,7 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
 
 # @nb.njit
 def cyrus_beck_line_polygon_clip(
-    poly: Sequence[Point], a: Point, b: Point
+    a: Point, b: Point, poly: Sequence[Point]
 ) -> Tuple[bool, Point, Point]:
     """
     In short, the basic idea:
@@ -126,8 +124,8 @@ def cyrus_beck_line_polygon_clip(
     leaving the polygon by the sign of the dot product.
 
     A valid intersection falls on the domain of the parametrized segment:
-    """
     0 <= t <= 1.0
+    """
     NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
 
     length = len(poly)
@@ -137,10 +135,11 @@ def cyrus_beck_line_polygon_clip(
     i1 = -1
     i = 0
     k = 0
-    ksi = cross_product(to_vector(a, poly[i]), s)
+    v = as_point(poly[i])
+    ksi = cross_product(to_vector(a, v), s)
     while i < length and k < 2:
-        v0 = poly[i]
-        v1 = poly[(i + 1) % length]
+        v0 = as_point(poly[i])
+        v1 = as_point(poly[(i + 1) % length])
         # Check if they can cross at all
         eta = cross_product(to_vector(a, v1), s)
         ksi_eta = ksi * eta
@@ -150,7 +149,7 @@ def cyrus_beck_line_polygon_clip(
         # TODO: Allclose?
         if ksi_eta == 0 and is_collinear(a, v0, v1):
             p0, p1 = collinear_case(a, b, v0, v1)
-            return ENTER_LEAVE, p0, p1
+            return True, p0, p1
         elif (ksi_eta) < 0:
             if k == 0:
                 i0 = i

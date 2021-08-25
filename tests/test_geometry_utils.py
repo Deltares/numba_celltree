@@ -2,8 +2,8 @@ import os
 
 import numba as nb
 import numpy as np
+
 from numba_celltree import geometry_utils as gu
-from numba_celltree.algorithms.separating_axis import polygons_intersect
 from numba_celltree.constants import Box, Point, Vector
 
 
@@ -14,6 +14,14 @@ def test_to_vector():
     assert isinstance(actual, Vector)
     assert actual.x == 1.0
     assert actual.y == 2.0
+
+
+def test_as_point():
+    a = np.array([0.0, 1.0])
+    actual = gu.as_point(a)
+    assert isinstance(actual, Point)
+    assert actual.x == 0.0
+    assert actual.y == 1.0
 
 
 def test_to_point():

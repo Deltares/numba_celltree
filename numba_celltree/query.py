@@ -229,7 +229,6 @@ def locate_edge(
         if node["child"] == -1:
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
-                print(bbox_index)
                 box = box_from_array(tree.bb_coords[bbox_index])
                 # box_intersect, _, _ = liang_barsky_line_box_clip(a, b, box)
                 box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)

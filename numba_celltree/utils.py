@@ -74,7 +74,7 @@ def nb_allocate_polygon():
 
 
 def np_allocate_clip_polygon():
-    return np.empty((CLIP_POLYGON_SIZE, NDIM), dtype=FloatDType)
+    return np.empty((CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
 
 
 @nb.njit(inline="always")
