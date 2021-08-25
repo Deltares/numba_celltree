@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-
 from numba_celltree import CellTree2d
 
 # some very simple test data:

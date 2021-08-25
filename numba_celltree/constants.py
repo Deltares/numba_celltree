@@ -137,15 +137,6 @@ NumbaFloatDType = nb.from_dtype(FloatDType)
 NumbaIntDType = nb.from_dtype(IntDType)
 NumbaNodeDType = nb.from_dtype(NodeDType)
 NumbaBucketDType = nb.from_dtype(BucketDType)
-NumbaBox = nbtypes.NamedTuple(
-    (
-        NumbaFloatDType,
-        NumbaFloatDType,
-        NumbaFloatDType,
-        NumbaFloatDType,
-    ),
-    Box,
-)
 
 NumbaCellTreeData = nbtypes.NamedTuple(
     (

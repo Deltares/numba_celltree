@@ -182,7 +182,10 @@ def build_bboxes(
 def copy_vertices(vertices: FloatArray, face: IntArray) -> FloatArray:
     length = polygon_length(face)
     out = allocate_polygon()
-    copy(vertices[face], out, length)
+    for i in range(length):
+        v = vertices[face[i]]
+        out[i, 0] = v[0]
+        out[i, 1] = v[1]
     return out[:length]
 
 

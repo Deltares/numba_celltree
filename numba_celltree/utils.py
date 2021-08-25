@@ -37,23 +37,18 @@ def copy(src, dst, n) -> None:
         dst[i] = src[i]
 
 
-@nb.njit(inline="always")
-def reallocate(a):
-    b = np.empty(2 * a.size, a.dtype)
-    b[: a.size] = a
-    return b
-
-
-@nb.njit(inline="always")
-def push_amortized(array, value, size):
-    if size >= array.size:
-        array = reallocate(array)
-    array[size] = value
-    return array, size + 1
-
-
 def np_allocate_stack():
     return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
+
+
+# Ensure these are constants for numba
+POLYGON_SIZE = MAX_N_VERTEX * NDIM
+CLIP_MAX_N_VERTEX = MAX_N_VERTEX * 2
+CLIP_POLYGON_SIZE = 2 * POLYGON_SIZE
+
+# Note: these stack allocated arrays should only be used inside of numba
+# compiled code. They should interact NEVER with dynamic Python code: there are
+# no guarantees in that case, they may very well be filled with garbage.
 
 
 @nb.njit(inline="always")
@@ -72,22 +67,22 @@ def np_allocate_polygon():
 @nb.njit(inline="always")
 def nb_allocate_polygon():
     arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
-        MAX_N_VERTEX * NDIM, FloatDType
+        POLYGON_SIZE, FloatDType
     )
     arr = nb.carray(arr_ptr, (MAX_N_VERTEX, NDIM), dtype=FloatDType)
     return arr
 
 
 def np_allocate_clip_polygon():
-    return np.empty((MAX_N_VERTEX * 2, NDIM), dtype=FloatDType)
+    return np.empty((CLIP_POLYGON_SIZE, NDIM), dtype=FloatDType)
 
 
 @nb.njit(inline="always")
 def nb_allocate_clip_polygon():
     arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
-        MAX_N_VERTEX * 2 * NDIM, FloatDType
+        CLIP_POLYGON_SIZE, FloatDType
     )
-    arr = nb.carray(arr_ptr, (MAX_N_VERTEX * 2, NDIM), dtype=FloatDType)
+    arr = nb.carray(arr_ptr, (CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
     return arr
 
 

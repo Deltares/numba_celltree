@@ -1,5 +1,7 @@
-import numpy as np
+import os
 
+import numba as nb
+import numpy as np
 from numba_celltree import geometry_utils as gu
 from numba_celltree.algorithms.separating_axis import polygons_intersect
 from numba_celltree.constants import Box, Point, Vector
@@ -54,12 +56,12 @@ def test_point_norm():
 
 
 def test_polygon_length():
-    face = [0, 1, 2]
+    face = np.array([0, 1, 2])
     assert gu.polygon_length(face) == 3
     assert gu.polygon_length(face) == 3
-    face = [0, 1, 2, -1, -1]
+    face = np.array([0, 1, 2, -1, -1])
     assert gu.polygon_length(face) == 3
-    face = [0, 1, 2, 3, -1]
+    face = np.array([0, 1, 2, 3, -1])
     assert gu.polygon_length(face) == 4
 
 
@@ -175,22 +177,47 @@ def test_build_bboxes():
 
 
 def test_copy_vertices():
-    face = np.array([0, 1, 2])
-    vertices = np.array(
-        [
-            [0.0, 1.0],
-            [1.0, 0.0],
-            [1.0, 1.0],
-        ]
-    )
-    expected = vertices.copy()
-    actual = gu.copy_vertices(vertices, face)
-    assert len(actual) == 3
-    assert np.array_equal(actual, expected)
-    face = np.array([0, 1, 2, -1, -1])
-    actual = gu.copy_vertices(vertices, face)
-    assert np.array_equal(actual, expected)
-    assert len(actual) == 3
+    """
+    This has to be tested inside of numba jitted function, because the vertices
+    are copied to a stack allocated array. This array is not returned properly
+    to dynamic python. This is OK: these arrays are exclusively for internal
+    use to temporarily store values.
+    """
+    if os.environ.get("NUMBA_DISABLE_JIT", "0") == "0":
+
+        @nb.njit()
+        def test():
+            face = np.array([0, 1, 2, -1, -1])
+            vertices = np.array(
+                [
+                    [0.0, 1.0],
+                    [1.0, 0.0],
+                    [1.0, 1.0],
+                ]
+            )
+            expected = vertices.copy()
+            actual = gu.copy_vertices(vertices, face)
+            result = True
+            for i in range(3):
+                result = result and actual[i, 0] == expected[i, 0]
+                result = result and actual[i, 1] == expected[i, 1]
+            return result
+
+        assert test()
+
+    else:
+        face = np.array([0, 1, 2, -1, -1])
+        vertices = np.array(
+            [
+                [0.0, 1.0],
+                [1.0, 0.0],
+                [1.0, 1.0],
+            ]
+        )
+        expected = vertices.copy()
+        actual = gu.copy_vertices(vertices, face)
+        assert np.array_equal(actual, expected)
+        assert len(actual) == 3
 
 
 def test_point_inside_box():
