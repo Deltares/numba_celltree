@@ -33,9 +33,9 @@ def is_separating_axis(
 
 
 @nb.njit(inline="always")
-def separating_axes(
-    a: Sequence[Point], b: Sequence[Point], length_a: int, length_b: int
-) -> bool:
+def separating_axes(a: Sequence[Point], b: Sequence[Point]) -> bool:
+    length_a = len(a)
+    length_b = len(b)
     p = Point(a[length_a - 1][0], a[length_a - 1][1])
     for i in range(length_a):
         q = Point(a[i][0], a[i][1])
@@ -62,8 +62,6 @@ def polygons_intersect(
     for i in nb.prange(n_shortlist):
         face_a = faces_a[indices_a[i]]
         face_b = faces_b[indices_b[i]]
-        a, length_a = copy_vertices(vertices_a, face_a)
-        b, length_b = copy_vertices(vertices_b, face_b)
-        intersects[i] = separating_axes(a, b, length_a, length_b) and separating_axes(
-            b, a, length_b, length_a
-        )
+        a = copy_vertices(vertices_a, face_a)
+        b = copy_vertices(vertices_b, face_b)
+        intersects[i] = separating_axes(a, b) and separating_axes(b, a)

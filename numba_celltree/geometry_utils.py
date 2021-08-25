@@ -38,10 +38,10 @@ def dot_product(u: Vector, v: Vector) -> float:
 
 
 @nb.njit(inline="always")
-def point_norm(p: Point, v0: Vector, v1: Vector) -> Vector:
+def point_norm(p: Point, v: Vector, u: Vector) -> Vector:
     # Use in case the polygon in not guaranteed counter-clockwise.
-    n = Vector(-(v1.y - v0.y), (v1.x - v0.x))
-    v = Vector(v0.x - p.x, v0.y - p.y)
+    n = Vector(-(u.y - v.y), (u.x - v.x))
+    v = Vector(v.x - p.x, v.y - p.y)
     dot = dot_product(n, v)
     if dot == 0:
         raise ValueError
@@ -51,37 +51,9 @@ def point_norm(p: Point, v0: Vector, v1: Vector) -> Vector:
 
 
 @nb.njit(inline="always")
-def intersection(a: Point, V: Vector, r: Point, N: Vector) -> Tuple[bool, Point]:
-    W = Vector(r.x - a.x, r.y - a.y)
-    nw = dot_product(N, W)
-    nv = dot_product(N, V)
-    if nv != 0:
-        t = nw / nv
-        return True, Point(a.x + t * V.x, a.y + t * V.y)
-    else:
-        return False, Point(np.nan, np.nan)
-
-
-@nb.njit(inline="always")
-def _polygon_area(polygon):
-    length = len(polygon)
-    area = 0.0
-    a = polygon[0]
-    b = polygon[1]
-    u = Point(b.x - a.x, b.y - a.y)
-    for i in range(2, length):
-        c = polygon[i]
-        v = Point(a.x - c.x, a.y - c.y)
-        area += abs(cross_product(u, v))
-        b = c
-        u = v
-    return 0.5 * area
-
-
-@nb.njit(inline="always")
 def polygon_length(face: IntArray) -> int:
     # A minimal polygon is a triangle
-    n = face.size
+    n = len(face)
     for i in range(3, n):
         if face[i] == FILL_VALUE:
             return i
@@ -89,7 +61,8 @@ def polygon_length(face: IntArray) -> int:
 
 
 @nb.njit(inline="always")
-def polygon_area(polygon: Sequence, length: int) -> float:
+def polygon_area(polygon: Sequence) -> float:
+    length = len(polygon)
     area = 0.0
     a = Point(polygon[0][0], polygon[0][1])
     b = Point(polygon[1][0], polygon[1][1])
@@ -104,7 +77,7 @@ def polygon_area(polygon: Sequence, length: int) -> float:
 
 
 @nb.njit(inline="always")
-def point_in_polygon(p: Point, poly: Sequence[Point]) -> bool:
+def point_in_polygon(p: Point, poly: Sequence) -> bool:
     # Refer to: https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
     # Copyright (c) 1970-2003, Wm. Randolph Franklin
     # MIT license.
@@ -142,8 +115,10 @@ def point_in_polygon(p: Point, poly: Sequence[Point]) -> bool:
     length = len(poly)
     c = False
     for i in range(length):
-        v0 = poly[i]
+        v0 = poly[i][0], poly[i][1]
         v1 = poly[(i + 1) % length]
+        v0 = Point(v0[0], v0[1])
+        v1 = Point(v1[0], v1[1])
         # Do not split this in two conditionals: if the first conditional fails,
         # the second will not be executed in Python's (and C's) execution model.
         # This matters because the second can result in division by zero.
@@ -152,11 +127,6 @@ def point_in_polygon(p: Point, poly: Sequence[Point]) -> bool:
         ):
             c = not c
     return c
-
-
-@nb.njit(inline="always")
-def intervals_intersect(a: Sequence[float], b: Sequence[float]) -> bool:
-    return a[0] < b[1] and b[0] < a[1]
 
 
 @nb.njit(inline="always")
@@ -172,8 +142,9 @@ def boxes_intersect(a: Sequence[float], b: Sequence[float]) -> bool:
 
 @nb.njit(inline="always")
 def bounding_box(
-    polygon: IntArray, vertices: FloatArray, max_n_verts: int
+    polygon: IntArray, vertices: FloatArray
 ) -> Tuple[float, float, float, float]:
+    max_n_verts = len(polygon)
     first_vertex = vertices[polygon[0]]
     xmin = xmax = first_vertex[0]
     ymin = ymax = first_vertex[1]
@@ -197,22 +168,22 @@ def build_bboxes(
     vertices: FloatArray,
 ) -> Tuple[FloatArray, IntArray]:
     # Make room for the bounding box of every polygon.
-    n_polys, max_n_verts = faces.shape
+    n_polys = len(faces)
     bbox_coords = np.empty((n_polys, NDIM * 2), FloatDType)
 
     for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
         polygon = faces[i]
-        bbox_coords[i] = bounding_box(polygon, vertices, max_n_verts)
+        bbox_coords[i] = bounding_box(polygon, vertices)
 
     return bbox_coords
 
 
 @nb.njit(inline="always")
-def copy_vertices(vertices: FloatArray, face: IntArray) -> Tuple[FloatArray, int]:
+def copy_vertices(vertices: FloatArray, face: IntArray) -> FloatArray:
     length = polygon_length(face)
     out = allocate_polygon()
     copy(vertices[face], out, length)
-    return out, length
+    return out[:length]
 
 
 @nb.njit(inline="always")
