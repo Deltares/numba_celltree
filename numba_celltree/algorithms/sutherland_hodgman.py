@@ -33,14 +33,14 @@ again the intersection point ~= vertex b. We treat b as if it is just on the
 inside and append it. For consistency, we set b_inside to True, as it will be
 used as a_inside in the next iteration.
 """
-from typing import Sequence
+from typing import Sequence, Tuple
 
 import numba as nb
 import numpy as np
 
-from .constants import PARALLEL, FloatArray, FloatDType, IntArray
-from .geometry_utils import Point, Vector, copy_vertices, intersection, polygon_area
-from .utils import allocate_clip_polygon, copy, push
+from ..constants import PARALLEL, FloatArray, FloatDType, IntArray
+from ..geometry_utils import Point, Vector, copy_vertices, dot_product, polygon_area
+from ..utils import allocate_clip_polygon, copy, push
 
 
 @nb.njit(inline="always")
@@ -51,11 +51,28 @@ def inside(p: Point, r: Point, U: Vector):
 
 
 @nb.njit(inline="always")
-def clip_polygons(
-    polygon: Sequence, clipper: Sequence, length_polygon: int, length_clipper: int
-) -> float:
-    n_output = length_polygon
-    n_clip = length_clipper
+def intersection(a: Point, V: Vector, r: Point, N: Vector) -> Tuple[bool, Point]:
+    W = Vector(r.x - a.x, r.y - a.y)
+    nw = dot_product(N, W)
+    nv = dot_product(N, V)
+    if nv != 0:
+        t = nw / nv
+        return True, Point(a.x + t * V.x, a.y + t * V.y)
+    else:
+        return False, Point(np.nan, np.nan)
+
+
+@nb.njit(inline="always")
+def push_point(polygon: FloatArray, size: int, p: Point) -> int:
+    polygon[size][0] = p.x
+    polygon[size][1] = p.y
+    return size + 1
+
+
+@nb.njit(inline="always")
+def polygon_polygon_clip_area(polygon: Sequence, clipper: Sequence) -> float:
+    n_output = len(polygon)
+    n_clip = len(clipper)
     subject = allocate_clip_polygon()
     output = allocate_clip_polygon()
 
@@ -92,15 +109,15 @@ def clip_polygons(
                 if not a_inside:  # out, or on the edge
                     succes, point = intersection(a, V, r, N)
                     if succes:
-                        n_output = push(output, n_output, point)
-                n_output = push(output, n_output, b)
+                        n_output = push_point(output, n_output, point)
+                n_output = push_point(output, n_output, b)
             elif a_inside:
                 succes, point = intersection(a, V, r, N)
                 if succes:
-                    n_output = push(output, n_output, point)
+                    n_output = push_point(output, n_output, point)
                 else:  # Floating point failure
                     b_inside = True  # flip it for consistency, will be set as a
-                    n_output = push(output, n_output, b)  # push b instead
+                    n_output = push_point(output, n_output, b)  # push b instead
 
             # Advance to next polygon edge
             a = b
@@ -113,7 +130,7 @@ def clip_polygons(
         # Advance to next clipping edge
         r = s
 
-    area = polygon_area(output, n_output)
+    area = polygon_area(output[:n_output])
     return area
 
 
@@ -127,11 +144,11 @@ def area_of_intersection(
     indices_b: IntArray,
 ) -> FloatArray:
     n_intersection = indices_a.size
-    area = np.empyt(n_intersection, dtype=FloatDType)
+    area = np.empty(n_intersection, dtype=FloatDType)
     for i in nb.prange(n_intersection):
-        face_a = faces_a[indices_a]
-        face_b = faces_b[indices_b]
-        a, length_a = copy_vertices(vertices_a, face_a)
-        b, length_b = copy_vertices(vertices_b, face_b)
-        area[i] = clip_polygons(a, b, length_a, length_b)
+        face_a = faces_a[indices_a[i]]
+        face_b = faces_b[indices_b[i]]
+        a = copy_vertices(vertices_a, face_a)
+        b = copy_vertices(vertices_b, face_b)
+        area[i] = polygon_polygon_clip_area(a, b)
     return area

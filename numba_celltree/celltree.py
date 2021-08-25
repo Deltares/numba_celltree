@@ -2,6 +2,7 @@ from typing import Tuple
 
 import numpy as np
 
+from .algorithms import area_of_intersection, polygons_intersect
 from .constants import (
     FILL_VALUE,
     CellTreeData,
@@ -11,10 +12,8 @@ from .constants import (
     IntDType,
 )
 from .creation import initialize
-from .geometry_utils import build_bboxes
+from .geometry_utils import Box, build_bboxes
 from .query import locate_boxes, locate_points
-from .separating_axis import polygons_intersect
-from .sutherland_hodgman import area_of_intersection
 
 try:
     from . import aot_compiled
@@ -49,7 +48,7 @@ def bbox_tree(bb_coords: FloatArray) -> FloatArray:
     xmax = bb_coords[:, 1].max()
     ymin = bb_coords[:, 2].min()
     ymax = bb_coords[:, 3].max()
-    return np.array([xmin, xmax, ymin, ymax])
+    return np.array([xmin, xmax, ymin, ymax], dtype=FloatDType)
 
 
 class CellTree2d:

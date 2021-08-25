@@ -35,6 +35,28 @@ BucketArray = np.ndarray
 NodeArray = np.ndarray
 
 
+class Point(NamedTuple):
+    x: float
+    y: float
+
+
+class Vector(NamedTuple):
+    x: float
+    y: float
+
+
+class Interval(NamedTuple):
+    xmin: float
+    xmax: float
+
+
+class Box(NamedTuple):
+    xmin: float
+    xmax: float
+    ymin: float
+    ymax: float
+
+
 class Node(NamedTuple):
     child: IntDType
     Lmax: FloatDType
