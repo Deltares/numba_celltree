@@ -102,7 +102,7 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
     return p0, p1
 
 
-# @nb.njit
+@nb.njit(inline="always")
 def cyrus_beck_line_polygon_clip(
     a: Point, b: Point, poly: Sequence[Point]
 ) -> Tuple[bool, Point, Point]:
