@@ -3,8 +3,8 @@ from typing import Sequence, Tuple
 import numba as nb
 import numpy as np
 
-from .constants import FLOAT_MAX, FLOAT_MIN, PARALLEL, BoolArray, FloatArray, IntArray
-from .geometry_utils import Point, Vector, copy_vertices, dot_product
+from ..constants import FLOAT_MAX, FLOAT_MIN, PARALLEL, BoolArray, FloatArray, IntArray
+from ..geometry_utils import Point, Vector, copy_vertices, dot_product
 
 
 @nb.njit(inline="always")

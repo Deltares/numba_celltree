@@ -6,7 +6,9 @@ from ..constants import Box, Point
 from ..geometry_utils import point_inside_box
 
 
-def liang_barsky_line_clip(a: Point, b: Point, box: Box) -> Tuple[bool, Point, Point]:
+def liang_barsky_line_box_clip(
+    a: Point, b: Point, box: Box
+) -> Tuple[bool, Point, Point]:
     # Liang-Barsky algorithm
     # Point(np.nan, np.nan)
     # Point(np.nan, np.nan)

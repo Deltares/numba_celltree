@@ -154,7 +154,7 @@ NumbaCellTreeData = nbtypes.NamedTuple(
         NumbaNodeDType[:],  # nodes
         NumbaIntDType[:],  # bb_indices
         NumbaFloatDType[:, :],  # bb_coords
-        NumbaBox,  # bbox
+        NumbaFloatDType[:],  # bbox
         NumbaIntDType,  # cells_per_leaf
     ),
     CellTreeData,

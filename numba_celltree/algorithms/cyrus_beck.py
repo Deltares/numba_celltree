@@ -1,3 +1,18 @@
+"""
+Implementation based off the description in:
+Skala, V. (1993). An efficient algorithm for line clipping by convex polygon.
+Computers & Graphics, 17(4), 417-421.
+
+Available at:
+https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.302.5729&rep=rep1&type=pdf
+
+Also available in:
+Duc Huy Bui, 1999. Algorithms for Line Clipping and Their Complexity. PhD
+Thesis.
+
+Available at:
+http://graphics.zcu.cz/files/DIS_1999_Bui_Duc_Huy.pdf
+"""
 from typing import Sequence, Tuple
 
 import numba as nb
@@ -90,37 +105,29 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
 
 
 # @nb.njit
-def cyrus_beck_line_clip(
+def cyrus_beck_line_polygon_clip(
     poly: Sequence[Point], a: Point, b: Point
-) -> Tuple[int, Point, Point]:
-    # Implementation based off the description in:
-    # Skala, V. (1993). An efficient algorithm for line clipping by convex
-    # polygon. Computers & Graphics, 17(4), 417-421.
-    # Available at:
-    # https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.302.5729&rep=rep1&type=pdf
-    #
-    # Also available in:
-    # Duc Huy Bui, 1999. Algorithms for Line Clipping and Their Complexity. PhD
-    # Thesis. Available at:
-    # http://graphics.zcu.cz/files/DIS_1999_Bui_Duc_Huy.pdf
-    #
-    # In short, the basic idea:
-    # For a given segment s (a -> b), test which two edges of a convex polygon
-    # it can intersect. If it intersects, the vertices [v0, v1] of an edge are
-    # separated by the segment (s). If s separates, the cross products of a ->
-    # v0 (ksi) and a -> v1 (eta) will point in opposing directions (ksi * eta <
-    # 0). If both are > 0 or both are < 0 (ksi * eta > 0), they fall on the on
-    # the same side of the line; they are parallel and possibly collinear if ksi
-    # * eta == 0.
-    #
-    # Once the number of intersections (k), and the possibly intersecting edges
-    # (i0, i1) have been identified, we can compute the intersections. This
-    # assumes the vertices of the polygons are ordered in counter-clockwise
-    # orientation. We can also tell whether a line is possibly entering or
-    # leaving the polygon by the sign of the dot product.
-    #
-    # A valid intersection falls on the domain of the parametrized segment:
-    # 0 <= t <= 1.
+) -> Tuple[bool, Point, Point]:
+    """
+    In short, the basic idea:
+
+    For a given segment s (a -> b), test which two edges of a convex polygon it
+    can intersect. If it intersects, the vertices [v0, v1] of an edge are
+    separated by the segment (s). If s separates, the cross products of a -> v0
+    (ksi) and a -> v1 (eta) will point in opposing directions (ksi * eta < 0).
+    If both are > 0 or both are < 0 (ksi * eta > 0), they fall on the on the
+    same side of the line; they are parallel and possibly collinear if ksi *
+    eta == 0.
+
+    Once the number of intersections (k), and the possibly intersecting edges
+    (i0, i1) have been identified, we can compute the intersections. This
+    assumes the vertices of the polygons are ordered in counter-clockwise
+    orientation. We can also tell whether a line is possibly entering or
+    leaving the polygon by the sign of the dot product.
+
+    A valid intersection falls on the domain of the parametrized segment:
+    """
+    0 <= t <= 1.0
     NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
 
     length = len(poly)

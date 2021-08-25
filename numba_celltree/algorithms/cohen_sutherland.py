@@ -1,3 +1,9 @@
+"""
+Slightly adapted from:
+https://github.com/scivision/lineclipping-python-fortran
+
+(MIT License)
+"""
 from typing import Tuple
 
 import numba as nb
@@ -10,7 +16,6 @@ INSIDE, LEFT, RIGHT, LOWER, UPPER = 0, 1, 2, 4, 8
 
 @nb.njit(inline="always")
 def get_clip(a: Point, box: Box):
-    # if dbglvl>1: print('point: '),; print(xa,ya)
     p = INSIDE  # default is inside
 
     # consider x
@@ -28,7 +33,7 @@ def get_clip(a: Point, box: Box):
 
 
 @nb.njit(inline="always")
-def cohen_sutherland_line_clip(box: Box, a: Point, b: Point) -> Tuple[Point, Point]:
+def cohen_sutherland_line_box_clip(box: Box, a: Point, b: Point) -> Tuple[Point, Point]:
     """
     Clips a line to a rectangular area.
 

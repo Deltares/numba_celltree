@@ -38,9 +38,9 @@ from typing import Sequence
 import numba as nb
 import numpy as np
 
-from .constants import PARALLEL, FloatArray, FloatDType, IntArray
-from .geometry_utils import Point, Vector, copy_vertices, intersection, polygon_area
-from .utils import allocate_clip_polygon, copy, push
+from ..constants import PARALLEL, FloatArray, FloatDType, IntArray
+from ..geometry_utils import Point, Vector, copy_vertices, intersection, polygon_area
+from ..utils import allocate_clip_polygon, copy, push
 
 
 @nb.njit(inline="always")

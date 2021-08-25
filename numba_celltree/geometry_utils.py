@@ -59,7 +59,7 @@ def intersection(a: Point, V: Vector, r: Point, N: Vector) -> Tuple[bool, Point]
         t = nw / nv
         return True, Point(a.x + t * V.x, a.y + t * V.y)
     else:
-        return False, Point(0.0, 0.0)
+        return False, Point(np.nan, np.nan)
 
 
 @nb.njit(inline="always")

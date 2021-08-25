@@ -3,6 +3,11 @@ from typing import Tuple
 import numba as nb
 import numpy as np
 
+from .algorithms import (
+    cohen_sutherland_line_box_clip,
+    cyrus_beck_line_polygon_clip,
+    liang_barsky_line_box_clip,
+)
 from .constants import (
     FILL_VALUE,
     FLOAT_MAX,
@@ -19,7 +24,6 @@ from .geometry_utils import (
     Point,
     Vector,
     boxes_intersect,
-    line_intersects_box,
     polygon_length,
     to_vector,
 )
@@ -207,12 +211,11 @@ def locate_edge(
     store_intersection: bool,
 ):
     # Check if the entire mesh intersects with the line segment at all
-    tree_intersects, _, _ = line_intersects_box(a, b, tree.bbox)
+    tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree.bbox)
     if not tree_intersects:
         return 0
 
     V = to_vector(a, b)
-    length = np.sqrt(V.x ** 2 + V.y ** 2)
     stack = allocate_stack()
     stack[0] = 0
     size = 1
@@ -228,26 +231,18 @@ def locate_edge(
                 bbox_index = tree.bb_indices[i]
                 print(bbox_index)
                 box = box_from_array(tree.bb_coords[bbox_index])
-                # box_intersect, _, _ = line_intersects_box(a, b, box)
-                box_intersect, t0, t1 = line_intersects_box(a, b, box)
+                # box_intersect, _, _ = liang_barsky_line_box_clip(a, b, box)
+                box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)
                 if box_intersect:
-                    print(box, t0, t1)
-                    if store_intersection:
-                        indices[count] = bbox_index
-                        intersections[count] = t0
-                        intersections[count, 1] = t1
-                        intersections[count, 2] = (t1 - t0) * length
-                    count += 1
-                # if box_intersect:
-                #    face_intersects, t0, t1 = face_intersects(
-                #        a, b, tree.vertices, tree.faces, bbox_index
-                #    )
-                #    if face_intersects:
-                #        if store_intersection:
-                #            indices[count] = bbox_index
-                #            intersections[count, 0] = t0
-                #            intersections[count, 1] = t1
-                #        count += 1
+                    face_intersects, t0, t1 = cyrus_beck_line_polygon_clip(
+                        a, b, tree.vertices, tree.faces, bbox_index
+                    )
+                    if face_intersects:
+                        if store_intersection:
+                            indices[count] = bbox_index
+                            intersections[count, 0] = t0
+                            intersections[count, 1] = t1
+                        count += 1
             continue
 
         # Note, "x" is a placeholder for x, y here
