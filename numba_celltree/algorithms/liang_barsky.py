@@ -9,9 +9,6 @@ from ..geometry_utils import point_inside_box
 def liang_barsky_line_box_clip(
     a: Point, b: Point, box: Box
 ) -> Tuple[bool, Point, Point]:
-    # Liang-Barsky algorithm
-    # Point(np.nan, np.nan)
-    # Point(np.nan, np.nan)
     t0 = 0.0
     t1 = 1.0
     NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
@@ -53,6 +50,6 @@ def liang_barsky_line_box_clip(
                 elif t < t1:
                     t1 = t
 
-    # c = Point(a.x + t0 * dx, a.y + t0 * dy)
-    # c = Point(a.x + t1 * dx, a.y + t1 * dy)
-    return True, t0, t1
+    c = Point(a.x + t0 * dx, a.y + t0 * dy)
+    d = Point(a.x + t1 * dx, a.y + t1 * dy)
+    return True, c, d
