@@ -15,9 +15,9 @@ efficiently, without exhaustively checking every cell. The implementation in
 ``numba_celltree`` provides four ways to search the tree:
 
 * Locating single points
-* Locating line segments
 * Locating bounding boxes
 * Locating convex polygons (e.g. cells of another mesh)
+* Locating line segments
 
 This example provides a basic introduction to searching a cell tree for each of
 these.
@@ -47,6 +47,9 @@ edges = demo.edges(faces, -1)
 fig, ax = plt.subplots()
 demo.plot_edges(node_x, node_y, edges, ax, color="black")
 
+# Locating points
+# ---------------
+#
 # We'll build a cell tree first, then look for some points.
 tree = CellTree2d(vertices, faces)
 points = np.array(
@@ -102,6 +105,9 @@ ax.scatter(*points.transpose())
 # line may intersect multiple cells, and a bounding box or polygon may contain
 # multiple cells.
 #
+# Locating bounding boxes
+# -----------------------
+#
 # A search of N points will yield N answers (cell numbers). A search of N boxes
 # may yield M answers. To illustrate, let's look for all the cells inside of
 # a box.
@@ -147,6 +153,9 @@ demo.plot_edges(
 )
 demo.plot_boxes(box_coords, ax, color="red", linewidth=3)
 
+# Locating cells
+# --------------
+#
 # Similarly, we can look for other cells (convex polygons):
 triangle_vertices = np.array(
     [
@@ -204,6 +213,9 @@ demo.plot_edges(node_x, node_y, edges, ax, color="black")
 demo.plot_edges(tri_x, tri_y, demo.edges(triangles, -1), ax, color="red", linewidth=3)
 fig.colorbar(colored)
 
+# Locating lines
+# --------------
+#
 # As a final example, we will compute the intersections with two lines (edges).
 # This returns three arrays of equal length:
 #
