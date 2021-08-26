@@ -1,4 +1,5 @@
 import numpy as np
+
 from numba_celltree.algorithms.separating_axis import (
     polygons_intersect,
     separating_axes,
@@ -75,6 +76,28 @@ def test_triangles_intersect():
     )
     assert not separating_axes(a, b)
     assert not separating_axes(b, a)
+
+    # This is a case which requires testing both (a, b) and (b, a) to determine intersection
+    # two edges of a do separate b
+    # no edges of b separate a
+    # => no intersection
+    a = np.array(
+        [
+            [5.0, 3.0],
+            [7.0, 3.0],
+            [7.0, 5.0],
+        ]
+    )
+    b = np.array(
+        [
+            [6.9, 5.6],
+            [8.0, 4.75],
+            [7.85, 5.9],
+        ]
+    )
+    assert separating_axes(a, b)
+    assert not separating_axes(b, a)
+    assert not (separating_axes(a, b) and separating_axes(b, a))
 
 
 def test_box_triangle():

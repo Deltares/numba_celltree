@@ -64,5 +64,5 @@ def polygons_intersect(
         face_b = faces_b[indices_b[i]]
         a = copy_vertices(vertices_a, face_a)
         b = copy_vertices(vertices_b, face_b)
-        intersects[i] = separating_axes(a, b)
+        intersects[i] = separating_axes(a, b) and separating_axes(b, a)
     return intersects
