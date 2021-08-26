@@ -164,6 +164,11 @@ def cyrus_beck_line_polygon_clip(
 
     # Gather the intersections, given half-planes
     t0, t1 = intersections(a, s, poly, length, k, i0, i1)
+
+    # Swap if necessary so that t0 is the smaller
+    if t1 < t0:
+        t0, t1 = t1, t0
+
     valid0 = t0 > 0 and t0 < 1
     valid1 = t1 > 0 and t1 < 1
 
