@@ -9,25 +9,23 @@ from .algorithms import (
     liang_barsky_line_box_clip,
 )
 from .constants import (
-    FILL_VALUE,
-    FLOAT_MAX,
     PARALLEL,
     CellTreeData,
     FloatArray,
     FloatDType,
     IntArray,
     IntDType,
-    NodeDType,
 )
 from .geometry_utils import (
     Box,
     Point,
-    Vector,
+    as_point,
     boxes_intersect,
+    copy_vertices_into,
     polygon_length,
     to_vector,
 )
-from .utils import allocate_stack, pop, push
+from .utils import allocate_polygon, allocate_stack, pop, push
 
 
 # Point search functions
@@ -143,8 +141,8 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
             dim = 1 if node["dim"] else 0
             minimum = 2 * dim
             maximum = 2 * dim + 1
-            left = box[maximum] <= node["Lmax"]
-            right = box[minimum] >= node["Rmin"]
+            left = box[minimum] <= node["Lmax"]
+            right = box[maximum] >= node["Rmin"]
 
             if left and right:
                 size = push(stack, node["child"], size)
@@ -211,12 +209,14 @@ def locate_edge(
     store_intersection: bool,
 ):
     # Check if the entire mesh intersects with the line segment at all
-    tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree.bbox)
+    tree_bbox = box_from_array(tree.bbox)
+    tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree_bbox)
     if not tree_intersects:
         return 0
 
     V = to_vector(a, b)
     stack = allocate_stack()
+    polygon_work_array = allocate_polygon()
     stack[0] = 0
     size = 1
     count = 0
@@ -233,14 +233,17 @@ def locate_edge(
                 # box_intersect, _, _ = liang_barsky_line_box_clip(a, b, box)
                 box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)
                 if box_intersect:
-                    face_intersects, t0, t1 = cyrus_beck_line_polygon_clip(
-                        a, b, tree.vertices, tree.faces, bbox_index
+                    polygon = copy_vertices_into(
+                        tree.vertices, tree.faces[bbox_index], polygon_work_array
                     )
+                    face_intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
                     if face_intersects:
                         if store_intersection:
                             indices[count] = bbox_index
-                            intersections[count, 0] = t0
-                            intersections[count, 1] = t1
+                            intersections[count, 0, 0] = c.x
+                            intersections[count, 0, 1] = c.y
+                            intersections[count, 1, 0] = d.x
+                            intersections[count, 1, 1] = d.y
                         count += 1
             continue
 
@@ -248,27 +251,40 @@ def locate_edge(
         # Contrast with t, which is along vector
         node_dim = 1 if node["dim"] else 0
         dx = V[node_dim]
-        dx_max = node["Lmax"] - a[node_dim]
-        dx_min = node["Rmin"] - b[node_dim]
+        if dx > 0.0:
+            dx_left = node["Lmax"] - a[node_dim]
+            dx_right = node["Rmin"] - b[node_dim]
+        else:
+            dx_left = node["Lmax"] - b[node_dim]
+            dx_right = node["Rmin"] - a[node_dim]
 
         # Check how origin (a) and end (b) are located compared to box edges
         # (Lmax, Rmin). The box should be investigated if:
-        # * the origin is left of Lmax (dx_max >= 0)
-        # * the end is right of Rmin (dx_min <= 0)
-        left = dx_max >= 0.0
-        right = dx_min <= 0.0
+        # * the origin is left of Lmax (dx_left >= 0)
+        # * the end is right of Rmin (dx_right <= 0)
+        left = dx_left >= 0.0
+        right = dx_right <= 0.0
 
         # Now find the intersection coordinates. These have to occur within in
         # the bounds of the vector. Note that if the line has no slope in this
         # dim (dx == 0), we cannot compute the intersection, and we have to
         # defer to the child nodes.
-        if dx != 0.0:  # TODO: abs(dx) > EPISLON?
+        if dx > 0.0:  # TODO: abs(dx) > EPISLON?
             if left:
-                t_left = dx_max / dx
+                t_left = dx_left / dx
                 left = t_left >= 0.0
             if right:
-                t_right = dx_min / dx
+                t_right = dx_right / dx
                 right = t_right <= 1.0
+        elif dx < 0.0:
+            if left:
+                t_left = 1.0 - (dx_left / dx)
+                left = t_left >= 0.0
+            if right:
+                t_right = 1.0 - (dx_right / dx)
+                right = t_right <= 1.0
+        # else dx == 0.0. In this case there's no info to extract from this
+        # node. We'll fully defer to the children.
 
         if left and right:
             size = push(stack, node["child"], size)
@@ -303,8 +319,9 @@ def locate_edges(
     counts[0] = 0
     # First run a count so we can allocate afterwards
     for i in nb.prange(n_edge):  # pylint: disable=not-an-iterable
-        box = box_from_array(edge_coords[i])
-        counts[i + 1] = locate_edge(box, tree, int_dummy, float_dummy, False)
+        a = as_point(edge_coords[i, 0])
+        b = as_point(edge_coords[i, 1])
+        counts[i + 1] = locate_edge(a, b, tree, int_dummy, float_dummy, False)
 
     # Run a cumulative sum
     total = 0
@@ -316,15 +333,15 @@ def locate_edges(
     ii = np.empty(total, dtype=IntDType)
     jj = np.empty(total, dtype=IntDType)
     # Intersections consists of t0, t1, length for every intersected edge
-    intersections = np.empty((total, 3), dtype=FloatDType)
+    xy = np.empty((total, 2, 2), dtype=FloatDType)
     for i in nb.prange(n_edge):  # pylint: disable=not-an-iterable
         start = counts[i]
         end = counts[i + 1]
         ii[start:end] = i
         indices = jj[start:end]
-        lengths = intersections[start:end]
-        a = Point(edge_coords[i, 0, 0], edge_coords[i, 0, 1])
-        b = Point(edge_coords[i, 1, 0], edge_coords[i, 2, 1])
-        locate_edge(a, b, tree, indices, lengths, True)
+        intersections = xy[start:end]
+        a = as_point(edge_coords[i, 0])
+        b = as_point(edge_coords[i, 1])
+        locate_edge(a, b, tree, indices, intersections, True)
 
-    return ii, jj, intersections
+    return ii, jj, xy
