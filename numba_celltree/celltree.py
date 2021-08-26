@@ -12,8 +12,8 @@ from .constants import (
     IntDType,
 )
 from .creation import initialize
-from .geometry_utils import Box, build_bboxes
-from .query import locate_boxes, locate_points
+from .geometry_utils import build_bboxes
+from .query import locate_boxes, locate_edges, locate_points
 
 try:
     from . import aot_compiled
@@ -26,8 +26,8 @@ except ImportError:
     )
 
 
+# Ensure all types are as as statically expected.
 def cast_vertices(vertices: FloatArray) -> FloatArray:
-    # Ensure all types are as as statically expected.
     vertices = np.ascontiguousarray(vertices, dtype=FloatDType)
     if vertices.ndim != 2 or vertices.shape[1] != 2:
         raise ValueError("vertices must be a Nx2 array")
@@ -41,6 +41,13 @@ def cast_faces(faces: IntArray, fill_value) -> IntArray:
     if fill_value != FILL_VALUE:
         faces[faces == fill_value] = FILL_VALUE
     return faces
+
+
+def cast_edges(edges: FloatArray) -> FloatArray:
+    edges = np.ascontiguousarray(edges, dtype=FloatDType)
+    if edges.ndim != 3 or edges.shape[1] != 2 or edges.shape[2] != 2:
+        raise ValueError("edges must be a Nx2x2 array")
+    return edges
 
 
 def bbox_tree(bb_coords: FloatArray) -> FloatArray:
@@ -69,6 +76,7 @@ class CellTree2d:
         # afterwards
         self._locate_points = locate_points
         self._locate_boxes = locate_boxes
+        self._locate_edges = locate_edges
 
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
@@ -133,7 +141,7 @@ class CellTree2d:
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
         bbox_coords = build_bboxes(faces, vertices)
-        shortlist_i, shortlist_j = self._locate_bboxes(bbox_coords, self.celltree_data)
+        shortlist_i, shortlist_j = self._locate_boxes(bbox_coords, self.celltree_data)
         intersects = polygons_intersect(
             vertices_a=vertices,
             vertices_b=self.vertices,
@@ -196,3 +204,9 @@ class CellTree2d:
             indices_b=j,
         )
         return i, j, area
+
+    def intersect_edges(
+        self, edge_coords: FloatArray
+    ) -> Tuple[IntArray, IntArray, FloatArray]:
+        edge_coords = cast_edges(edge_coords)
+        return self._locate_edges(edge_coords, self.celltree_data)
