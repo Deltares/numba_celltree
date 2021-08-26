@@ -193,5 +193,17 @@ def copy_vertices(vertices: FloatArray, face: IntArray) -> FloatArray:
 
 
 @nb.njit(inline="always")
+def copy_vertices_into(
+    vertices: FloatArray, face: IntArray, out: FloatArray
+) -> FloatArray:
+    length = polygon_length(face)
+    for i in range(length):
+        v = vertices[face[i]]
+        out[i, 0] = v[0]
+        out[i, 1] = v[1]
+    return out[:length]
+
+
+@nb.njit(inline="always")
 def point_inside_box(a: Point, box: Box):
     return box.xmin < a.x and a.x < box.xmax and box.ymin < a.y and a.y < box.ymax

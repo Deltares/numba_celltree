@@ -228,6 +228,22 @@ def test_copy_vertices():
         assert len(actual) == 3
 
 
+def test_copy_vertices_into():
+    out = np.empty((10, 2))
+    face = np.array([0, 1, 2, -1, -1])
+    vertices = np.array(
+        [
+            [0.0, 1.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+        ]
+    )
+    expected = vertices.copy()
+    actual = gu.copy_vertices_into(vertices, face, out)
+    assert np.array_equal(actual, expected)
+    assert len(actual) == 3
+
+
 def test_point_inside_box():
     box = Box(0.0, 1.0, 0.0, 1.0)
     a = Point(0.5, 0.5)
