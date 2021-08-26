@@ -19,7 +19,14 @@ import numba as nb
 import numpy as np
 
 from ..constants import Point, Vector
-from ..geometry_utils import as_point, cross_product, dot_product, to_point, to_vector
+from ..geometry_utils import (
+    as_point,
+    cross_product,
+    dot_product,
+    point_in_polygon,
+    to_point,
+    to_vector,
+)
 
 
 @nb.njit(inline="always")
@@ -127,9 +134,15 @@ def cyrus_beck_line_polygon_clip(
     0 <= t <= 1.0
     """
     NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
-
     length = len(poly)
     s = to_vector(a, b)
+
+    # Test whether points are identical
+    if s.x == 0 and s.y == 0:
+        return NO_INTERSECTION
+    # Test whether line is fully enclosed in box
+    if point_in_polygon(a, poly) and point_in_polygon(b, poly):
+        return True, a, b
 
     i0 = -1
     i1 = -1
@@ -150,7 +163,8 @@ def cyrus_beck_line_polygon_clip(
         if ksi_eta == 0 and is_collinear(a, v0, v1):
             p0, p1 = collinear_case(a, b, v0, v1)
             return True, p0, p1
-        elif (ksi_eta) < 0:
+        # Note: <= rather than <
+        elif (ksi_eta) <= 0:
             if k == 0:
                 i0 = i
             else:
@@ -169,8 +183,11 @@ def cyrus_beck_line_polygon_clip(
     if t1 < t0:
         t0, t1 = t1, t0
 
-    valid0 = t0 > 0 and t0 < 1
-    valid1 = t1 > 0 and t1 < 1
+    # Note:
+    # t >= 0, not >
+    # t1 <= 1, not <
+    valid0 = t0 >= 0 and t0 < 1
+    valid1 = t1 > 0 and t1 <= 1
 
     # Return only the intersections that are within the segment
     if valid0 and valid1:

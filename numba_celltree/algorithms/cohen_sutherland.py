@@ -46,10 +46,15 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
     four None values will be returned as tuple. Otherwise a tuple of the
     clipped line points will be returned in the form (cx1, ca.y, cb.x, cb.y).
     """
+    NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
+    dx = b.x - a.x
+    dy = b.y - a.y
+    if dx == 0.0 and dy == 0.0:
+        return NO_INTERSECTION
+
     # check for trivially outside lines
     k1 = get_clip(a, box)
     k2 = get_clip(b, box)
-    NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
 
     # examine non-trivially outside points
     # bitwise OR |
@@ -65,16 +70,16 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
         # this is not a bitwise or, it's the word "or"
         opt = k1 or k2  # take first non-zero point, short circuit logic
         if opt & UPPER:  # these are bitwise ANDS
-            x = a.x + (b.x - a.x) * (box.ymax - a.y) / (b.y - a.y)
+            x = a.x + dx * (box.ymax - a.y) / dy
             y = box.ymax
         elif opt & LOWER:
-            x = a.x + (b.x - a.x) * (box.ymin - a.y) / (b.y - a.y)
+            x = a.x + dx * (box.ymin - a.y) / dy
             y = box.ymin
         elif opt & RIGHT:
-            y = a.y + (b.y - a.y) * (box.xmax - a.x) / (b.x - a.x)
+            y = a.y + dy * (box.xmax - a.x) / dx
             x = box.xmax
         elif opt & LEFT:
-            y = a.y + (b.y - a.y) * (box.xmin - a.x) / (b.x - a.x)
+            y = a.y + dy * (box.xmin - a.x) / dx
             x = box.xmin
         else:
             raise RuntimeError("Undefined clipping state")

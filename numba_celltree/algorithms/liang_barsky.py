@@ -9,16 +9,18 @@ from ..geometry_utils import point_inside_box
 def liang_barsky_line_box_clip(
     a: Point, b: Point, box: Box
 ) -> Tuple[bool, Point, Point]:
-    t0 = 0.0
-    t1 = 1.0
     NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
-
-    # Test whether line is fully enclosed in box
-    if point_inside_box(a, box) and point_inside_box(b, box):
-        return True, t0, t1
-
     dx = b.x - a.x
     dy = b.y - a.y
+
+    if dx == 0.0 and dy == 0.0:
+        return NO_INTERSECTION
+    # Test whether line is fully enclosed in box
+    if point_inside_box(a, box) and point_inside_box(b, box):
+        return True, a, b
+
+    t0 = 0.0
+    t1 = 1.0
     P = (-dx, dx, -dy, dy)
     Q = (
         a.x - box.xmin,
