@@ -15,16 +15,6 @@ from .creation import initialize
 from .geometry_utils import build_bboxes
 from .query import locate_boxes, locate_edges, locate_points
 
-try:
-    from . import aot_compiled
-except ImportError:
-    import warnings
-
-    warnings.warn(
-        "Could not import ahead-of-time compiled celltree. Reinstall package "
-        "or use jit=True."
-    )
-
 
 # Ensure all types are as as statically expected.
 def cast_vertices(vertices: FloatArray) -> FloatArray:
@@ -66,18 +56,7 @@ class CellTree2d:
         n_buckets: int = 4,
         cells_per_leaf: int = 2,
         fill_value=-1,
-        jit=False,
     ):
-        if jit:
-            self._initialize = initialize
-        else:
-            self._initialize = aot_compiled.initialize
-        # Compiling query only takes around 5 seconds and is much faster
-        # afterwards
-        self._locate_points = locate_points
-        self._locate_boxes = locate_boxes
-        self._locate_edges = locate_edges
-
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
@@ -118,7 +97,7 @@ class CellTree2d:
         tree_face_indices: IntArray of size N
         """
         points = cast_vertices(points)
-        return self._locate_points(points, self.celltree_data)
+        return locate_points(points, self.celltree_data)
 
     def locate_boxes(self, bbox_coords) -> Tuple[IntArray, IntArray]:
         """
@@ -135,13 +114,13 @@ class CellTree2d:
             Indices of the face
         """
         bbox_coords = bbox_coords.astype(FloatDType)
-        return self._locate_boxes(bbox_coords, self.celltree_data)
+        return locate_boxes(bbox_coords, self.celltree_data)
 
     def _locate_faces(
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
         bbox_coords = build_bboxes(faces, vertices)
-        shortlist_i, shortlist_j = self._locate_boxes(bbox_coords, self.celltree_data)
+        shortlist_i, shortlist_j = locate_boxes(bbox_coords, self.celltree_data)
         intersects = polygons_intersect(
             vertices_a=vertices,
             vertices_b=self.vertices,
@@ -209,4 +188,4 @@ class CellTree2d:
         self, edge_coords: FloatArray
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         edge_coords = cast_edges(edge_coords)
-        return self._locate_edges(edge_coords, self.celltree_data)
+        return locate_edges(edge_coords, self.celltree_data)
