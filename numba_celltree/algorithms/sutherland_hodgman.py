@@ -1,24 +1,24 @@
 """
-Sutherland-Hodgman clipping 
+Sutherland-Hodgman clipping
 ---------------------------
 Vertices (always lower case, single letter):
 Clipping polygon with vertices r, s, ...
-Subject polgyon with vertices a, b, ...  
+Subject polgyon with vertices a, b, ...
 Vectors (always upper case, single letter):
 
 * U: r -> s
 * N: norm, orthogonal to u
 * V: a -> b
 * W: a -> r
-   
+
    s ----- ...
    |
    |  b ----- ...
-   | / 
-   |/   
-   x     
-  /|      
- / |       
+   | /
+   |/
+   x
+  /|
+ / |
 a--+-- ...
    |
    r ----- ...
@@ -27,7 +27,7 @@ Floating point rounding should not be an issue, since we're only looking at
 finding the area of overlap of two convex polygons.
 In case of intersection failure, we can ignore it when going out -> in. It will
 occur when the outgoing point is very close the clipping edge. In that case the
-intersection point ~= vertex b, and we can safely skip the intersection. 
+intersection point ~= vertex b, and we can safely skip the intersection.
 When going in -> out, b might be located on the edge. If intersection fails,
 again the intersection point ~= vertex b. We treat b as if it is just on the
 inside and append it. For consistency, we set b_inside to True, as it will be
@@ -40,7 +40,7 @@ import numpy as np
 
 from ..constants import PARALLEL, FloatArray, FloatDType, IntArray
 from ..geometry_utils import Point, Vector, copy_vertices, dot_product, polygon_area
-from ..utils import allocate_clip_polygon, copy, push
+from ..utils import allocate_clip_polygon, copy
 
 
 @nb.njit(inline="always")

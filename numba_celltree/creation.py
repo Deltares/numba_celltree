@@ -4,16 +4,13 @@ import numba as nb
 import numpy as np
 
 from .constants import (
-    FILL_VALUE,
     FLOAT_MAX,
     FLOAT_MIN,
     INT_MAX,
-    NDIM,
     Bucket,
     BucketArray,
     BucketDType,
     FloatArray,
-    FloatDType,
     IntArray,
     IntDType,
     Node,
@@ -384,7 +381,7 @@ def build(
     return node_index
 
 
-@nb.njit
+@nb.njit(cache=True)
 def initialize(
     vertices: FloatArray, faces: IntArray, n_buckets: int = 4, cells_per_leaf: int = 2
 ) -> Tuple[NodeArray, IntArray]:
@@ -410,5 +407,5 @@ def initialize(
         cells_per_leaf,
     )
 
-    ## Remove the unused part in nodes.
+    # Remove the unused part in nodes.
     return nodes[:node_index], bb_indices, bb_coords

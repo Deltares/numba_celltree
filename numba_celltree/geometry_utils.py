@@ -10,11 +10,10 @@ from .constants import (
     FloatArray,
     FloatDType,
     IntArray,
-    IntDType,
     Point,
     Vector,
 )
-from .utils import allocate_polygon, copy
+from .utils import allocate_polygon
 
 
 @nb.njit(inline="always")

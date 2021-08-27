@@ -1,10 +1,8 @@
-import os
-
 import numba as nb
 import numpy as np
 
 from numba_celltree import utils as ut
-from numba_celltree.constants import MAX_N_VERTEX, MAX_TREE_DEPTH, FloatDType, IntDType
+from numba_celltree.constants import MAX_N_VERTEX, MAX_TREE_DEPTH
 
 
 def test_pop():

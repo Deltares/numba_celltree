@@ -1,12 +1,9 @@
-from typing import Tuple
-
 import numba as nb
 import numpy as np
 
-from .algorithms import (
+from .algorithms import (  # liang_barsky_line_box_clip,
     cohen_sutherland_line_box_clip,
     cyrus_beck_line_polygon_clip,
-    liang_barsky_line_box_clip,
 )
 from .constants import (
     PARALLEL,
@@ -92,7 +89,7 @@ def locate_point(point: Point, tree: CellTreeData):
     return return_value
 
 
-@nb.njit(parallel=PARALLEL)
+@nb.njit(parallel=PARALLEL, cache=True)
 def locate_points(
     points: FloatArray,
     tree: CellTreeData,
@@ -155,7 +152,7 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
     return count
 
 
-@nb.njit
+@nb.njit(parallel=PARALLEL, cache=True)
 def locate_boxes(
     box_coords: FloatArray,
     tree: CellTreeData,
@@ -297,7 +294,7 @@ def locate_edge(
     return count
 
 
-@nb.njit
+@nb.njit(parallel=PARALLEL, cache=True)
 def locate_edges(
     edge_coords: FloatArray,
     tree: CellTreeData,

@@ -73,20 +73,20 @@ def test_init():
     can a tree be initialized
     """
     # with defaults
-    tree = CellTree2d(nodes, faces)
+    CellTree2d(nodes, faces)
     # with everything specified
-    tree = CellTree2d(nodes, faces, n_buckets=2, cells_per_leaf=1)
+    CellTree2d(nodes, faces, n_buckets=2, cells_per_leaf=1)
     # with n_buckets
-    tree = CellTree2d(nodes, faces, n_buckets=4)
+    CellTree2d(nodes, faces, n_buckets=4)
     # with cells_per_leaf
-    tree = CellTree2d(nodes, faces, cells_per_leaf=2)
+    CellTree2d(nodes, faces, cells_per_leaf=2)
 
 
 def test_lists():
     """
     python lists should get converted to numpy arrays
     """
-    tree = CellTree2d(nodes2, faces2)
+    CellTree2d(nodes2, faces2)
 
 
 def test_types():
@@ -95,7 +95,7 @@ def test_types():
     """
     nodes = np.array(nodes2, dtype=np.float32)
     faces = np.array(faces2, dtype=np.int32)
-    tree = CellTree2d(nodes, faces)
+    CellTree2d(nodes, faces)
 
 
 def test_shape_error():
@@ -107,17 +107,17 @@ def test_shape_error():
 
     with pytest.raises(ValueError):
         # nodes is wrong shape
-        tree = CellTree2d(nodes, faces)
-        tree = CellTree2d(nodes2, (2, 3, 4, 5))
-        tree = CellTree2d(nodes2, ((2, 3, 4, 5), (1, 2, 3, 4, 5), (1, 2, 3, 4, 5)))
+        CellTree2d(nodes, faces)
+        CellTree2d(nodes2, (2, 3, 4, 5))
+        CellTree2d(nodes2, ((2, 3, 4, 5), (1, 2, 3, 4, 5), (1, 2, 3, 4, 5)))
 
 
 def test_bounds_errors():
     with pytest.raises(ValueError):
-        tree = CellTree2d(nodes, faces, cells_per_leaf=-1)
+        CellTree2d(nodes, faces, cells_per_leaf=-1)
 
     with pytest.raises(ValueError):
-        tree = CellTree2d(nodes, faces, n_buckets=0)
+        CellTree2d(nodes, faces, n_buckets=0)
 
 
 def test_triangle_lookup():

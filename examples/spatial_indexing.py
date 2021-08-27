@@ -7,7 +7,7 @@ Unstructured meshes are challening in this regard: for a given point, we cannot
 simply compute a row and column number as we would for structured data such as
 rasters. The most straightforward procedure is checking every single cell,
 until we find the cell which contains the point we're looking for. This is
-clearly not efficient. 
+clearly not efficient.
 
 A cell tree is bounding volume hierarchy (BVH) which may be used as a spatial
 index. A spatial index is a data structure to search a spatial object
@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 import meshzoo
 import numpy as np
 from matplotlib.collections import LineCollection
+
 from numba_celltree import CellTree2d, demo
 
 # Let's go easy for a start with a rectangular mesh:
