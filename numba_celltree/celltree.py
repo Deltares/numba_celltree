@@ -17,15 +17,21 @@ from .query import locate_boxes, locate_edges, locate_points
 
 
 # Ensure all types are as as statically expected.
-def cast_vertices(vertices: FloatArray) -> FloatArray:
-    vertices = np.ascontiguousarray(vertices, dtype=FloatDType)
+def cast_vertices(vertices: FloatArray, copy: bool = False) -> FloatArray:
+    if isinstance(vertices, np.ndarray):
+        vertices = vertices.astype(FloatDType, copy=copy)
+    else:
+        vertices = np.ascontiguousarray(vertices, dtype=FloatDType)
     if vertices.ndim != 2 or vertices.shape[1] != 2:
         raise ValueError("vertices must be a Nx2 array")
     return vertices
 
 
-def cast_faces(faces: IntArray, fill_value) -> IntArray:
-    faces = np.ascontiguousarray(faces, dtype=IntDType)
+def cast_faces(faces: IntArray, fill_value: int, copy: bool = False) -> IntArray:
+    if isinstance(faces, np.ndarray):
+        faces = faces.astype(IntDType, copy=copy)
+    else:
+        faces = np.ascontiguousarray(faces, dtype=IntDType)
     if faces.ndim != 2:
         raise ValueError("faces must be a 2D array")
     if fill_value != FILL_VALUE:
@@ -62,8 +68,8 @@ class CellTree2d:
         if cells_per_leaf < 1:
             raise ValueError("cells_per_leaf must be >= 1")
 
-        vertices = cast_vertices(vertices)
-        faces = cast_faces(faces, fill_value)
+        vertices = cast_vertices(vertices, copy=True)
+        faces = cast_faces(faces, fill_value, copy=True)
 
         nodes, bb_indices, bb_coords = initialize(
             vertices, faces, n_buckets, cells_per_leaf

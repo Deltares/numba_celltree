@@ -97,7 +97,7 @@ def locate_points(
     n_points = points.shape[0]
     result = np.empty(n_points, dtype=IntDType)
     for i in nb.prange(n_points):  # pylint: disable=not-an-iterable
-        point = Point(points[i, 0], points[i, 1])
+        point = as_point(points[i])
         result[i] = locate_point(point, tree)
     return result
 
