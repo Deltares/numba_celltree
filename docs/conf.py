@@ -18,7 +18,7 @@ import numba_celltree
 
 # -- Project information -----------------------------------------------------
 
-project = "numba_celltree"
+project = "Numba Celltree"
 copyright = "Deltares"
 author = "Huite Bootsma"
 
