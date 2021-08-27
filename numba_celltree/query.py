@@ -34,20 +34,19 @@ def point_in_polygon(
     vertices: FloatArray,
 ) -> bool:
     face = faces[bbox_index]
-    n_vertex = polygon_length(face)
-
+    length = polygon_length(face)
+    v0 = vertices[face[length - 1]]
     c = False
-    for i in range(n_vertex):
-        v1 = vertices[face[i - 1]]
-        v2 = vertices[face[i]]
+    for i in range(length):
+        v1 = vertices[face[i]]
         # Do not split this in two conditionals: if the first conditional fails,
         # the second will not be executed in Python's (and C's) execution model.
         # This matters because the second can result in division by zero.
-        if (v1[1] > point[1]) != (v2[1] > point[1]) and point[0] < (
-            (v2[0] - v1[0]) * (point[1] - v1[1]) / (v2[1] - v1[1]) + v1[0]
+        if (v0[1] > point[1]) != (v1[1] > point[1]) and point[0] < (
+            (v1[0] - v0[0]) * (point[1] - v0[1]) / (v1[1] - v0[1]) + v0[0]
         ):
             c = not c
-
+        v0 = v1
     return c
 
 
@@ -94,7 +93,7 @@ def locate_points(
     points: FloatArray,
     tree: CellTreeData,
 ):
-    n_points = points.shape[0]
+    n_points = len(points)
     result = np.empty(n_points, dtype=IntDType)
     for i in nb.prange(n_points):  # pylint: disable=not-an-iterable
         point = as_point(points[i])
