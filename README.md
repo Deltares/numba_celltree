@@ -24,3 +24,5 @@ currently pre-allocates pessimistically. Serial queries are ~30% slower, but
 numba allows parallellization via a single keyword, in which case queries are
 faster -- the C++ implementation is exclusively serial (of course it could be
 parallelized fairly easily with OpenMP).
+
+Documentation [here](https://huite.github.io/numba_celltree/)
