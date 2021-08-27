@@ -12,7 +12,7 @@ from .constants import (
     IntDType,
 )
 from .creation import initialize
-from .geometry_utils import build_bboxes
+from .geometry_utils import build_bboxes, counter_clockwise
 from .query import locate_boxes, locate_edges, locate_points
 
 
@@ -27,9 +27,9 @@ def cast_vertices(vertices: FloatArray, copy: bool = False) -> FloatArray:
     return vertices
 
 
-def cast_faces(faces: IntArray, fill_value: int, copy: bool = False) -> IntArray:
+def cast_faces(faces: IntArray, fill_value: int) -> IntArray:
     if isinstance(faces, np.ndarray):
-        faces = faces.astype(IntDType, copy=copy)
+        faces = faces.astype(IntDType, copy=True)
     else:
         faces = np.ascontiguousarray(faces, dtype=IntDType)
     if faces.ndim != 2:
@@ -69,7 +69,8 @@ class CellTree2d:
             raise ValueError("cells_per_leaf must be >= 1")
 
         vertices = cast_vertices(vertices, copy=True)
-        faces = cast_faces(faces, fill_value, copy=True)
+        faces = cast_faces(faces, fill_value)
+        counter_clockwise(vertices, faces)
 
         nodes, bb_indices, bb_coords = initialize(
             vertices, faces, n_buckets, cells_per_leaf
@@ -125,6 +126,7 @@ class CellTree2d:
     def _locate_faces(
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
+        counter_clockwise(vertices, faces)
         bbox_coords = build_bboxes(faces, vertices)
         shortlist_i, shortlist_j = locate_boxes(bbox_coords, self.celltree_data)
         intersects = polygons_intersect(

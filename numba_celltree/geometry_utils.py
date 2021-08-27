@@ -6,6 +6,7 @@ import numpy as np
 from .constants import (
     FILL_VALUE,
     NDIM,
+    PARALLEL,
     Box,
     FloatArray,
     FloatDType,
@@ -117,10 +118,10 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
     # Rappoport, A. (1991). An efficient algorithm for line and polygon
     # clipping. The Visual Computer, 7(1), 19-28.
     length = len(poly)
+    v0 = as_point(poly[-1])
     c = False
     for i in range(length):
-        v0 = as_point(poly[i])
-        v1 = as_point(poly[(i + 1) % length])
+        v1 = as_point(poly[i])
         # Do not split this in two conditionals: if the first conditional fails,
         # the second will not be executed in Python's (and C's) execution model.
         # This matters because the second can result in division by zero.
@@ -128,6 +129,7 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
             (v1.x - v0.x) * (p.y - v0.y) / (v1.y - v0.y) + v0.x
         ):
             c = not c
+        v0 = v1
     return c
 
 
@@ -206,3 +208,35 @@ def copy_vertices_into(
 @nb.njit(inline="always")
 def point_inside_box(a: Point, box: Box):
     return box.xmin < a.x and a.x < box.xmax and box.ymin < a.y and a.y < box.ymax
+
+
+@nb.njit(inline="always")
+def flip(face: IntArray, length: int) -> None:
+    end = length - 1
+    for i in range(int(length / 2)):
+        j = end - i
+        face[i], face[j] = face[j], face[i]
+    return
+
+
+@nb.njit(parallel=PARALLEL, cache=True)
+def counter_clockwise(vertices: FloatArray, faces: IntArray) -> None:
+    n_face = len(faces)
+    for i_face in range(n_face):
+        face = faces[i_face]
+        length = polygon_length(face)
+        a = as_point(vertices[face[length - 2]])
+        b = as_point(vertices[face[length - 1]])
+        for i in range(length):
+            c = as_point(vertices[face[i]])
+            u = to_vector(a, b)
+            v = to_vector(a, c)
+            product = cross_product(u, v)
+            if product == 0:
+                a = b
+                b = c
+            elif product < 0:
+                flip(face, length)
+            else:
+                break
+    return

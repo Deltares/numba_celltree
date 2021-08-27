@@ -119,6 +119,13 @@ def test_point_in_polygon():
     assert gu.point_in_polygon(Point(0.5, 0.25), poly)
     assert not gu.point_in_polygon(Point(1.5, 0.25), poly)
 
+    assert gu.point_in_polygon(Point(0.0, 0.0), poly)
+    assert gu.point_in_polygon(Point(0.0, 0.0), poly[::-1])
+    assert gu.point_in_polygon(Point(0.5, 0.5), poly)
+    assert gu.point_in_polygon(Point(0.5, 0.5), poly[::-1])
+    assert not gu.point_in_polygon(Point(1.0, 1.0), poly)
+    assert not gu.point_in_polygon(Point(1.0, 1.0), poly[::-1])
+
 
 def test_boxes_intersect():
     # Identity
@@ -252,3 +259,47 @@ def test_point_inside_box():
     assert not gu.point_inside_box(a, box)
     a = Point(0.5, -0.5)
     assert not gu.point_inside_box(a, box)
+
+
+def test_flip():
+    face0 = np.array([0, 1, 2, -1, -1])
+    face1 = np.array([0, 1, 2, 3, -1])
+    face2 = np.array([0, 1, 2, 3, 4])
+    gu.flip(face0, 3)
+    gu.flip(face1, 4)
+    gu.flip(face2, 5)
+    assert np.array_equal(face0, [2, 1, 0, -1, -1])
+    assert np.array_equal(face1, [3, 2, 1, 0, -1])
+    assert np.array_equal(face2, [4, 3, 2, 1, 0])
+
+
+def test_counter_clockwise():
+    vertices = np.array(
+        [
+            [0.0, 0.0],
+            [0.5, 0.0],  # hanging node
+            [1.0, 0.0],
+            [1.0, 0.5],  # hanging node
+            [1.0, 1.0],
+            [0.0, 1.0],
+        ]
+    )
+    ccw_faces = np.array(
+        [
+            [0, 2, 4, 5, -1, -1],
+            [0, 1, 2, 3, 4, 5],
+        ]
+    )
+    cw_faces = np.array(
+        [
+            [5, 4, 2, 0, -1, -1],
+            [5, 4, 3, 2, 1, 0],
+        ]
+    )
+    expected = ccw_faces.copy()
+    # already counter clockwise should not be mutated
+    gu.counter_clockwise(vertices, ccw_faces)
+    assert np.array_equal(expected, ccw_faces)
+    # clockwise should be mutated
+    gu.counter_clockwise(vertices, cw_faces)
+    assert np.array_equal(expected, cw_faces)
