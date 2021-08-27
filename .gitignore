@@ -19,3 +19,7 @@ lib64
 
 # Installer logs
 pip-log.txt
+
+# Built docs
+docs/_build
+docs/examples
