@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spatial indexing &#8212; Numba Celltree 0.0.0 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CellTree2d" href="../api.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+  <nav class="navbar navbar-dark navbar-expand-lg bg-deltares fixed-top bd-navbar shadow" id="navbar-main"><div class="container-xl">
+
+    <a class="navbar-brand" href="../index.html">
+    <p style="color:#fff;font-size:25px;" class="title">Numba Celltree</p>
+    </a>
+  
+    <div id="navbar-menu" class="collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Examples</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../api.html">CellTree2d</a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <a class="navbar-brand" href="https://www.deltares.nl/en/">
+    <img src="../_static/deltares-white.svg" class="logo" alt="logo" />
+    </a>
+
+</div>
+  </nav>
+
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Spatial indexing
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#locating-points">
+   Locating points
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#locating-bounding-boxes">
+   Locating bounding boxes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#locating-cells">
+   Locating cells
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#locating-lines">
+   Locating lines
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-spatial-indexing-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="spatial-indexing">
+<span id="sphx-glr-examples-spatial-indexing-py"></span><h1>Spatial indexing<a class="headerlink" href="#spatial-indexing" title="Permalink to this headline">¶</a></h1>
+<p>The goal of a cell tree is to quickly locate cells of an unstructured mesh.
+Unstructured meshes are challenging in this regard: for a given point, we
+cannot simply compute a row and column number as we would for structured data
+such as rasters. The most straightforward procedure is checking every single
+cell, until we find the cell which contains the point we’re looking for. This
+is clearly not efficient.</p>
+<p>A cell tree is bounding volume hierarchy (BVH) which may be used as a spatial
+index. A spatial index is a data structure to search a spatial object
+efficiently, without exhaustively checking every cell. The implementation in
+<code class="docutils literal notranslate"><span class="pre">numba_celltree</span></code> provides four ways to search the tree:</p>
+<ul class="simple">
+<li><p>Locating single points</p></li>
+<li><p>Locating bounding boxes</p></li>
+<li><p>Locating convex polygons (e.g. cells of another mesh)</p></li>
+<li><p>Locating line segments</p></li>
+</ul>
+<p>This example provides a basic introduction to searching a cell tree for each of
+these.</p>
+<p>We’ll start by importing the required packages with matplotlib for plotting.
+We will use <code class="docutils literal notranslate"><span class="pre">meshzoo</span></code> to create some examples meshes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;NUMBA_DISABLE_JIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>  <span class="c1"># small examples, avoid JIT overhead</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">meshzoo</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
+
+<span class="kn">from</span> <span class="nn">numba_celltree</span> <span class="kn">import</span> <span class="n">CellTree2d</span><span class="p">,</span> <span class="n">demo</span>
+</pre></div>
+</div>
+<p>Let’s go easy for a start with a rectangular mesh:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lower_left</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">upper_right</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">rectangle_quad</span><span class="p">(</span><span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Determine the edges of the cells, and plot them.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_001.png" />
+<div class="section" id="locating-points">
+<h2>Locating points<a class="headerlink" href="#locating-points" title="Permalink to this headline">¶</a></h2>
+<p>We’ll build a cell tree first, then look for some points.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+<span class="n">i</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([-1, 12,  5])
+</pre></div>
+</div>
+<p>These numbers are the cell numbers in which we can find the points.</p>
+<p>A value of -1 means that a point is not located in any cell.</p>
+<p>Let’s get rid of the -1 values, and take a look which cells have been found.
+We’ll color the found cells blue, and we’ll draw the nodes to compare.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">i</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">points</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_002.png" />
+<p>Now let’s try a more exotic example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">vertices</span> <span class="o">+=</span> <span class="mf">1.0</span>
+<span class="n">vertices</span> <span class="o">*=</span> <span class="mf">5.0</span>
+<span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_003.png" />
+<p>There are certainly no rows or columns to speak of!</p>
+<p>Let’s build a new tree, and look for the same points as before.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">i</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">points</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_004.png" />
+<p>It should be clear by now that a point may only fall into a single cell. A
+point may also be out of bounds. If a cell falls exactly on an edge, one of the
+two neighbors will be chosen arbitrarily. At any rate, we can always expect
+one answer per cell.</p>
+<p>This is not the case for line segments, bounding boxes, or convex polygons: a
+line may intersect multiple cells, and a bounding box or polygon may contain
+multiple cells.</p>
+</div>
+<div class="section" id="locating-bounding-boxes">
+<h2>Locating bounding boxes<a class="headerlink" href="#locating-bounding-boxes" title="Permalink to this headline">¶</a></h2>
+<p>A search of N points will yield N answers (cell numbers). A search of N boxes
+may yield M answers. To illustrate, let’s look for all the cells inside of
+a box.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">box_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>  <span class="c1"># xmin, xmax, ymin, ymax</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">box_i</span><span class="p">,</span> <span class="n">cell_i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_boxes</span><span class="p">(</span><span class="n">box_coords</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">cell_i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_boxes</span><span class="p">(</span><span class="n">box_coords</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_005.png" />
+<p>We can also search for multiple boxes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">box_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">box_i</span><span class="p">,</span> <span class="n">cell_i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_boxes</span><span class="p">(</span><span class="n">box_coords</span><span class="p">)</span>
+<span class="n">box_i</span><span class="p">,</span> <span class="n">cell_i</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1]), array([107, 103,  94,  96,  91, 102, 101, 106, 100, 105,  92,  89,  85,
+        88,  80,  84,  81,  76,  50,  75,  55,  59,   0,   5,   9,  51,
+        25,  30,  26,  34, 118, 111, 115, 120, 122, 114, 117, 123, 124,
+       119, 121,   4,   8,   7,   3,  15,  12,  14,  11,  18,  17,  20,
+        22]))
+</pre></div>
+</div>
+<p>Note that this method returns two arrays of equal length. The second array
+contains the cell numbers, as usual. The first array contains the index of
+the bounding box in which the respective cells fall. Note that there are only
+two numbers in <code class="docutils literal notranslate"><span class="pre">box_i</span></code>: there are no cells located in the third box, as we
+can confirm visually:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cells_0</span> <span class="o">=</span> <span class="n">cell_i</span><span class="p">[</span><span class="n">box_i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">cells_1</span> <span class="o">=</span> <span class="n">cell_i</span><span class="p">[</span><span class="n">box_i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">cells_0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">cells_1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_boxes</span><span class="p">(</span><span class="n">box_coords</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_006.png" />
+</div>
+<div class="section" id="locating-cells">
+<h2>Locating cells<a class="headerlink" href="#locating-cells" title="Permalink to this headline">¶</a></h2>
+<p>Similarly, we can look for other cells (convex polygons):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">triangle_vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">7.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">7.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">triangles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span> <span class="o">=</span> <span class="n">triangle_vertices</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+<span class="n">tri_i</span><span class="p">,</span> <span class="n">cell_i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_faces</span><span class="p">(</span><span class="n">triangle_vertices</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">cells_0</span> <span class="o">=</span> <span class="n">cell_i</span><span class="p">[</span><span class="n">tri_i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">cells_1</span> <span class="o">=</span> <span class="n">cell_i</span><span class="p">[</span><span class="n">tri_i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">cells_0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">cells_1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_007.png" />
+<p>We can also compute how large the overlap is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tri_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">area</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_faces</span><span class="p">(</span><span class="n">triangle_vertices</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">area</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.00871605, 0.05399711, 0.08977243, 0.06850277, 0.27310478,
+       0.44295032, 0.45148705, 0.33395494, 0.07939018, 0.19812438,
+       0.28020701, 0.2439384 , 0.15635359, 0.0672785 , 0.41313708,
+       0.03739642, 0.06826046, 0.58473083, 0.51557381, 0.57127098,
+       0.66575332, 0.31475411, 0.44597069, 0.67310123, 0.09393931,
+       0.62192747, 0.64661202, 0.67310123, 0.58778525, 0.55431165,
+       0.57127098, 0.37498137, 0.54575367, 0.6021836 , 0.36411514,
+       0.50808495, 0.16265269, 0.11001612, 0.24834604, 0.3601918 ,
+       0.09199652, 0.6110686 , 0.58616685, 0.09873262, 0.53274277])
+</pre></div>
+</div>
+<p>Let’s color the faces of the mesh by their proportion of overlap. Because our
+mesh is triangular, we can represent the triangles as two collections of
+vectors (V, U). Then the area is half of the absolute value of the cross
+product of U and V.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">intersection_faces</span> <span class="o">=</span> <span class="n">faces</span><span class="p">[</span><span class="n">cell_i</span><span class="p">]</span>
+<span class="n">intersection_vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">intersection_faces</span><span class="p">]</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">full_area</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">U</span><span class="p">))</span>
+<span class="n">proportion</span> <span class="o">=</span> <span class="n">area</span> <span class="o">/</span> <span class="n">full_area</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">colored</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span>
+    <span class="n">node_y</span><span class="p">,</span>
+    <span class="n">intersection_faces</span><span class="p">,</span>
+    <span class="n">proportion</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">colored</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_008.png" />
+</div>
+<div class="section" id="locating-lines">
+<h2>Locating lines<a class="headerlink" href="#locating-lines" title="Permalink to this headline">¶</a></h2>
+<p>As a final example, we will compute the intersections with two lines (edges).
+This returns three arrays of equal length:</p>
+<ul class="simple">
+<li><p>the index of the line</p></li>
+<li><p>the index of the cell</p></li>
+<li><p>the location of the intersections</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">edge_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]],</span>
+        <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">edge_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">intersections</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">)</span>
+<span class="n">edge_i</span><span class="p">,</span> <span class="n">cell_i</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([112, 111, 115, 114, 110, 101, 106, 100, 105,  50,  75,   0,  25,
+        30,  34,  41,  38,  46,  44,  48,  49, 100,  83,  78,  82,  79,
+        80,  77,  81,  76,  50,  75,  14,   0,   5,  10,  13,   9,  17,
+        20,  22,  25]))
+</pre></div>
+</div>
+<p>To wrap up, we’ll color the intersect faces with the length of the
+intersected line segments. We can easily compute the length of each segment
+with the Euclidian norm (Pythagorean distance):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">intersections</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersections</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">colored</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span>
+    <span class="n">node_y</span><span class="p">,</span>
+    <span class="n">faces</span><span class="p">[</span><span class="n">cell_i</span><span class="p">],</span>
+    <span class="n">length</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">colored</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">LineCollection</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_009.png" />
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.117 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/f989545cc7034bd6c0c40e2091705820/spatial_indexing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">spatial_indexing.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/2898f91a1d3d00e555fa19b6a4d6c98e/spatial_indexing.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">spatial_indexing.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Examples</a>
+    <a class='right-next' id="next-link" href="../api.html" title="next page">CellTree2d</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Deltares.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
