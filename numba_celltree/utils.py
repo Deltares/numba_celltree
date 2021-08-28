@@ -10,7 +10,7 @@ from .constants import (
     MAX_N_VERTEX,
     MAX_TREE_DEPTH,
     NDIM,
-    STACK_ALLOCATE,
+    STACK_ALLOCATE_STATIC_ARRAYS,
     FloatDType,
     IntDType,
 )
@@ -94,12 +94,26 @@ def np_allocate_clip_polygon():
     return np.empty((CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
 
 
+@nb.njit(inline="always")
+def nb_allocate_box_polygon():
+    arr_ptr = stack_empty(8, FloatDType)  # pylint: disable=no-value-for-parameter
+    arr = nb.carray(arr_ptr, (4, 2), dtype=FloatDType)
+    return arr
+
+
+@nb.njit(inline="always")
+def np_allocate_box_polygon():
+    return np.empty((4, 2), dtype=FloatDType)
+
+
 # Make sure everything still works when calling as non-compiled Python code:
-if STACK_ALLOCATE and os.environ.get("NUMBA_DISABLE_JIT", "0") == "0":
+if STACK_ALLOCATE_STATIC_ARRAYS and os.environ.get("NUMBA_DISABLE_JIT", "0") == "0":
     allocate_stack = nb_allocate_stack
     allocate_polygon = nb_allocate_polygon
     allocate_clip_polygon = nb_allocate_clip_polygon
+    allocate_box_polygon = nb_allocate_box_polygon
 else:
     allocate_stack = np_allocate_stack
     allocate_polygon = np_allocate_polygon
     allocate_clip_polygon = np_allocate_clip_polygon
+    allocate_box_polygon = np_allocate_box_polygon

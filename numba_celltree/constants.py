@@ -117,8 +117,13 @@ BucketDType = np.dtype(
     ]
 )
 
+# Numba can parallellize for loops with a single keyword.
 PARALLEL = True
-STACK_ALLOCATE = True
+# By default, Numba will allocate all arrays on the heap. For small (statically
+# sized) arrays, this creates a large overhead. This enables stack allocated
+# arrays rather than "regular" heap allocated numpy arrays. See allocate
+# functions in utils.py.
+STACK_ALLOCATE_STATIC_ARRAYS = True
 # 2D is still rather hard-baked in, so changing this alone to 3 will NOT
 # suffice to generalize it to a 3D CellTree.
 NDIM = 2

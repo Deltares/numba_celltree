@@ -14,7 +14,7 @@ from .constants import (
     Point,
     Vector,
 )
-from .utils import allocate_polygon
+from .utils import allocate_box_polygon, allocate_polygon
 
 
 @nb.njit(inline="always")
@@ -25,6 +25,16 @@ def to_vector(a: Point, b: Point) -> Vector:
 @nb.njit(inline="always")
 def as_point(a: FloatArray) -> Point:
     return Point(a[0], a[1])
+
+
+@nb.njit(inline="always")
+def as_box(arr: FloatArray) -> Box:
+    return Box(
+        arr[0],
+        arr[1],
+        arr[2],
+        arr[3],
+    )
 
 
 @nb.njit(inline="always")
@@ -134,14 +144,14 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
-def boxes_intersect(a: Sequence[float], b: Sequence[float]) -> bool:
+def boxes_intersect(a: Box, b: Box) -> bool:
     """
     Parameters
     ----------
     a: (xmin, xmax, ymin, ymax)
     b: (xmin, xmax, ymin, ymax)
     """
-    return a[0] < b[1] and b[0] < a[1] and a[2] < b[3] and b[2] < a[3]
+    return a.xmin < b.xmax and b.xmin < a.xmax and a.ymin < b.ymax and b.ymin < a.ymax
 
 
 @nb.njit(inline="always")
@@ -206,6 +216,20 @@ def copy_vertices_into(
 
 
 @nb.njit(inline="always")
+def copy_box_vertices(box: Box) -> FloatArray:
+    a = allocate_box_polygon()
+    a[0, 0] = box.xmin
+    a[0, 1] = box.ymin
+    a[1, 0] = box.xmax
+    a[1, 1] = box.ymin
+    a[2, 0] = box.xmax
+    a[2, 1] = box.ymax
+    a[3, 0] = box.xmin
+    a[3, 1] = box.ymax
+    return a
+
+
+@nb.njit(inline="always")
 def point_inside_box(a: Point, box: Box):
     return box.xmin < a.x and a.x < box.xmax and box.ymin < a.y and a.y < box.ymax
 
@@ -222,7 +246,7 @@ def flip(face: IntArray, length: int) -> None:
 @nb.njit(parallel=PARALLEL, cache=True)
 def counter_clockwise(vertices: FloatArray, faces: IntArray) -> None:
     n_face = len(faces)
-    for i_face in range(n_face):
+    for i_face in nb.prange(n_face):
         face = faces[i_face]
         length = polygon_length(face)
         a = as_point(vertices[face[length - 2]])
