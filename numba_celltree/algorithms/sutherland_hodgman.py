@@ -39,7 +39,15 @@ import numba as nb
 import numpy as np
 
 from ..constants import PARALLEL, FloatArray, FloatDType, IntArray
-from ..geometry_utils import Point, Vector, copy_vertices, dot_product, polygon_area
+from ..geometry_utils import (
+    Point,
+    Vector,
+    as_box,
+    copy_box_vertices,
+    copy_vertices,
+    dot_product,
+    polygon_area,
+)
 from ..utils import allocate_clip_polygon, copy
 
 
@@ -150,5 +158,24 @@ def area_of_intersection(
         face_b = faces_b[indices_b[i]]
         a = copy_vertices(vertices_a, face_a)
         b = copy_vertices(vertices_b, face_b)
+        area[i] = polygon_polygon_clip_area(a, b)
+    return area
+
+
+@nb.njit(parallel=PARALLEL)
+def box_area_of_intersection(
+    bbox_coords: FloatArray,
+    vertices: FloatArray,
+    faces: IntArray,
+    indices_a: IntArray,
+    indices_b: IntArray,
+) -> FloatArray:
+    n_intersection = indices_a.size
+    area = np.empty(n_intersection, dtype=FloatDType)
+    for i in nb.prange(n_intersection):
+        box = as_box(bbox_coords[indices_a[i]])
+        face = faces[indices_b[i]]
+        a = copy_box_vertices(box)
+        b = copy_vertices(vertices, face)
         area[i] = polygon_polygon_clip_area(a, b)
     return area

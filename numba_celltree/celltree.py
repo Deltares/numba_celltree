@@ -2,9 +2,15 @@ from typing import Tuple
 
 import numpy as np
 
-from .algorithms import area_of_intersection, polygons_intersect
+from .algorithms import (
+    area_of_intersection,
+    box_area_of_intersection,
+    polygons_intersect,
+)
 from .constants import (
     FILL_VALUE,
+    MAX_N_FACE,
+    MAX_N_VERTEX,
     CellTreeData,
     FloatArray,
     FloatDType,
@@ -34,6 +40,19 @@ def cast_faces(faces: IntArray, fill_value: int) -> IntArray:
         faces = np.ascontiguousarray(faces, dtype=IntDType)
     if faces.ndim != 2:
         raise ValueError("faces must have shape (n_face, n_max_vert)")
+    n_face, n_max_vert = faces.shape
+    if n_face > MAX_N_FACE:
+        raise ValueError(
+            f"faces contains {n_face} faces. "
+            f"numba_celltree supports a maximum of {MAX_N_FACE} faces. "
+            f"Increase MAX_N_FACE in the source code, or supply a smaller mesh."
+        )
+    if n_max_vert > MAX_N_VERTEX:
+        raise ValueError(
+            f"faces contains up to {n_max_vert} vertices for a single face. "
+            f"numba_celltree supports a maximum of {MAX_N_VERTEX} vertices. "
+            f"Increase MAX_N_VERTEX in the source code, or alter the mesh."
+        )
     if fill_value != FILL_VALUE:
         faces[faces == fill_value] = FILL_VALUE
     return faces
@@ -82,9 +101,9 @@ class CellTree2d:
         self,
         vertices: FloatArray,
         faces: IntArray,
+        fill_value: int,
         n_buckets: int = 4,
         cells_per_leaf: int = 2,
-        fill_value: int = -1,
     ):
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
@@ -133,7 +152,7 @@ class CellTree2d:
         points = cast_vertices(points)
         return locate_points(points, self.celltree_data)
 
-    def locate_boxes(self, bbox_coords) -> Tuple[IntArray, IntArray]:
+    def locate_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
         """
         Finds the index of a face intersecting with a bounding box.
 
@@ -152,6 +171,39 @@ class CellTree2d:
         bbox_coords = bbox_coords.astype(FloatDType)
         return locate_boxes(bbox_coords, self.celltree_data)
 
+    def intersect_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
+        """
+        Finds the index of a box intersecting with a face, and the area
+        of intersection.
+
+        Parameters
+        ----------
+        bbox_coords: ndarray of floats with shape ``(n_box, 4)``
+            Every row containing ``(xmin, xmax, ymin, ymax)``.
+
+        Returns
+        -------
+        bbox_indices: ndarray of integers with shape ``(n_found,)``
+            Indices of the bounding box.
+        tree_face_indices: ndarray of integers with shape ``(n_found,)``
+            Indices of the tree faces.
+        area: ndarray of floats with shape ``(n_found,)``
+            Area of intersection between the two intersecting faces.
+        """
+        bbox_coords = bbox_coords.astype(FloatDType)
+        i, j = locate_boxes(bbox_coords, self.celltree_data)
+        area = box_area_of_intersection(
+            bbox_coords_a=bbox_coords,
+            vertices_b=self.vertices,
+            faces_b=self.faces,
+            indices_a=i,
+            indices_b=j,
+        )
+        # Separating axes declares polygons with shared edges as touching.
+        # Make sure we only include actual intersections.
+        actual = area > 0
+        return i[actual], j[actual], area[actual]
+
     def _locate_faces(
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
@@ -167,34 +219,6 @@ class CellTree2d:
             indices_b=shortlist_j,
         )
         return shortlist_i[intersects], shortlist_j[intersects]
-
-    def locate_faces(
-        self, vertices: FloatArray, faces: IntArray, fill_value: int = 1
-    ) -> Tuple[IntArray, IntArray]:
-        """
-        Finds the index of a face intersecting with another face.
-
-        Parameters
-        ----------
-        vertices: ndarray of floats with shape ``(n_point, 2)``
-            Corner coordinates (x, y) of the cells.
-        faces: ndarray of integers with shape ``(n_face x n_max_vert)``
-            Index identifying for every face the indices of its corner nodes.
-            If a face has less corner nodes than n_max_vert, its last indices
-            should be equal to ``fill_value``.
-        fill_value: int, optional, default: -1
-            Fill value marking empty nodes in ``faces``.
-
-        Returns
-        -------
-        frace_indices: ndarray of integers with shape ``(n_found,)``
-            Indices of the faces.
-        tree_face_indices: ndarray of integers with shape ``(n_found,)``
-            Indices of the tree faces.
-        """
-        vertices = cast_vertices(vertices)
-        faces = cast_faces(faces, fill_value)
-        return self._locate_faces(vertices, faces)
 
     def intersect_faces(
         self, vertices: FloatArray, faces: IntArray, fill_value: int
@@ -234,7 +258,10 @@ class CellTree2d:
             indices_a=i,
             indices_b=j,
         )
-        return i, j, area
+        # Separating axes declares polygons with shared edges as touching.
+        # Make sure we only include actual intersections.
+        actual = area > 0
+        return i[actual], j[actual], area[actual]
 
     def intersect_edges(
         self, edge_coords: FloatArray
