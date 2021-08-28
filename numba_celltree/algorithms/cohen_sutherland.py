@@ -58,9 +58,9 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
 
     # examine non-trivially outside points
     # bitwise OR |
-    while (k1 | k2) != 0:
-        # if both points are inside box (0000), ACCEPT trivial whole line in
-        # box
+    while (k1 | k2) != INSIDE:
+        # if both points are inside box (0000),
+        # ACCEPT trivial whole line in box, exit.
 
         # if line trivially outside window, REJECT
         if (k1 & k2) != 0:  # bitwise AND &
