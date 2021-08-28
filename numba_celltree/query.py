@@ -16,43 +16,21 @@ from .constants import (
 from .geometry_utils import (
     Box,
     Point,
+    as_box,
     as_point,
     boxes_intersect,
     copy_vertices_into,
-    polygon_length,
+    point_in_polygon,
     to_vector,
 )
 from .utils import allocate_polygon, allocate_stack, pop, push
 
 
-# Point search functions
-@nb.njit(inline="always")
-def point_in_polygon(
-    bbox_index: int,
-    point: Point,
-    faces: IntArray,
-    vertices: FloatArray,
-) -> bool:
-    face = faces[bbox_index]
-    length = polygon_length(face)
-    v0 = vertices[face[length - 1]]
-    c = False
-    for i in range(length):
-        v1 = vertices[face[i]]
-        # Do not split this in two conditionals: if the first conditional fails,
-        # the second will not be executed in Python's (and C's) execution model.
-        # This matters because the second can result in division by zero.
-        if (v0[1] > point[1]) != (v1[1] > point[1]) and point[0] < (
-            (v1[0] - v0[0]) * (point[1] - v0[1]) / (v1[1] - v0[1]) + v0[0]
-        ):
-            c = not c
-        v0 = v1
-    return c
-
-
+# Inlining saves about 15% runtime
 @nb.njit(inline="always")
 def locate_point(point: Point, tree: CellTreeData):
     stack = allocate_stack()
+    polygon_work_array = allocate_polygon()
     stack[0] = 0
     return_value = -1
     size = 1
@@ -65,25 +43,33 @@ def locate_point(point: Point, tree: CellTreeData):
         if node["child"] == -1:
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
-                if point_in_polygon(bbox_index, point, tree.faces, tree.vertices):
+                face = tree.faces[bbox_index]
+                # Make sure polygons to test is contiguous (stack allocated) array
+                # This saves about 40-50% runtime
+                poly = copy_vertices_into(tree.vertices, face, polygon_work_array)
+                if point_in_polygon(point, poly):
                     return bbox_index
             continue
 
         dim = 1 if node["dim"] else 0
         left = point[dim] <= node["Lmax"]
         right = point[dim] >= node["Rmin"]
+        left_child = node["child"]
+        right_child = left_child + 1
 
         if left and right:
+            # This heuristic is worthwhile because a point will fall into a
+            # single face -- if found, we can stop.
             if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
-                size = push(stack, node["child"], size)
-                size = push(stack, node["child"] + 1, size)
+                size = push(stack, left_child, size)
+                size = push(stack, right_child, size)
             else:
-                size = push(stack, node["child"] + 1, size)
-                size = push(stack, node["child"], size)
+                size = push(stack, right_child, size)
+                size = push(stack, left_child, size)
         elif left:
-            size = push(stack, node["child"], size)
+            size = push(stack, left_child, size)
         elif right:
-            size = push(stack, node["child"] + 1, size)
+            size = push(stack, right_child, size)
 
     return return_value
 
@@ -102,18 +88,9 @@ def locate_points(
 
 
 @nb.njit(inline="always")
-def box_from_array(arr: FloatArray) -> Box:
-    return Box(
-        arr[0],
-        arr[1],
-        arr[2],
-        arr[3],
-    )
-
-
-@nb.njit(inline="always")
 def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: bool):
-    if not boxes_intersect(box, tree.bbox):
+    tree_bbox = as_box(tree.bbox)
+    if not boxes_intersect(box, tree_bbox):
         return 0
     stack = allocate_stack()
     stack[0] = 0
@@ -128,7 +105,8 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
             # Iterate over the bboxes in the leaf
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
-                leaf_box = tree.bb_coords[bbox_index]
+                # As a named tuple: saves about 15% runtime
+                leaf_box = as_box(tree.bb_coords[bbox_index])
                 if boxes_intersect(box, leaf_box):
                     if store_indices:
                         indices[count] = bbox_index
@@ -139,14 +117,16 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
             maximum = 2 * dim + 1
             left = box[minimum] <= node["Lmax"]
             right = box[maximum] >= node["Rmin"]
+            left_child = node["child"]
+            right_child = left_child + 1
 
             if left and right:
-                size = push(stack, node["child"], size)
-                size = push(stack, node["child"] + 1, size)
+                size = push(stack, left_child, size)
+                size = push(stack, right_child, size)
             elif left:
-                size = push(stack, node["child"], size)
+                size = push(stack, left_child, size)
             elif right:
-                size = push(stack, node["child"] + 1, size)
+                size = push(stack, right_child, size)
 
     return count
 
@@ -172,7 +152,7 @@ def locate_boxes(
     counts[0] = 0
     # First run a count so we can allocate afterwards
     for i in nb.prange(n_box):  # pylint: disable=not-an-iterable
-        box = box_from_array(box_coords[i])
+        box = as_box(box_coords[i])
         counts[i + 1] = locate_box(box, tree, dummy, False)
 
     # Run a cumulative sum
@@ -189,7 +169,7 @@ def locate_boxes(
         end = counts[i + 1]
         ii[start:end] = i
         indices = jj[start:end]
-        box = box_from_array(box_coords[i])
+        box = as_box(box_coords[i])
         locate_box(box, tree, indices, True)
 
     return ii, jj
@@ -209,7 +189,7 @@ def locate_edge(
     store_intersection: bool,
 ):
     # Check if the entire mesh intersects with the line segment at all
-    tree_bbox = box_from_array(tree.bbox)
+    tree_bbox = as_box(tree.bbox)
     tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree_bbox)
     if not tree_intersects:
         return 0
@@ -229,7 +209,7 @@ def locate_edge(
         if node["child"] == -1:
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
-                box = box_from_array(tree.bb_coords[bbox_index])
+                box = as_box(tree.bb_coords[bbox_index])
                 # box_intersect, _, _ = liang_barsky_line_box_clip(a, b, box)
                 box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)
                 if box_intersect:
@@ -285,14 +265,16 @@ def locate_edge(
                 right = t_right <= 1.0
         # else dx == 0.0. In this case there's no info to extract from this
         # node. We'll fully defer to the children.
+        left_child = node["child"]
+        right_child = left_child + 1
 
         if left and right:
-            size = push(stack, node["child"], size)
-            size = push(stack, node["child"] + 1, size)
+            size = push(stack, left_child, size)
+            size = push(stack, right_child, size)
         elif left:
-            size = push(stack, node["child"], size)
+            size = push(stack, left_child, size)
         elif right:
-            size = push(stack, node["child"] + 1, size)
+            size = push(stack, right_child, size)
 
     return count
 
