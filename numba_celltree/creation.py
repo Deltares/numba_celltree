@@ -50,7 +50,7 @@ def centroid_test(bucket: np.void, box: FloatArray, dim: int):
     return (centroid >= bucket.Min) and (centroid < bucket.Max)
 
 
-@nb.njit(inline="always")
+@nb.njit(inline="never")
 def stable_partition(
     bb_indices: IntArray,
     bb_coords: FloatArray,
@@ -110,7 +110,7 @@ def stable_partition(
     return start_second
 
 
-@nb.njit(inline="always")
+@nb.njit(inline="never")
 def sort_bbox_indices(
     bb_indices: IntArray,
     bb_coords: FloatArray,
@@ -148,7 +148,7 @@ def sort_bbox_indices(
         i += 1
 
 
-@nb.njit(inline="always")
+@nb.njit(inline="never")
 def get_bounds(
     index: int,
     size: int,
@@ -169,7 +169,7 @@ def get_bounds(
     return Rmin, Lmax
 
 
-@nb.njit(inline="always")
+@nb.njit(inline="never")
 def split_plane(
     buckets: List[Bucket],
     root: np.void,
