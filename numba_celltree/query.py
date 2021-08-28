@@ -168,7 +168,7 @@ def locate_boxes(
     # which enables parallelization -- should still result in a net speed up.
     n_box = box_coords.shape[0]
     counts = np.empty(n_box + 1, dtype=IntDType)
-    dummy = np.empty((), dtype=IntDType)
+    dummy = np.empty((0,), dtype=IntDType)
     counts[0] = 0
     # First run a count so we can allocate afterwards
     for i in nb.prange(n_box):  # pylint: disable=not-an-iterable
@@ -195,7 +195,11 @@ def locate_boxes(
     return ii, jj
 
 
-@nb.njit(inline="always")
+# Inlining this function drives compilation time through the roof. It's
+# probably also a rather bad idea, given its complexity: compared to looking
+# for either boxes or points, checking is more much complicated by involving
+# two intersection algorithms.
+@nb.njit(inline="never")
 def locate_edge(
     a: Point,
     b: Point,
@@ -310,8 +314,8 @@ def locate_edges(
     # which enables parallelization -- should still result in a net speed up.
     n_edge = edge_coords.shape[0]
     counts = np.empty(n_edge + 1, dtype=IntDType)
-    int_dummy = np.empty((), dtype=IntDType)
-    float_dummy = np.empty((), dtype=FloatDType)
+    int_dummy = np.empty((0,), dtype=IntDType)
+    float_dummy = np.empty((0, 0, 0), dtype=FloatDType)
     counts[0] = 0
     # First run a count so we can allocate afterwards
     for i in nb.prange(n_edge):  # pylint: disable=not-an-iterable
@@ -328,7 +332,6 @@ def locate_edges(
     # Now allocate appropriately
     ii = np.empty(total, dtype=IntDType)
     jj = np.empty(total, dtype=IntDType)
-    # Intersections consists of t0, t1, length for every intersected edge
     xy = np.empty((total, 2, 2), dtype=FloatDType)
     for i in nb.prange(n_edge):  # pylint: disable=not-an-iterable
         start = counts[i]

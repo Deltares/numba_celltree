@@ -1,11 +1,13 @@
 from typing import Tuple
 
+import numba as nb
 import numpy as np
 
 from ..constants import Box, Point
 from ..geometry_utils import point_inside_box
 
 
+@nb.njit
 def liang_barsky_line_box_clip(
     a: Point, b: Point, box: Box
 ) -> Tuple[bool, Point, Point]:

@@ -118,6 +118,7 @@ BucketDType = np.dtype(
 )
 
 PARALLEL = True
+STACK_ALLOCATE = True
 # 2D is still rather hard-baked in, so changing this alone to 3 will NOT
 # suffice to generalize it to a 3D CellTree.
 NDIM = 2

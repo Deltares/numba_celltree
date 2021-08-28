@@ -6,7 +6,14 @@ from numba import types
 from numba.core import cgutils
 from numba.extending import intrinsic
 
-from .constants import MAX_N_VERTEX, MAX_TREE_DEPTH, NDIM, FloatDType, IntDType
+from .constants import (
+    MAX_N_VERTEX,
+    MAX_TREE_DEPTH,
+    NDIM,
+    STACK_ALLOCATE,
+    FloatDType,
+    IntDType,
+)
 
 
 @intrinsic
@@ -37,10 +44,6 @@ def copy(src, dst, n) -> None:
         dst[i] = src[i]
 
 
-def np_allocate_stack():
-    return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
-
-
 # Ensure these are constants for numba
 POLYGON_SIZE = MAX_N_VERTEX * NDIM
 CLIP_MAX_N_VERTEX = MAX_N_VERTEX * 2
@@ -49,8 +52,6 @@ CLIP_POLYGON_SIZE = 2 * POLYGON_SIZE
 # Note: these stack allocated arrays should only be used inside of numba
 # compiled code. They should interact NEVER with dynamic Python code: there are
 # no guarantees in that case, they may very well be filled with garbage.
-
-
 @nb.njit(inline="always")
 def nb_allocate_stack():
     arr_ptr = stack_empty(
@@ -60,8 +61,9 @@ def nb_allocate_stack():
     return arr
 
 
-def np_allocate_polygon():
-    return np.empty((MAX_N_VERTEX, NDIM), dtype=FloatDType)
+@nb.njit(inline="always")
+def np_allocate_stack():
+    return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
 
 
 @nb.njit(inline="always")
@@ -73,8 +75,9 @@ def nb_allocate_polygon():
     return arr
 
 
-def np_allocate_clip_polygon():
-    return np.empty((CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
+@nb.njit(inline="always")
+def np_allocate_polygon():
+    return np.empty((MAX_N_VERTEX, NDIM), dtype=FloatDType)
 
 
 @nb.njit(inline="always")
@@ -86,12 +89,17 @@ def nb_allocate_clip_polygon():
     return arr
 
 
+@nb.njit(inline="always")
+def np_allocate_clip_polygon():
+    return np.empty((CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
+
+
 # Make sure everything still works when calling as non-compiled Python code:
-if os.environ.get("NUMBA_DISABLE_JIT", "0") == "1":
-    allocate_stack = np_allocate_stack
-    allocate_polygon = np_allocate_polygon
-    allocate_clip_polygon = np_allocate_clip_polygon
-else:
+if STACK_ALLOCATE and os.environ.get("NUMBA_DISABLE_JIT", "0") == "0":
     allocate_stack = nb_allocate_stack
     allocate_polygon = nb_allocate_polygon
     allocate_clip_polygon = nb_allocate_clip_polygon
+else:
+    allocate_stack = np_allocate_stack
+    allocate_polygon = np_allocate_polygon
+    allocate_clip_polygon = np_allocate_clip_polygon

@@ -32,7 +32,7 @@ def get_clip(a: Point, box: Box):
     return p
 
 
-@nb.njit(inline="always")
+@nb.njit(inline="never")
 def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point, Point]:
     """
     Clips a line to a rectangular area.
