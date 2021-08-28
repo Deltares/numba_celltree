@@ -1,15 +1,15 @@
-from typing import Sequence, Tuple
+from typing import Tuple
 
 import numba as nb
 import numpy as np
 
 from ..constants import FLOAT_MAX, FLOAT_MIN, PARALLEL, BoolArray, FloatArray, IntArray
-from ..geometry_utils import Point, Vector, as_point, copy_vertices, dot_product
+from ..geometry_utils import Vector, as_point, copy_vertices, dot_product
 
 
 @nb.njit(inline="always")
 def extrema_projected(
-    norm: Vector, polygon: Sequence[Point], length: int
+    norm: Vector, polygon: FloatArray, length: int
 ) -> Tuple[float, float]:
     min_proj = FLOAT_MAX
     max_proj = FLOAT_MIN
@@ -22,7 +22,7 @@ def extrema_projected(
 
 @nb.njit(inline="always")
 def is_separating_axis(
-    norm: Vector, a: Sequence[Point], b: Sequence[Point], length_a: int, length_b: int
+    norm: Vector, a: FloatArray, b: FloatArray, length_a: int, length_b: int
 ) -> bool:
     mina, maxa = extrema_projected(norm, a, length_a)
     minb, maxb = extrema_projected(norm, b, length_b)
@@ -33,7 +33,7 @@ def is_separating_axis(
 
 
 @nb.njit(inline="always")
-def separating_axes(a: Sequence[Point], b: Sequence[Point]) -> bool:
+def separating_axes(a: FloatArray, b: FloatArray) -> bool:
     length_a = len(a)
     length_b = len(b)
     p = as_point(a[length_a - 1])
