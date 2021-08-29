@@ -167,14 +167,14 @@ def box_area_of_intersection(
     bbox_coords: FloatArray,
     vertices: FloatArray,
     faces: IntArray,
-    indices_a: IntArray,
-    indices_b: IntArray,
+    indices_bbox: IntArray,
+    indices_face: IntArray,
 ) -> FloatArray:
-    n_intersection = indices_a.size
+    n_intersection = indices_bbox.size
     area = np.empty(n_intersection, dtype=FloatDType)
     for i in nb.prange(n_intersection):
-        box = as_box(bbox_coords[indices_a[i]])
-        face = faces[indices_b[i]]
+        box = as_box(bbox_coords[indices_bbox[i]])
+        face = faces[indices_face[i]]
         a = copy_box_vertices(box)
         b = copy_vertices(vertices, face)
         area[i] = polygon_polygon_clip_area(a, b)

@@ -193,11 +193,11 @@ class CellTree2d:
         bbox_coords = bbox_coords.astype(FloatDType)
         i, j = locate_boxes(bbox_coords, self.celltree_data)
         area = box_area_of_intersection(
-            bbox_coords_a=bbox_coords,
-            vertices_b=self.vertices,
-            faces_b=self.faces,
-            indices_a=i,
-            indices_b=j,
+            bbox_coords=bbox_coords,
+            vertices=self.vertices,
+            faces=self.faces,
+            indices_bbox=i,
+            indices_face=j,
         )
         # Separating axes declares polygons with shared edges as touching.
         # Make sure we only include actual intersections.
