@@ -81,10 +81,10 @@ class CellTree2d:
     ----------
     vertices: ndarray of floats with shape ``(n_point, 2)``
         Corner coordinates (x, y) of the cells.
-    faces: ndarray of integers with shape ``(n_face x n_max_vert)``
-        Index identifying for every face the indices of its corner nodes.
-        If a face has less corner nodes than n_max_vert, its last indices
-        should be equal to ``fill_value``.
+    faces: ndarray of integers with shape ``(n_face, n_max_vert)``
+        Index identifying for every face the indices of its corner nodes.  If a
+        face has less corner nodes than ``n_max_vert``, its last indices should
+        be equal to ``fill_value``.
     n_buckets: int, optional, default: 4
         The number of "buckets" used in tree construction. Must be higher
         or equal to 2. Values over 8 provide diminishing returns.
@@ -231,7 +231,7 @@ class CellTree2d:
         ----------
         vertices: ndarray of floats with shape ``(n_point, 2)``
             Corner coordinates (x, y) of the cells.
-        faces: ndarray of integers with shape ``(n_face x n_max_vert)``
+        faces: ndarray of integers with shape ``(n_face, n_max_vert)``
             Index identifying for every face the indices of its corner nodes.
             If a face has less corner nodes than n_max_vert, its last indices
             should be equal to ``fill_value``.
