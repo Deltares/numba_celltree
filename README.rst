@@ -1,6 +1,13 @@
 Numba Celltree
 ==============
 
+.. image:: https://img.shields.io/github/workflow/status/huite/numba_celltree/ci?style=flat-square
+   :target: https://github.com/Huite/numba_celltree/actions?query=workflows%3Aci
+.. image:: https://img.shields.io/codecov/c/github/Huite/numba_celltree.svg?style=flat-square
+   :target: https://app.codecov.io/gh/Huite/numba_celltree
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
+   :target: https://github.com/psf/black
+
 Finding your way around in an unstructured meshes is difficult. Numba Celltree
 provides methods for searching for points, lines, boxes, and cells (convex
 polygons) in a two dimensional unstructured mesh.
