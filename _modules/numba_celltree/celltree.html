@@ -191,10 +191,10 @@
 <span class="sd">    ----------</span>
 <span class="sd">    vertices: ndarray of floats with shape ``(n_point, 2)``</span>
 <span class="sd">        Corner coordinates (x, y) of the cells.</span>
-<span class="sd">    faces: ndarray of integers with shape ``(n_face x n_max_vert)``</span>
-<span class="sd">        Index identifying for every face the indices of its corner nodes.</span>
-<span class="sd">        If a face has less corner nodes than n_max_vert, its last indices</span>
-<span class="sd">        should be equal to ``fill_value``.</span>
+<span class="sd">    faces: ndarray of integers with shape ``(n_face, n_max_vert)``</span>
+<span class="sd">        Index identifying for every face the indices of its corner nodes.  If a</span>
+<span class="sd">        face has less corner nodes than ``n_max_vert``, its last indices should</span>
+<span class="sd">        be equal to ``fill_value``.</span>
 <span class="sd">    n_buckets: int, optional, default: 4</span>
 <span class="sd">        The number of &quot;buckets&quot; used in tree construction. Must be higher</span>
 <span class="sd">        or equal to 2. Values over 8 provide diminishing returns.</span>
@@ -341,7 +341,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        vertices: ndarray of floats with shape ``(n_point, 2)``</span>
 <span class="sd">            Corner coordinates (x, y) of the cells.</span>
-<span class="sd">        faces: ndarray of integers with shape ``(n_face x n_max_vert)``</span>
+<span class="sd">        faces: ndarray of integers with shape ``(n_face, n_max_vert)``</span>
 <span class="sd">            Index identifying for every face the indices of its corner nodes.</span>
 <span class="sd">            If a face has less corner nodes than n_max_vert, its last indices</span>
 <span class="sd">            should be equal to ``fill_value``.</span>

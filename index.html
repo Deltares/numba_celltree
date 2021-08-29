@@ -100,9 +100,19 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation">
+   Installation
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -126,8 +136,47 @@
 <h1>Numba Celltree<a class="headerlink" href="#numba-celltree" title="Permalink to this headline">¶</a></h1>
 <p>Finding your way around in an unstructured meshes is difficult. Numba Celltree
 provides methods for searching for points, lines, boxes, and cells (convex
-polygons) in an unstructured mesh.</p>
-<img alt="_images/intersection-example.svg" src="_images/intersection-example.svg" /><div class="toctree-wrapper compound">
+polygons) in a two dimensional unstructured mesh.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">meshzoo</span>
+<span class="kn">from</span> <span class="nn">numba_celltree</span> <span class="kn">import</span> <span class="n">CellTree2d</span><span class="p">,</span> <span class="n">demo</span>
+
+
+<span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">vertices</span> <span class="o">+=</span> <span class="mf">1.0</span>
+<span class="n">vertices</span> <span class="o">*=</span> <span class="mf">5.0</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Intersection with two triangles</span>
+<span class="n">triangle_vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">7.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">7.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">triangles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="n">tri_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">area</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_faces</span><span class="p">(</span><span class="n">triangle_vertices</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Intersection with two lines</span>
+<span class="n">edge_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]],</span>
+        <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">edge_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">intersections</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/intersection-example.svg" src="_images/intersection-example.svg" /><div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install numba_celltree</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 

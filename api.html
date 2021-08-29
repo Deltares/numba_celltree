@@ -133,9 +133,9 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vertices</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Corner coordinates (x, y) of the cells.</p></li>
-<li><p><strong>faces</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_face</span> <span class="pre">x</span> <span class="pre">n_max_vert)</span></code>) – Index identifying for every face the indices of its corner nodes.
-If a face has less corner nodes than n_max_vert, its last indices
-should be equal to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>.</p></li>
+<li><p><strong>faces</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_face,</span> <span class="pre">n_max_vert)</span></code>) – Index identifying for every face the indices of its corner nodes.  If a
+face has less corner nodes than <code class="docutils literal notranslate"><span class="pre">n_max_vert</span></code>, its last indices should
+be equal to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>.</p></li>
 <li><p><strong>n_buckets</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default: 4</em>) – The number of “buckets” used in tree construction. Must be higher
 or equal to 2. Values over 8 provide diminishing returns.</p></li>
 <li><p><strong>cells_per_leaf</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default: 2</em>) – The number of cells in the leaf nodes of the cell tree. Can be set
@@ -194,7 +194,7 @@ of intersection.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vertices</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Corner coordinates (x, y) of the cells.</p></li>
-<li><p><strong>faces</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_face</span> <span class="pre">x</span> <span class="pre">n_max_vert)</span></code>) – Index identifying for every face the indices of its corner nodes.
+<li><p><strong>faces</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_face,</span> <span class="pre">n_max_vert)</span></code>) – Index identifying for every face the indices of its corner nodes.
 If a face has less corner nodes than n_max_vert, its last indices
 should be equal to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>.</p></li>
 <li><p><strong>fill_value</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default: -1</em>) – Fill value marking empty nodes in <code class="docutils literal notranslate"><span class="pre">faces</span></code>.</p></li>
