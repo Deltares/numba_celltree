@@ -36,8 +36,11 @@ import numpy as np
 
 from numba_celltree.algorithms.sutherland_hodgman import (
     area_of_intersection,
+    box_area_of_intersection,
+    intersection,
     polygon_polygon_clip_area,
 )
+from numba_celltree.constants import FloatDType, Point, Vector
 
 A = np.array(
     [
@@ -86,10 +89,101 @@ EXPECTED = np.array(
 )
 
 
+def test_intersection():
+    # Intersection
+    a = Point(0.0, 0.0)
+    V = Vector(1.0, 1.0)
+    r = Point(1.0, 0.0)
+    s = Point(0.0, 1.0)
+    U = Vector(s.x - r.x, s.y - r.y)
+    N = Vector(-U.y, U.x)
+    succes, p = intersection(a, V, r, N)
+    assert succes
+    assert np.allclose(p, [0.5, 0.5])
+
+    # Parallel lines, no intersection
+    s = Point(2.0, 1.0)
+    U = Vector(s.x - r.x, s.y - r.y)
+    N = Vector(-U.y, U.x)
+    succes, p = intersection(a, V, r, N)
+    assert not succes
+
+
 def test_clip_area():
     for a, b, expected in zip(A, B, EXPECTED):
         actual = polygon_polygon_clip_area(a, b)
         assert np.allclose(actual, expected)
+
+
+def test_clip_area_no_overlap():
+    a = np.array(
+        [
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+        ]
+    )
+    b = a.copy()
+    b += 2.0
+    actual = polygon_polygon_clip_area(a, b)
+    assert np.allclose(actual, 0)
+
+
+def test_clip_area_repeated_vertex():
+    a = np.array(
+        [
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+        ]
+    )
+    # No overlap
+    b = a.copy()
+    b += 2.0
+    actual = polygon_polygon_clip_area(a, b)
+    assert np.allclose(actual, 0)
+
+    b = np.array(
+        [
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+        ]
+    )
+    actual = polygon_polygon_clip_area(a, b)
+
+
+def test_clip_area_epsilon():
+    EPS = np.finfo(FloatDType).eps
+    a = np.array(
+        [
+            [-1.0, -1.0],
+            [1.0, -1.0],
+            [1.0, 1.0],
+        ]
+    )
+    b = np.array(
+        [
+            [-1.0 - EPS, -1.0 - EPS],
+            [1.0 + EPS, -1.0 - EPS],
+            [1.0 + EPS, 1.0 + EPS],
+        ]
+    )
+    actual = polygon_polygon_clip_area(a, b)
+    assert np.allclose(actual, 2.0)
+
+    EPS = -EPS
+    b = np.array(
+        [
+            [-1.0 - EPS, -1.0 - EPS],
+            [1.0 + EPS, -1.0 - EPS],
+            [1.0 + EPS, 1.0 + EPS],
+        ]
+    )
+    actual = polygon_polygon_clip_area(a, b)
+    assert np.allclose(actual, 2.0)
 
 
 def test_area_of_intersection():
@@ -103,3 +197,37 @@ def test_area_of_intersection():
         vertices_a, vertices_b, faces_a, faces_b, indices_a, indices_b
     )
     assert np.allclose(actual, EXPECTED)
+
+
+def test_box_area_of_intersection():
+    box_coords = np.array(
+        [
+            [0.0, 1.0, 0.0, 1.0],
+            [1.0, 2.0, 1.0, 2.0],
+        ]
+    )
+    vertices = np.array(
+        [
+            [0.0, 0.0],
+            [2.0, 0.0],
+            [2.0, 2.0],
+            [-2.0, 0.0],
+            [-2.0, 2.0],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 2],
+            [0, 3, 4],
+        ]
+    )
+    indices_bbox = np.array([0, 0, 1, 1])
+    indices_face = np.array([0, 1, 0, 1])
+    actual = box_area_of_intersection(
+        box_coords,
+        vertices,
+        faces,
+        indices_bbox,
+        indices_face,
+    )
+    assert np.allclose(actual, [0.5, 0.0, 0.5, 0.0])

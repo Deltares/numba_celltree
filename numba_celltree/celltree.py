@@ -58,6 +58,13 @@ def cast_faces(faces: IntArray, fill_value: int) -> IntArray:
     return faces
 
 
+def cast_bboxes(bbox_coords: FloatArray) -> FloatArray:
+    bbox_coords = np.ascontiguousarray(bbox_coords, dtype=FloatDType)
+    if bbox_coords.ndim != 2 or bbox_coords.shape[1] != 4:
+        raise ValueError("bbox_coords must have shape (n_box, 4)")
+    return bbox_coords
+
+
 def cast_edges(edges: FloatArray) -> FloatArray:
     edges = np.ascontiguousarray(edges, dtype=FloatDType)
     if edges.ndim != 3 or edges.shape[1] != 2 or edges.shape[2] != 2:
@@ -168,7 +175,7 @@ class CellTree2d:
         tree_face_indices: ndarray of integers with shape ``(n_found,)``
             Indices of the face.
         """
-        bbox_coords = bbox_coords.astype(FloatDType)
+        bbox_coords = cast_bboxes(bbox_coords)
         return locate_boxes(bbox_coords, self.celltree_data)
 
     def intersect_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
@@ -190,7 +197,7 @@ class CellTree2d:
         area: ndarray of floats with shape ``(n_found,)``
             Area of intersection between the two intersecting faces.
         """
-        bbox_coords = bbox_coords.astype(FloatDType)
+        bbox_coords = cast_bboxes(bbox_coords)
         i, j = locate_boxes(bbox_coords, self.celltree_data)
         area = box_area_of_intersection(
             bbox_coords=bbox_coords,

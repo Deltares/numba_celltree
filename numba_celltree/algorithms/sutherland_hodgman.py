@@ -43,6 +43,7 @@ from ..geometry_utils import (
     Point,
     Vector,
     as_box,
+    as_point,
     copy_box_vertices,
     copy_vertices,
     dot_product,
@@ -67,6 +68,7 @@ def intersection(a: Point, V: Vector, r: Point, N: Vector) -> Tuple[bool, Point]
         t = nw / nv
         return True, Point(a.x + t * V.x, a.y + t * V.y)
     else:
+        # parallel lines
         return False, Point(np.nan, np.nan)
 
 
@@ -88,14 +90,14 @@ def polygon_polygon_clip_area(polygon: Sequence, clipper: Sequence) -> float:
     copy(polygon, output, n_output)
 
     # Grab last point
-    r = Point(clipper[n_clip - 1][0], clipper[n_clip - 1][1])
+    r = as_point(clipper[n_clip - 1])
     for i in range(n_clip):
-        s = Point(clipper[i][0], clipper[i][1])
+        s = as_point(clipper[i])
 
         U = Vector(s.x - r.x, s.y - r.y)
-        N = Vector(-U.y, U.x)
         if U.x == 0 and U.y == 0:
             continue
+        N = Vector(-U.y, U.x)
 
         # Copy output into subject
         length = n_output
@@ -103,10 +105,10 @@ def polygon_polygon_clip_area(polygon: Sequence, clipper: Sequence) -> float:
         # Reset
         n_output = 0
         # Grab last point
-        a = Point(subject[length - 1][0], subject[length - 1][1])
+        a = as_point(subject[length - 1])
         a_inside = inside(a, r, U)
         for j in range(length):
-            b = Point(subject[j][0], subject[j][1])
+            b = as_point(subject[j])
 
             V = Vector(b.x - a.x, b.y - a.y)
             if V.x == 0 and V.y == 0:
@@ -124,6 +126,8 @@ def polygon_polygon_clip_area(polygon: Sequence, clipper: Sequence) -> float:
                 if succes:
                     n_output = push_point(output, n_output, point)
                 else:  # Floating point failure
+                    # TODO: haven't come up with a test case yet to succesfully
+                    # trigger this ...
                     b_inside = True  # flip it for consistency, will be set as a
                     n_output = push_point(output, n_output, b)  # push b instead
 

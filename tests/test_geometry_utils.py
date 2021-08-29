@@ -53,16 +53,6 @@ def test_dot_product():
     assert np.allclose(gu.dot_product(u, v), np.dot(u, v))
 
 
-def test_point_norm():
-    p = Point(0.0, 0.0)
-    v = Vector(0.0, 1.0)
-    u = Vector(1.0, 0.0)
-    actual = gu.point_norm(p, u, v)
-    assert np.allclose(actual, Vector(1.0, 1.0))
-    actual = gu.point_norm(p, v, u)
-    assert np.allclose(actual, Vector(1.0, 1.0))
-
-
 def test_polygon_length():
     face = np.array([0, 1, 2])
     assert gu.polygon_length(face) == 3

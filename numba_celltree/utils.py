@@ -16,17 +16,6 @@ from .constants import (
 )
 
 
-@intrinsic
-def stack_empty(typingctx, size, dtype):
-    def impl(context, builder, signature, args):
-        ty = context.get_value_type(dtype.dtype)
-        ptr = cgutils.alloca_once(builder, ty, size=args[0])
-        return ptr
-
-    sig = types.CPointer(dtype.dtype)(types.int64, dtype)
-    return sig, impl
-
-
 @nb.njit(inline="always")
 def pop(array, size):
     return array[size - 1], size - 1
@@ -50,71 +39,67 @@ CLIP_MAX_N_VERTEX = MAX_N_VERTEX * 2
 CLIP_POLYGON_SIZE = 2 * POLYGON_SIZE
 
 
+# Make sure everything still works when calling as non-compiled Python code.
 # Note: these stack allocated arrays should only be used inside of numba
 # compiled code. They should interact NEVER with dynamic Python code: there are
 # no guarantees in that case, they may very well be filled with garbage.
-@nb.njit(inline="always")
-def nb_allocate_stack():
-    arr_ptr = stack_empty(
-        MAX_TREE_DEPTH, IntDType
-    )  # pylint: disable=no-value-for-parameter
-    arr = nb.carray(arr_ptr, MAX_TREE_DEPTH, dtype=IntDType)
-    return arr
-
-
-@nb.njit(inline="always")
-def np_allocate_stack():
-    return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
-
-
-@nb.njit(inline="always")
-def nb_allocate_polygon():
-    arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
-        POLYGON_SIZE, FloatDType
-    )
-    arr = nb.carray(arr_ptr, (MAX_N_VERTEX, NDIM), dtype=FloatDType)
-    return arr
-
-
-@nb.njit(inline="always")
-def np_allocate_polygon():
-    return np.empty((MAX_N_VERTEX, NDIM), dtype=FloatDType)
-
-
-@nb.njit(inline="always")
-def nb_allocate_clip_polygon():
-    arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
-        CLIP_POLYGON_SIZE, FloatDType
-    )
-    arr = nb.carray(arr_ptr, (CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
-    return arr
-
-
-@nb.njit(inline="always")
-def np_allocate_clip_polygon():
-    return np.empty((CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
-
-
-@nb.njit(inline="always")
-def nb_allocate_box_polygon():
-    arr_ptr = stack_empty(8, FloatDType)  # pylint: disable=no-value-for-parameter
-    arr = nb.carray(arr_ptr, (4, 2), dtype=FloatDType)
-    return arr
-
-
-@nb.njit(inline="always")
-def np_allocate_box_polygon():
-    return np.empty((4, 2), dtype=FloatDType)
-
-
-# Make sure everything still works when calling as non-compiled Python code:
 if STACK_ALLOCATE_STATIC_ARRAYS and os.environ.get("NUMBA_DISABLE_JIT", "0") == "0":
-    allocate_stack = nb_allocate_stack
-    allocate_polygon = nb_allocate_polygon
-    allocate_clip_polygon = nb_allocate_clip_polygon
-    allocate_box_polygon = nb_allocate_box_polygon
+
+    @intrinsic  # pragma: no cover
+    def stack_empty(typingctx, size, dtype):
+        def impl(context, builder, signature, args):
+            ty = context.get_value_type(dtype.dtype)
+            ptr = cgutils.alloca_once(builder, ty, size=args[0])
+            return ptr
+
+        sig = types.CPointer(dtype.dtype)(types.int64, dtype)
+        return sig, impl
+
+    @nb.njit(inline="always")  # pragma: no cover
+    def allocate_stack():
+        arr_ptr = stack_empty(
+            MAX_TREE_DEPTH, IntDType
+        )  # pylint: disable=no-value-for-parameter
+        arr = nb.carray(arr_ptr, MAX_TREE_DEPTH, dtype=IntDType)
+        return arr
+
+    @nb.njit(inline="always")  # pragma: no cover
+    def allocate_polygon():
+        arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
+            POLYGON_SIZE, FloatDType
+        )
+        arr = nb.carray(arr_ptr, (MAX_N_VERTEX, NDIM), dtype=FloatDType)
+        return arr
+
+    @nb.njit(inline="always")  # pragma: no cover
+    def allocate_clip_polygon():
+        arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
+            CLIP_POLYGON_SIZE, FloatDType
+        )
+        arr = nb.carray(arr_ptr, (CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
+        return arr
+
+    @nb.njit(inline="always")  # pragma: no cover
+    def allocate_box_polygon():
+        arr_ptr = stack_empty(8, FloatDType)  # pylint: disable=no-value-for-parameter
+        arr = nb.carray(arr_ptr, (4, 2), dtype=FloatDType)
+        return arr
+
+
 else:
-    allocate_stack = np_allocate_stack
-    allocate_polygon = np_allocate_polygon
-    allocate_clip_polygon = np_allocate_clip_polygon
-    allocate_box_polygon = np_allocate_box_polygon
+
+    @nb.njit(inline="always")
+    def allocate_stack():
+        return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
+
+    @nb.njit(inline="always")
+    def allocate_polygon():
+        return np.empty((MAX_N_VERTEX, NDIM), dtype=FloatDType)
+
+    @nb.njit(inline="always")
+    def allocate_clip_polygon():
+        return np.empty((CLIP_MAX_N_VERTEX, NDIM), dtype=FloatDType)
+
+    @nb.njit(inline="always")
+    def allocate_box_polygon():
+        return np.empty((4, 2), dtype=FloatDType)

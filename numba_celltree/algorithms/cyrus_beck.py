@@ -59,22 +59,14 @@ def intersections(
     # A single intersection found, could be entering, could be leaving
     v0 = as_point(poly[i0])
     v01 = as_point(poly[(i0 + 1) % length])
-    if k == 1:
-        enters0, t = compute_intersection(a, s, v0, v01)
-        if enters0:
-            return t, 1
-        else:
-            return 0, t
-    # Entering and leaving intersection found
-    else:  # k == 2:  # Entering and leaving
-        v1 = as_point(poly[i1])
-        v11 = as_point(poly[(i1 + 1) % length])
-        enters0, t0 = compute_intersection(a, s, v0, v01)
-        enters1, t1 = compute_intersection(a, s, v1, v11)
-        if enters1:  # Swap them
-            return t1, t0
-        else:
-            return t0, t1
+    v1 = as_point(poly[i1])
+    v11 = as_point(poly[(i1 + 1) % length])
+    _, t0 = compute_intersection(a, s, v0, v01)
+    enters1, t1 = compute_intersection(a, s, v1, v11)
+    if enters1:  # Swap them
+        return t1, t0
+    else:
+        return t0, t1
 
 
 @nb.njit(inline="always")
@@ -165,7 +157,7 @@ def cyrus_beck_line_polygon_clip(
             p0, p1 = collinear_case(a, b, v0, v1)
             return True, p0, p1
         # Note: <= rather than <
-        elif (ksi_eta) <= 0:
+        elif ksi_eta <= 0:
             if k == 0:
                 i0 = i
             else:

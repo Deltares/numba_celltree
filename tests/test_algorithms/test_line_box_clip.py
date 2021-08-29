@@ -26,32 +26,35 @@ POLY = np.array(
 
 
 @pytest.mark.parametrize(
-    "line_clip", [cohen_sutherland_line_box_clip, liang_barsky_line_box_clip]
+    "line_clip, box",
+    [
+        (cohen_sutherland_line_box_clip, BOX),
+        (liang_barsky_line_box_clip, BOX),
+        (cyrus_beck_line_polygon_clip, POLY),
+    ],
 )
-def test_line_box_clip(line_clip):
-    box = Box(1.0, 4.0, 3.0, 5.0)
-    a = Point(0.0, 0.0)
-    b = Point(4.0, 6.0)
+def test_line_box_clip(line_clip, box):
+    a = Point(-1.0, 0.0)
+    b = Point(2.0, 3.0)
     intersects, c, d = line_clip(a, b, box)
     assert intersects
-    assert np.allclose(c, [2.0, 3.0])
-    assert np.allclose(d, [3.3333333333333, 5.0])
+    assert np.allclose(c, [0.0, 1.0])
+    assert np.allclose(d, [1.0, 2.0])
 
-    a = Point(0.0, 0.1)
-    b = Point(0.0, 0.1)
+    a = Point(0.0, -0.1)
+    b = Point(0.0, -0.1)
     intersects, c, d = line_clip(a, b, box)
     assert not intersects
     assert np.isnan(c).all()
     assert np.isnan(d).all()
 
-    a = Point(0.0, 4.0)
-    b = Point(5.0, 4.0)
+    a = Point(-1.0, 1.0)
+    b = Point(3.0, 1.0)
     intersects, c, d = line_clip(a, b, box)
     assert intersects
-    assert np.allclose(c, [1.0, 4.0])
-    assert np.allclose(d, [4.0, 4.0])
+    assert np.allclose(c, [0.0, 1.0])
+    assert np.allclose(d, [2.0, 1.0])
 
-    box = Box(0.0, 2.0, 0.0, 2.0)
     a = Point(1.0, -3.0)
     b = Point(1.0, 3.0)
     intersects, c, d = line_clip(a, b, box)
@@ -71,6 +74,38 @@ def test_line_box_clip(line_clip):
     assert intersects
     assert np.allclose(c, [1.0, 1.0])
     assert np.allclose(d, [1.0, 2.0])
+
+    a = Point(-1.0, 3.0)
+    b = Point(3.0, 3.0)
+    intersects, c, d = line_clip(a, b, box)
+    assert not intersects
+
+    a = Point(-1.0, 1.0)
+    b = Point(1.0, 1.0)
+    intersects, c, d = line_clip(a, b, box)
+    assert intersects
+    assert np.allclose(c, [0.0, 1.0])
+    assert np.allclose(d, [1.0, 1.0])
+
+    # both inside
+    a = Point(0.5, 0.5)
+    b = Point(1.5, 1.5)
+    intersects, c, d = line_clip(a, b, box)
+    assert intersects
+    assert np.allclose(c, a)
+    assert np.allclose(d, b)
+
+    # No intersection, left
+    a = Point(-1.5, 0.0)
+    b = Point(-0.5, 1.0)
+    intersects, c, d = line_clip(a, b, box)
+    assert not intersects
+
+    # No intersection, right
+    a = Point(2.5, 0.0)
+    b = Point(3.5, 1.0)
+    intersects, c, d = line_clip(a, b, box)
+    assert not intersects
 
 
 @pytest.mark.parametrize(

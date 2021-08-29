@@ -53,19 +53,6 @@ def dot_product(u: Vector, v: Vector) -> float:
 
 
 @nb.njit(inline="always")
-def point_norm(p: Point, v: Vector, u: Vector) -> Vector:
-    # Use in case the polygon in not guaranteed counter-clockwise.
-    n = Vector(-(u.y - v.y), (u.x - v.x))
-    v = Vector(v.x - p.x, v.y - p.y)
-    dot = dot_product(n, v)
-    if dot == 0:
-        raise ValueError
-    elif dot < 0:
-        n = Vector(-n.x, -n.y)
-    return n
-
-
-@nb.njit(inline="always")
 def polygon_length(face: IntArray) -> int:
     # A minimal polygon is a triangle
     n = len(face)

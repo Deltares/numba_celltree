@@ -207,3 +207,17 @@ def test_triangles_intersect_hanging_nodes():
     )
     assert not separating_axes(a, b)
     assert not separating_axes(b, a)
+
+    # Repeat node
+    a = np.array(
+        [
+            [0.0, 0.0],
+            [0.5, 0.5],
+            [0.5, 0.5],
+            [0.0, 1.0],
+            [1.0, 1.0],
+        ]
+    )
+    b = a
+    assert separating_axes(a, b)
+    assert separating_axes(b, a)

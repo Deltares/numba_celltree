@@ -78,6 +78,24 @@ def test_line_box_clip():
     assert line_clip(a, b, poly) == ab(*line_clip(b, a, poly))
 
 
+def test_line_triangle_clip():
+    # Triangle
+    a = Point(1.0, 1.0)
+    b = Point(3.0, 1.0)
+    poly = np.array(
+        [
+            [0.0, 0.5],
+            [2.0, 0.0],
+            [2.0, 2.0],
+        ]
+    )
+    intersects, c, d = line_clip(a, b, poly)
+    assert intersects
+    assert np.allclose(c, [1.0, 1.0])
+    assert np.allclose(d, [2.0, 1.0])
+    assert line_clip(a, b, poly) == ab(*line_clip(b, a, poly))
+
+
 def test_line_triangle_clip_degeneracies():
     poly = np.array(
         [
