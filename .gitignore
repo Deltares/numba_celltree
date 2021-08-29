@@ -23,3 +23,6 @@ pip-log.txt
 # Built docs
 docs/_build
 docs/examples
+
+# Tox
+.tox
