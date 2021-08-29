@@ -16,6 +16,7 @@ faces2 = [
     [0, 1, 2],
     [1, 3, 2],
 ]
+fill_value = -1
 nodes = np.array(nodes2, dtype=np.float64)
 faces = np.array(faces2, dtype=np.intc)
 
@@ -73,20 +74,20 @@ def test_init():
     can a tree be initialized
     """
     # with defaults
-    CellTree2d(nodes, faces)
+    CellTree2d(nodes, faces, fill_value)
     # with everything specified
-    CellTree2d(nodes, faces, n_buckets=2, cells_per_leaf=1)
+    CellTree2d(nodes, faces, fill_value, n_buckets=2, cells_per_leaf=1)
     # with n_buckets
-    CellTree2d(nodes, faces, n_buckets=4)
+    CellTree2d(nodes, faces, fill_value, n_buckets=4)
     # with cells_per_leaf
-    CellTree2d(nodes, faces, cells_per_leaf=2)
+    CellTree2d(nodes, faces, fill_value, cells_per_leaf=2)
 
 
 def test_lists():
     """
     python lists should get converted to numpy arrays
     """
-    CellTree2d(nodes2, faces2)
+    CellTree2d(nodes2, faces2, fill_value)
 
 
 def test_types():
@@ -95,7 +96,7 @@ def test_types():
     """
     nodes = np.array(nodes2, dtype=np.float32)
     faces = np.array(faces2, dtype=np.int32)
-    CellTree2d(nodes, faces)
+    CellTree2d(nodes, faces, fill_value)
 
 
 def test_shape_error():
@@ -107,21 +108,21 @@ def test_shape_error():
 
     with pytest.raises(ValueError):
         # nodes is wrong shape
-        CellTree2d(nodes, faces)
+        CellTree2d(nodes, faces, fill_value)
         CellTree2d(nodes2, (2, 3, 4, 5))
-        CellTree2d(nodes2, ((2, 3, 4, 5), (1, 2, 3, 4, 5), (1, 2, 3, 4, 5)))
+        CellTree2d(nodes2, ((2, 3, 4, 5), (1, 2, 3, 4, 5), (1, 2, 3, 4, 5)), fill_value)
 
 
 def test_bounds_errors():
     with pytest.raises(ValueError):
-        CellTree2d(nodes, faces, cells_per_leaf=-1)
+        CellTree2d(nodes, faces, fill_value, cells_per_leaf=-1)
 
     with pytest.raises(ValueError):
-        CellTree2d(nodes, faces, n_buckets=0)
+        CellTree2d(nodes, faces, fill_value, n_buckets=0)
 
 
 def test_triangle_lookup():
-    tree = CellTree2d(nodes, faces)
+    tree = CellTree2d(nodes, faces, fill_value)
     point = np.array(
         [
             [1.0, 1.0],
@@ -170,7 +171,7 @@ def test_poly_lookup():
         dtype=np.intc,
     )
 
-    tree1 = CellTree2d(nodes, faces1, n_buckets=2, cells_per_leaf=1)
+    tree1 = CellTree2d(nodes, faces1, fill_value, n_buckets=2, cells_per_leaf=1)
     point = np.array(
         [
             [1.0, 1.0],
@@ -182,7 +183,7 @@ def test_poly_lookup():
     expected = np.array([0, 1, -1])
     assert np.array_equal(result, expected)
 
-    tree2 = CellTree2d(nodes, faces2, n_buckets=2, cells_per_leaf=1)
+    tree2 = CellTree2d(nodes, faces2, fill_value, n_buckets=2, cells_per_leaf=1)
     point = np.array(
         [
             [1.0, 2.0],
@@ -217,7 +218,7 @@ def test_multi_poly_lookup():
     faces = np.array(
         [[0, 8, 9, 5, 2], [9, 11, 7, 5, -1], [4, 7, 6, -1, -1]], dtype=np.intc
     )
-    tree = CellTree2d(nodes, faces, n_buckets=2, cells_per_leaf=1)
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=2, cells_per_leaf=1)
     point = np.array(
         [
             [1.0, 1.0],
@@ -232,7 +233,7 @@ def test_multi_poly_lookup():
 
 
 def test_multipoint():
-    tree = CellTree2d(nodes21, faces21)
+    tree = CellTree2d(nodes21, faces21, fill_value)
     points = [
         (4.2, 3.0),
         (7.7, 13.5),
@@ -269,7 +270,7 @@ def test_box_lookup():
     faces = np.array(
         [[0, 8, 9, 5, 2], [9, 11, 7, 5, -1], [4, 7, 6, -1, -1]], dtype=np.intc
     )
-    tree = CellTree2d(nodes, faces, n_buckets=2, cells_per_leaf=1)
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=2, cells_per_leaf=1)
     box_coords = np.array(
         [
             [1.0, 2.0, 1.0, 2.0],  # in face 0
