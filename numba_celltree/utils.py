@@ -49,6 +49,7 @@ POLYGON_SIZE = MAX_N_VERTEX * NDIM
 CLIP_MAX_N_VERTEX = MAX_N_VERTEX * 2
 CLIP_POLYGON_SIZE = 2 * POLYGON_SIZE
 
+
 # Note: these stack allocated arrays should only be used inside of numba
 # compiled code. They should interact NEVER with dynamic Python code: there are
 # no guarantees in that case, they may very well be filled with garbage.
