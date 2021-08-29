@@ -138,13 +138,12 @@
 provides methods for searching for points, lines, boxes, and cells (convex
 polygons) in a two dimensional unstructured mesh.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">meshzoo</span>
-<span class="kn">from</span> <span class="nn">numba_celltree</span> <span class="kn">import</span> <span class="n">CellTree2d</span><span class="p">,</span> <span class="n">demo</span>
+<span class="kn">from</span> <span class="nn">numba_celltree</span> <span class="kn">import</span> <span class="n">CellTree2d</span>
 
 
 <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">vertices</span> <span class="o">+=</span> <span class="mf">1.0</span>
 <span class="n">vertices</span> <span class="o">*=</span> <span class="mf">5.0</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Intersection with two triangles</span>
 <span class="n">triangle_vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
