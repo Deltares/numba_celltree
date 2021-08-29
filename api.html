@@ -126,7 +126,7 @@
 <span id="celltree2d"></span><h1>CellTree2d<a class="headerlink" href="#module-numba_celltree" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">numba_celltree.</span></span><span class="sig-name descname"><span class="pre">CellTree2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_buckets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_per_leaf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">numba_celltree.</span></span><span class="sig-name descname"><span class="pre">CellTree2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_buckets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_per_leaf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Construct a cell tree from 2D vertices and a faces indexing array.</p>
 <dl class="field-list simple">
@@ -146,6 +146,26 @@ performance.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="numba_celltree.CellTree2d.intersect_boxes">
+<span class="sig-name descname"><span class="pre">intersect_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox_coords</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.intersect_boxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.intersect_boxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the index of a box intersecting with a face, and the area
+of intersection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bbox_coords</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_box,</span> <span class="pre">4)</span></code>) – Every row containing <code class="docutils literal notranslate"><span class="pre">(xmin,</span> <span class="pre">xmax,</span> <span class="pre">ymin,</span> <span class="pre">ymax)</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>bbox_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the bounding box.</p></li>
+<li><p><strong>tree_face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the tree faces.</p></li>
+<li><p><strong>area</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Area of intersection between the two intersecting faces.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.intersect_edges">
 <span class="sig-name descname"><span class="pre">intersect_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_coords</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.intersect_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.intersect_edges" title="Permalink to this definition">¶</a></dt>
@@ -193,7 +213,7 @@ should be equal to <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.locate_boxes">
-<span class="sig-name descname"><span class="pre">locate_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox_coords</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_boxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_boxes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">locate_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox_coords</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_boxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_boxes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the index of a face intersecting with a bounding box.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -203,30 +223,6 @@ should be equal to <code class="docutils literal notranslate"><span class="pre">
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>bbox_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the bounding box.</p></li>
 <li><p><strong>tree_face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the face.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="numba_celltree.CellTree2d.locate_faces">
-<span class="sig-name descname"><span class="pre">locate_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_faces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds the index of a face intersecting with another face.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Corner coordinates (x, y) of the cells.</p></li>
-<li><p><strong>faces</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_face</span> <span class="pre">x</span> <span class="pre">n_max_vert)</span></code>) – Index identifying for every face the indices of its corner nodes.
-If a face has less corner nodes than n_max_vert, its last indices
-should be equal to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>.</p></li>
-<li><p><strong>fill_value</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default: -1</em>) – Fill value marking empty nodes in <code class="docutils literal notranslate"><span class="pre">faces</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>frace_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the faces.</p></li>
-<li><p><strong>tree_face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the tree faces.</p></li>
 </ul>
 </p>
 </dd>

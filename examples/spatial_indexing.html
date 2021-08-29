@@ -162,6 +162,7 @@ to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="spatial-indexing">
 <span id="sphx-glr-examples-spatial-indexing-py"></span><h1>Spatial indexing<a class="headerlink" href="#spatial-indexing" title="Permalink to this headline">¶</a></h1>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></p>
 <p>The goal of a cell tree is to quickly locate cells of an unstructured mesh.
 Unstructured meshes are challenging in this regard: for a given point, we
 cannot simply compute a row and column number as we would for structured data
@@ -178,7 +179,7 @@ efficiently, without exhaustively checking every cell. The implementation in
 <li><p>Locating convex polygons (e.g. cells of another mesh)</p></li>
 <li><p>Locating line segments</p></li>
 </ul>
-<p>This example provides a basic introduction to searching a cell tree for each of
+<p>This example provides an introduction to searching a cell tree for each of
 these.</p>
 <p>We’ll start by importing the required packages with matplotlib for plotting.
 We will use <code class="docutils literal notranslate"><span class="pre">meshzoo</span></code> to create some examples meshes.</p>
@@ -194,10 +195,17 @@ We will use <code class="docutils literal notranslate"><span class="pre">meshzoo
 <span class="kn">from</span> <span class="nn">numba_celltree</span> <span class="kn">import</span> <span class="n">CellTree2d</span><span class="p">,</span> <span class="n">demo</span>
 </pre></div>
 </div>
-<p>Let’s go easy for a start with a rectangular mesh:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lower_left</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-<span class="n">upper_right</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
-<span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">rectangle_quad</span><span class="p">(</span><span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<p>Let’s start with a rectangular mesh:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="p">),</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ny</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ny</span><span class="p">)</span>
+<span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># TODO: Replace this one meshzoo R is merged.</span>
+<span class="c1"># lower_left = (0.0, 0.0)</span>
+<span class="c1"># upper_right = (10.0, 10.0)</span>
+<span class="c1"># vertices, faces = meshzoo.rectangle_quad(lower_left, upper_right, n=10)</span>
 </pre></div>
 </div>
 <p>Determine the edges of the cells, and plot them.</p>
@@ -212,7 +220,7 @@ We will use <code class="docutils literal notranslate"><span class="pre">meshzoo
 <div class="section" id="locating-points">
 <h2>Locating points<a class="headerlink" href="#locating-points" title="Permalink to this headline">¶</a></h2>
 <p>We’ll build a cell tree first, then look for some points.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="p">[</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
@@ -225,7 +233,7 @@ We will use <code class="docutils literal notranslate"><span class="pre">meshzoo
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([-1, 12,  5])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([-1, 24, 46])
 </pre></div>
 </div>
 <p>These numbers are the cell numbers in which we can find the points.</p>
@@ -255,7 +263,7 @@ We’ll color the found cells blue, and we’ll draw the nodes to compare.</p>
 <img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_003.png" />
 <p>There are certainly no rows or columns to speak of!</p>
 <p>Let’s build a new tree, and look for the same points as before.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">i</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -340,7 +348,14 @@ can confirm visually:</p>
 </div>
 <div class="section" id="locating-cells">
 <h2>Locating cells<a class="headerlink" href="#locating-cells" title="Permalink to this headline">¶</a></h2>
-<p>Similarly, we can look for other cells (convex polygons):</p>
+<p>Similarly, we can look for other cells (convex polygons) and compute the
+overlap:</p>
+<p>This returns three arrays of equal length:</p>
+<ul class="simple">
+<li><p>the index of the face to locate</p></li>
+<li><p>the index of the face in the celtree</p></li>
+<li><p>the area of the intersection</p></li>
+</ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">triangle_vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
@@ -359,7 +374,7 @@ can confirm visually:</p>
 <span class="p">)</span>
 <span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span> <span class="o">=</span> <span class="n">triangle_vertices</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
-<span class="n">tri_i</span><span class="p">,</span> <span class="n">cell_i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_faces</span><span class="p">(</span><span class="n">triangle_vertices</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">tri_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">area</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_faces</span><span class="p">(</span><span class="n">triangle_vertices</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">cells_0</span> <span class="o">=</span> <span class="n">cell_i</span><span class="p">[</span><span class="n">tri_i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">cells_1</span> <span class="o">=</span> <span class="n">cell_i</span><span class="p">[</span><span class="n">tri_i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
 
@@ -375,24 +390,7 @@ can confirm visually:</p>
 </pre></div>
 </div>
 <img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_007.png" />
-<p>We can also compute how large the overlap is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tri_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">area</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_faces</span><span class="p">(</span><span class="n">triangle_vertices</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">area</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.00871605, 0.05399711, 0.08977243, 0.06850277, 0.27310478,
-       0.44295032, 0.45148705, 0.33395494, 0.07939018, 0.19812438,
-       0.28020701, 0.2439384 , 0.15635359, 0.0672785 , 0.41313708,
-       0.03739642, 0.06826046, 0.58473083, 0.51557381, 0.57127098,
-       0.66575332, 0.31475411, 0.44597069, 0.67310123, 0.09393931,
-       0.62192747, 0.64661202, 0.67310123, 0.58778525, 0.55431165,
-       0.57127098, 0.37498137, 0.54575367, 0.6021836 , 0.36411514,
-       0.50808495, 0.16265269, 0.11001612, 0.24834604, 0.3601918 ,
-       0.09199652, 0.6110686 , 0.58616685, 0.09873262, 0.53274277])
-</pre></div>
-</div>
-<p>Let’s color the faces of the mesh by their proportion of overlap. Because our
+<p>Let’s color the faces of the mesh by their ratio of overlap. Because our
 mesh is triangular, we can represent the triangles as two collections of
 vectors (V, U). Then the area is half of the absolute value of the cross
 product of U and V.</p>
@@ -401,14 +399,14 @@ product of U and V.</p>
 <span class="n">U</span> <span class="o">=</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">V</span> <span class="o">=</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">full_area</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">U</span><span class="p">))</span>
-<span class="n">proportion</span> <span class="o">=</span> <span class="n">area</span> <span class="o">/</span> <span class="n">full_area</span>
+<span class="n">ratio</span> <span class="o">=</span> <span class="n">area</span> <span class="o">/</span> <span class="n">full_area</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="n">colored</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span>
     <span class="n">node_x</span><span class="p">,</span>
     <span class="n">node_y</span><span class="p">,</span>
     <span class="n">intersection_faces</span><span class="p">,</span>
-    <span class="n">proportion</span><span class="p">,</span>
+    <span class="n">ratio</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">colored</span><span class="p">)</span>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
@@ -416,15 +414,91 @@ product of U and V.</p>
 </pre></div>
 </div>
 <img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_008.png" />
+<p><code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code> also provides a method to compute overlaps between boxes and a
+mesh. This may come in handy to compute overlap with a raster, for example to
+rasterize a mesh.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">xmin</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">xmax</span> <span class="o">=</span> <span class="mf">10.0</span>
+
+<span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+<span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="mf">10.0</span>
+
+<span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ymax</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dy</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">),</span>
+    <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ny</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]]</span>
+<span class="p">)</span>
+<span class="n">raster_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">,</span> <span class="n">raster_overlap</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_boxes</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can construct a weight matrix with these arrays. This weight matrix stores
+for every raster cell (row) the area of overlap with a triangle (column).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">weight_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ny</span> <span class="o">*</span> <span class="n">nx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)))</span>
+<span class="n">weight_matrix</span><span class="p">[</span><span class="n">raster_i</span><span class="p">,</span> <span class="n">cell_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">raster_overlap</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">colored</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">weight_matrix</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">colored</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_009.png" />
+<p>This weight matrix can be used for translating data from one mesh to another.
+Let’s generate some mock elevation data for a valley. Then, we’ll compute the
+area weighted mean for every raster cell.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">saddle_elevation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.6</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+
+
+<span class="c1"># Generate an elevation for every triangle</span>
+<span class="n">centroid_x</span><span class="p">,</span> <span class="n">centroid_y</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">faces</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">face_z</span> <span class="o">=</span> <span class="n">saddle_elevation</span><span class="p">(</span><span class="n">centroid_x</span><span class="p">,</span> <span class="n">centroid_y</span><span class="p">)</span>
+
+<span class="c1"># Compute the weighted mean of the triangles per raster cell</span>
+<span class="n">weighted_elevation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weight_matrix</span><span class="p">,</span> <span class="n">face_z</span><span class="p">)</span>
+<span class="n">area_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weight_matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)))</span>
+<span class="n">mean_elevation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">ny</span> <span class="o">*</span> <span class="n">nx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="n">intersects</span> <span class="o">=</span> <span class="n">area_sum</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">mean_elevation</span><span class="p">[</span><span class="n">intersects</span><span class="p">]</span> <span class="o">=</span> <span class="n">weighted_elevation</span><span class="p">[</span><span class="n">intersects</span><span class="p">]</span> <span class="o">/</span> <span class="n">area_sum</span><span class="p">[</span><span class="n">intersects</span><span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">plot_trisurf</span><span class="p">(</span>
+    <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">saddle_elevation</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span>
+<span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mean_elevation</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">))</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_010.png" />
+<p>Such a weight matrix doesn’t apply to just boxes and triangles, but to every
+case of mapping one mesh to another by intersecting cell areas. Note however
+that the aggregation above is not very efficient. Most of the entries in the
+weight matrix are 0; a raster cell only intersects a small number triangles.
+Such a matrix is much more efficiently stored and processed as a <a class="reference external" href="https://en.wikipedia.org/wiki/Sparse_matrix">sparse
+matrix</a> (see also Scipy
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/sparse.html">sparse</a>). The
+arrays returned by the <code class="docutils literal notranslate"><span class="pre">intersect_</span></code> methods of <code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code> form a
+coordinate list (COO).</p>
+<p>Such a coordinate list can also be easily used to aggregate values with
+<a class="reference external" href="https://pandas.pydata.org/docs/index.html">Pandas</a>, as Pandas provides
+very efficient aggregation in the form of <a class="reference external" href="https://pandas.pydata.org/docs/reference/groupby.html">groupby operations</a>.</p>
 </div>
 <div class="section" id="locating-lines">
 <h2>Locating lines<a class="headerlink" href="#locating-lines" title="Permalink to this headline">¶</a></h2>
 <p>As a final example, we will compute the intersections with two lines (edges).
-This returns three arrays of equal length:</p>
+This once again returns three arrays of equal length:</p>
 <ul class="simple">
 <li><p>the index of the line</p></li>
 <li><p>the index of the cell</p></li>
-<li><p>the location of the intersections</p></li>
+<li><p>the location of the intersection</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">edge_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
     <span class="p">[</span>
@@ -461,8 +535,8 @@ with the Euclidian norm (Pythagorean distance):</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_009.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.117 seconds)</p>
+<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_011.png" />
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.897 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f989545cc7034bd6c0c40e2091705820/spatial_indexing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">spatial_indexing.py</span></code></a></p>
