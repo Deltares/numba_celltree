@@ -278,6 +278,8 @@ _ = fig.colorbar(colored)
 # This weight matrix can be used for translating data from one mesh to another.
 # Let's generate some mock elevation data for a valley. Then, we'll compute the
 # area weighted mean for every raster cell.
+
+
 def saddle_elevation(x, y):
     return np.sin(0.6 * x + 2) + np.sin(0.2 * y)
 

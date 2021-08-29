@@ -537,9 +537,11 @@ This weight matrix can be used for translating data from one mesh to another.
 Let's generate some mock elevation data for a valley. Then, we'll compute the
 area weighted mean for every raster cell.
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-305
+.. GENERATED FROM PYTHON SOURCE LINES 281-307
 
 .. code-block:: default
+
+
 
     def saddle_elevation(x, y):
         return np.sin(0.6 * x + 2) + np.sin(0.2 * y)
@@ -576,7 +578,7 @@ area weighted mean for every raster cell.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 306-330
+.. GENERATED FROM PYTHON SOURCE LINES 308-332
 
 Such a weight matrix doesn't apply to just boxes and triangles, but to every
 case of mapping one mesh to another by intersecting cell areas. Note however
@@ -603,7 +605,7 @@ This once again returns three arrays of equal length:
 * the index of the cell
 * the location of the intersection
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-339
+.. GENERATED FROM PYTHON SOURCE LINES 332-341
 
 .. code-block:: default
 
@@ -635,13 +637,13 @@ This once again returns three arrays of equal length:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-343
+.. GENERATED FROM PYTHON SOURCE LINES 342-345
 
 To wrap up, we'll color the intersect faces with the length of the
 intersected line segments. We can easily compute the length of each segment
 with the Euclidian norm (Pythagorean distance):
 
-.. GENERATED FROM PYTHON SOURCE LINES 343-355
+.. GENERATED FROM PYTHON SOURCE LINES 345-357
 
 .. code-block:: default
 
@@ -671,7 +673,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.449 seconds)
+   **Total running time of the script:** ( 0 minutes  1.456 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing.py:
