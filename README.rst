@@ -30,7 +30,7 @@ polygons) in a two dimensional unstructured mesh.
     triangles = np.array([[0, 1, 2], [3, 4, 5]])
     tri_i, cell_i, area = tree.intersect_faces(triangle_vertices, triangles, -1)
 
-    # Intersection with two lines 
+    # Intersection with two lines
     edge_coords = np.array(
         [
             [[0.0, 0.0], [10.0, 10.0]],
@@ -135,6 +135,7 @@ In Python itself:
 .. code:: python
 
     import os
+
     os.environ["NUMBA_DISABLE_JIT"] = "1"
 
 This must be done before importing the package to have effect. 
