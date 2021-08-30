@@ -5,8 +5,8 @@
 
 Computation times
 =================
-**00:02.010** total execution time for **examples** files:
+**00:01.709** total execution time for **examples** files:
 
 +------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_spatial_indexing.py` (``spatial_indexing.py``) | 00:02.010 | 0.0 MB |
+| :ref:`sphx_glr_examples_spatial_indexing.py` (``spatial_indexing.py``) | 00:01.709 | 0.0 MB |
 +------------------------------------------------------------------------+-----------+--------+
