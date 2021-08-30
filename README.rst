@@ -15,12 +15,14 @@ polygons) in a two dimensional unstructured mesh.
 .. code:: python
 
     import meshzoo
+    import numpy as np
     from numba_celltree import CellTree2d
 
 
     vertices, faces = meshzoo.disk(5, 5)
     vertices += 1.0
     vertices *= 5.0
+    tree = CellTree2d(vertices, faces, -1)
 
     # Intersection with two triangles
     triangle_vertices = np.array(
@@ -45,7 +47,8 @@ polygons) in a two dimensional unstructured mesh.
     )
     edge_i, cell_i, intersections = tree.intersect_edges(edge_coords)
 
-.. image:: docs/_static/intersection-example.svg
+.. image:: https://huite.github.io/numba_celltree/_images/intersection-example.svg
+  :target: https://github.com/Huite/numba_celltree
 
 Installation
 ------------
@@ -86,8 +89,8 @@ licensed) implementation which supports three dimensions can be found in VTK's
 The cell tree of the ``cell_tree2d`` currently only locates points. I've added
 additional methods for locating and clipping lines and convex polygons.
 
-Numba
------
+Just-In-Time Compilation: Numba
+-------------------------------
 
 This package relies on `Numba <https://numba.pydata.org/>`_ to just-in-time
 compile Python code into fast machine code. This has the benefit of keeping

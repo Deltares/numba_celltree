@@ -8,12 +8,14 @@ polygons) in a two dimensional unstructured mesh.
 .. code:: python
 
     import meshzoo
+    import numpy as np
     from numba_celltree import CellTree2d
 
 
     vertices, faces = meshzoo.disk(5, 5)
     vertices += 1.0
     vertices *= 5.0
+    tree = CellTree2d(vertices, faces, -1)
 
     # Intersection with two triangles
     triangle_vertices = np.array(
@@ -29,7 +31,7 @@ polygons) in a two dimensional unstructured mesh.
     triangles = np.array([[0, 1, 2], [3, 4, 5]])
     tri_i, cell_i, area = tree.intersect_faces(triangle_vertices, triangles, -1)
 
-    # Intersection with two lines 
+    # Intersection with two lines
     edge_coords = np.array(
         [
             [[0.0, 0.0], [10.0, 10.0]],
