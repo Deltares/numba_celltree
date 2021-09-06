@@ -70,13 +70,17 @@ def intersections(
 
 
 @nb.njit(inline="always")
-def is_collinear(a: Point, b: Point, c: Point) -> bool:
+def is_collinear(a: Point, b: Point, c: Point, d: Point) -> bool:
     # Calculate the area of the triangle formed by a, b, c
     # if zero, then points are collinear.
     u = to_vector(a, b)
     v = to_vector(c, a)
-    # TODO: should be allclose I guess?
-    return cross_product(u, v) == 0
+    abc = cross_product(u, v)
+    if abc != 0.0:
+        return False
+    w = to_vector(d, a)
+    abd = cross_product(u, w)
+    return abd == 0
 
 
 @nb.njit(inline="always")
@@ -134,7 +138,9 @@ def cyrus_beck_line_polygon_clip(
     if s.x == 0 and s.y == 0:
         return NO_INTERSECTION
     # Test whether line is fully enclosed in box
-    if point_in_polygon(a, poly) and point_in_polygon(b, poly):
+    a_inside = point_in_polygon(a, poly)
+    b_inside = point_in_polygon(b, poly)
+    if a_inside and b_inside:
         return True, a, b
 
     i0 = -1
@@ -153,7 +159,7 @@ def cyrus_beck_line_polygon_clip(
         ksi = eta
 
         # TODO: Allclose?
-        if ksi_eta == 0 and is_collinear(a, v0, v1):
+        if ksi_eta == 0 and is_collinear(a, b, v0, v1):
             p0, p1 = collinear_case(a, b, v0, v1)
             return True, p0, p1
         # Note: <= rather than <
@@ -171,6 +177,15 @@ def cyrus_beck_line_polygon_clip(
 
     # Gather the intersections, given half-planes
     t0, t1 = intersections(a, s, poly, length, k, i0, i1)
+
+    # Deal with edge cases
+    if t0 == t1:
+        if a_inside:
+            t0 = 0.0
+        elif b_inside:
+            t1 = 1.0
+        else:
+            return NO_INTERSECTION
 
     # Swap if necessary so that t0 is the smaller
     if t1 < t0:
