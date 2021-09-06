@@ -23,7 +23,7 @@ from ..geometry_utils import (
     as_point,
     cross_product,
     dot_product,
-    point_in_polygon,
+    point_in_polygon_or_on_edge,
     to_point,
     to_vector,
 )
@@ -137,9 +137,9 @@ def cyrus_beck_line_polygon_clip(
     # Test whether points are identical
     if s.x == 0 and s.y == 0:
         return NO_INTERSECTION
-    # Test whether line is fully enclosed in box
-    a_inside = point_in_polygon(a, poly)
-    b_inside = point_in_polygon(b, poly)
+    # Test whether line is fully enclosed in polygon
+    a_inside = point_in_polygon_or_on_edge(a, poly)
+    b_inside = point_in_polygon_or_on_edge(b, poly)
     if a_inside and b_inside:
         return True, a, b
 
@@ -180,9 +180,9 @@ def cyrus_beck_line_polygon_clip(
 
     # Deal with edge cases
     if t0 == t1:
-        if a_inside:
+        if a_inside and t1 != 0.0:
             t0 = 0.0
-        elif b_inside:
+        elif b_inside and t0 != 1.0:
             t1 = 1.0
         else:
             return NO_INTERSECTION

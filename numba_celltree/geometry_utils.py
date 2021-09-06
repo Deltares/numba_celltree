@@ -7,6 +7,7 @@ from .constants import (
     FILL_VALUE,
     NDIM,
     PARALLEL,
+    TOLERANCE_ON_EDGE,
     Box,
     FloatArray,
     FloatDType,
@@ -127,6 +128,38 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
         ):
             c = not c
         v0 = v1
+    return c
+
+
+@nb.njit(inline="always")
+def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
+    length = len(poly)
+    v0 = as_point(poly[-1])
+    U = to_vector(p, v0)
+    c = False
+    for i in range(length):
+        v1 = as_point(poly[i])
+        V = to_vector(p, v1)
+
+        twice_area = abs(cross_product(U, V))
+        if twice_area < TOLERANCE_ON_EDGE:
+            W = to_vector(v0, v1)
+            if W.x != 0.0:
+                t = (p.x - v0.x) / W.x
+            elif W.y != 0.0:
+                t = (p.y - v0.y) / W.y
+            else:
+                continue
+            if 0 <= t <= 1:
+                return True
+
+        if (v0.y > p.y) != (v1.y > p.y) and p.x < (
+            (v1.x - v0.x) * (p.y - v0.y) / (v1.y - v0.y) + v0.x
+        ):
+            c = not c
+
+        v0 = v1
+        U = V
     return c
 
 

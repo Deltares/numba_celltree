@@ -136,7 +136,8 @@ FILL_VALUE = -1
 # that can be included is given by 2 ** (depth of stack - 1).
 MAX_N_FACE = 2e9  # 2e9 results in a depth of 32
 MAX_TREE_DEPTH = int(math.ceil(math.log(MAX_N_FACE, 2))) + 1
-
+# Floating point slack
+TOLERANCE_ON_EDGE = 1e-9
 
 # Derived types & constants
 NumbaFloatDType = nb.from_dtype(FloatDType)
