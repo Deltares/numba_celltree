@@ -61,6 +61,7 @@ def inside(p: Point, r: Point, U: Vector):
 
 @nb.njit(inline="always")
 def intersection(a: Point, V: Vector, r: Point, N: Vector) -> Tuple[bool, Point]:
+    # Find the intersection with an (infinite) clipping plane
     W = Vector(r.x - a.x, r.y - a.y)
     nw = dot_product(N, W)
     nv = dot_product(N, V)
