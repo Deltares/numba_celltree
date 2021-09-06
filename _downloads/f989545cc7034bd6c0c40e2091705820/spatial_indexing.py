@@ -1,7 +1,6 @@
 """
 Spatial indexing
 ================
-```
 
 The goal of a cell tree is to quickly locate cells of an unstructured mesh.
 Unstructured meshes are challenging in this regard: for a given point, we
