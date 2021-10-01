@@ -1,10 +1,10 @@
 Numba Celltree
 ==============
 
-.. image:: https://img.shields.io/github/workflow/status/huite/numba_celltree/ci?style=flat-square
-   :target: https://github.com/Huite/numba_celltree/actions?query=workflows%3Aci
-.. image:: https://img.shields.io/codecov/c/github/Huite/numba_celltree.svg?style=flat-square
-   :target: https://app.codecov.io/gh/Huite/numba_celltree
+.. image:: https://img.shields.io/github/workflow/status/deltares/numba_celltree/ci?style=flat-square
+   :target: https://github.com/deltares/numba_celltree/actions?query=workflows%3Aci
+.. image:: https://img.shields.io/codecov/c/github/deltares/numba_celltree.svg?style=flat-square
+   :target: https://app.codecov.io/gh/deltares/numba_celltree
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
    :target: https://github.com/psf/black
 
@@ -47,8 +47,8 @@ polygons) in a two dimensional unstructured mesh.
     )
     edge_i, cell_i, intersections = tree.intersect_edges(edge_coords)
 
-.. image:: https://huite.github.io/numba_celltree/_images/intersection-example.svg
-  :target: https://github.com/Huite/numba_celltree
+.. image:: https://github.com/deltares/numba_celltree/raw/main/docs/_static/intersection-example.svg
+  :target: https://github.com/deltares/numba_celltree
 
 Installation
 ------------
@@ -60,8 +60,8 @@ Installation
 Documentation
 -------------
 
-.. image:: https://img.shields.io/github/workflow/status/huite/numba_celltree/docs?style=flat-square
-   :target: https://huite.github.io/numba_celltree/
+.. image:: https://img.shields.io/github/workflow/status/deltares/numba_celltree/docs?style=flat-square
+   :target: https://deltares.github.io/numba_celltree/
 
 Background
 ----------
