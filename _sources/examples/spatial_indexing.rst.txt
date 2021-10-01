@@ -109,9 +109,10 @@ Determine the edges of the cells, and plot them.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_001.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_001.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_001.png
+   :class: sphx-glr-single-img
 
 
 
@@ -177,9 +178,10 @@ We'll color the found cells blue, and we'll draw the nodes to compare.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_002.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_002.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_002.png
+   :class: sphx-glr-single-img
 
 
 
@@ -205,9 +207,10 @@ Now let's try a more exotic example.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_003.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_003.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_003.png
+   :class: sphx-glr-single-img
 
 
 
@@ -235,9 +238,10 @@ Let's build a new tree, and look for the same points as before.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_004.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_004.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_004.png
+   :class: sphx-glr-single-img
 
 
 
@@ -282,9 +286,10 @@ a box.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_005.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_005.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_005.png
+   :class: sphx-glr-single-img
 
 
 
@@ -357,9 +362,10 @@ can confirm visually:
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_006.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_006.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_006.png
+   :class: sphx-glr-single-img
 
 
 
@@ -418,9 +424,10 @@ This returns three arrays of equal length:
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_007.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_007.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_007.png
+   :class: sphx-glr-single-img
 
 
 
@@ -458,9 +465,10 @@ product of U and V.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_008.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_008.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_008.png
+   :class: sphx-glr-single-img
 
 
 
@@ -522,9 +530,10 @@ for every raster cell (row) the area of overlap with a triangle (column).
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_009.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_009.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_009.png
+   :class: sphx-glr-single-img
 
 
 
@@ -569,9 +578,10 @@ area weighted mean for every raster cell.
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_010.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_010.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_010.png
+   :class: sphx-glr-single-img
 
 
 
@@ -660,9 +670,10 @@ with the Euclidian norm (Pythagorean distance):
 
 
 
-.. image:: /examples/images/sphx_glr_spatial_indexing_011.png
-    :alt: spatial indexing
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_spatial_indexing_011.png
+   :alt: spatial indexing
+   :srcset: /examples/images/sphx_glr_spatial_indexing_011.png
+   :class: sphx-glr-single-img
 
 
 
@@ -671,7 +682,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.001 seconds)
+   **Total running time of the script:** ( 0 minutes  1.962 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing.py:

@@ -4,11 +4,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Spatial indexing &#8212; Numba Celltree 0.1 documentation</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet" />
-  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.f8312eac34e2432659a6ef7e609c047e.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -23,14 +24,14 @@
 
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="../_static/js/index.c258f241e0e9126fa012.js">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -41,7 +42,10 @@
     <link rel="next" title="CellTree2d" href="../api.html" />
     <link rel="prev" title="Examples" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
     
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -160,7 +164,7 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-examples-spatial-indexing-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="spatial-indexing">
+<section class="sphx-glr-example-title" id="spatial-indexing">
 <span id="sphx-glr-examples-spatial-indexing-py"></span><h1>Spatial indexing<a class="headerlink" href="#spatial-indexing" title="Permalink to this headline">¶</a></h1>
 <p>The goal of a cell tree is to quickly locate cells of an unstructured mesh.
 Unstructured meshes are challenging in this regard: for a given point, we
@@ -215,8 +219,7 @@ We will use <code class="docutils literal notranslate"><span class="pre">meshzoo
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_001.png" />
-<div class="section" id="locating-points">
+<img src="../_images/sphx_glr_spatial_indexing_001.png" srcset="../_images/sphx_glr_spatial_indexing_001.png" alt="spatial indexing" class = "sphx-glr-single-img"/><section id="locating-points">
 <h2>Locating points<a class="headerlink" href="#locating-points" title="Permalink to this headline">¶</a></h2>
 <p>We’ll build a cell tree first, then look for some points.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -247,8 +250,7 @@ We’ll color the found cells blue, and we’ll draw the nodes to compare.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_002.png" />
-<p>Now let’s try a more exotic example.</p>
+<img src="../_images/sphx_glr_spatial_indexing_002.png" srcset="../_images/sphx_glr_spatial_indexing_002.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>Now let’s try a more exotic example.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">vertices</span> <span class="o">+=</span> <span class="mf">1.0</span>
 <span class="n">vertices</span> <span class="o">*=</span> <span class="mf">5.0</span>
@@ -259,8 +261,7 @@ We’ll color the found cells blue, and we’ll draw the nodes to compare.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_003.png" />
-<p>There are certainly no rows or columns to speak of!</p>
+<img src="../_images/sphx_glr_spatial_indexing_003.png" srcset="../_images/sphx_glr_spatial_indexing_003.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>There are certainly no rows or columns to speak of!</p>
 <p>Let’s build a new tree, and look for the same points as before.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">CellTree2d</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">i</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">locate_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -272,16 +273,15 @@ We’ll color the found cells blue, and we’ll draw the nodes to compare.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_004.png" />
-<p>It should be clear by now that a point may only fall into a single cell. A
+<img src="../_images/sphx_glr_spatial_indexing_004.png" srcset="../_images/sphx_glr_spatial_indexing_004.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>It should be clear by now that a point may only fall into a single cell. A
 point may also be out of bounds. If a cell falls exactly on an edge, one of the
 two neighbors will be chosen arbitrarily. At any rate, we can always expect
 one answer per cell.</p>
 <p>This is not the case for line segments, bounding boxes, or convex polygons: a
 line may intersect multiple cells, and a bounding box or polygon may contain
 multiple cells.</p>
-</div>
-<div class="section" id="locating-bounding-boxes">
+</section>
+<section id="locating-bounding-boxes">
 <h2>Locating bounding boxes<a class="headerlink" href="#locating-bounding-boxes" title="Permalink to this headline">¶</a></h2>
 <p>A search of N points will yield N answers (cell numbers). A search of N boxes
 may yield M answers. To illustrate, let’s look for all the cells inside of
@@ -301,8 +301,7 @@ a box.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_boxes</span><span class="p">(</span><span class="n">box_coords</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_005.png" />
-<p>We can also search for multiple boxes:</p>
+<img src="../_images/sphx_glr_spatial_indexing_005.png" srcset="../_images/sphx_glr_spatial_indexing_005.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>We can also search for multiple boxes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">box_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>
@@ -343,9 +342,8 @@ can confirm visually:</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_boxes</span><span class="p">(</span><span class="n">box_coords</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_006.png" />
-</div>
-<div class="section" id="locating-cells">
+<img src="../_images/sphx_glr_spatial_indexing_006.png" srcset="../_images/sphx_glr_spatial_indexing_006.png" alt="spatial indexing" class = "sphx-glr-single-img"/></section>
+<section id="locating-cells">
 <h2>Locating cells<a class="headerlink" href="#locating-cells" title="Permalink to this headline">¶</a></h2>
 <p>Similarly, we can look for other cells (convex polygons) and compute the
 overlap:</p>
@@ -388,8 +386,7 @@ overlap:</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_007.png" />
-<p>Let’s color the faces of the mesh by their ratio of overlap. Because our
+<img src="../_images/sphx_glr_spatial_indexing_007.png" srcset="../_images/sphx_glr_spatial_indexing_007.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>Let’s color the faces of the mesh by their ratio of overlap. Because our
 mesh is triangular, we can represent the triangles as two collections of
 vectors (V, U). Then the area is half of the absolute value of the cross
 product of U and V.</p>
@@ -412,8 +409,7 @@ product of U and V.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_008.png" />
-<p><code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code> also provides a method to compute overlaps between boxes and a
+<img src="../_images/sphx_glr_spatial_indexing_008.png" srcset="../_images/sphx_glr_spatial_indexing_008.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p><code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code> also provides a method to compute overlaps between boxes and a
 mesh. This may come in handy to compute overlap with a raster, for example to
 rasterize a mesh.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -447,8 +443,7 @@ for every raster cell (row) the area of overlap with a triangle (column).</p>
 <span class="n">_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">colored</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_009.png" />
-<p>This weight matrix can be used for translating data from one mesh to another.
+<img src="../_images/sphx_glr_spatial_indexing_009.png" srcset="../_images/sphx_glr_spatial_indexing_009.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>This weight matrix can be used for translating data from one mesh to another.
 Let’s generate some mock elevation data for a valley. Then, we’ll compute the
 area weighted mean for every raster cell.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">saddle_elevation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -476,8 +471,7 @@ area weighted mean for every raster cell.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_010.png" />
-<p>Such a weight matrix doesn’t apply to just boxes and triangles, but to every
+<img src="../_images/sphx_glr_spatial_indexing_010.png" srcset="../_images/sphx_glr_spatial_indexing_010.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>Such a weight matrix doesn’t apply to just boxes and triangles, but to every
 case of mapping one mesh to another by intersecting cell areas. Note however
 that the aggregation above is not very efficient. Most of the entries in the
 weight matrix are 0; a raster cell only intersects a small number triangles.
@@ -489,8 +483,8 @@ coordinate list (COO).</p>
 <p>Such a coordinate list can also be easily used to aggregate values with
 <a class="reference external" href="https://pandas.pydata.org/docs/index.html">Pandas</a>, as Pandas provides
 very efficient aggregation in the form of <a class="reference external" href="https://pandas.pydata.org/docs/reference/groupby.html">groupby operations</a>.</p>
-</div>
-<div class="section" id="locating-lines">
+</section>
+<section id="locating-lines">
 <h2>Locating lines<a class="headerlink" href="#locating-lines" title="Permalink to this headline">¶</a></h2>
 <p>As a final example, we will compute the intersections with two lines (edges).
 This once again returns three arrays of equal length:</p>
@@ -533,8 +527,7 @@ with the Euclidian norm (Pythagorean distance):</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="spatial indexing" class="sphx-glr-single-img" src="../_images/sphx_glr_spatial_indexing_011.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.001 seconds)</p>
+<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.962 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f989545cc7034bd6c0c40e2091705820/spatial_indexing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">spatial_indexing.py</span></code></a></p>
@@ -544,19 +537,30 @@ with the Euclidian norm (Pythagorean distance):</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
-</div>
+</section>
+</section>
 
 
               </div>
               
               
-              <div class='prev-next-bottom'>
-                
-    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Examples</a>
-    <a class='right-next' id="next-link" href="../api.html" title="next page">CellTree2d</a>
-
-              </div>
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">Previous</p>
+            <p class="prev-next-title">Examples</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../api.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">Next</p>
+        <p class="prev-next-title">CellTree2d</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
               
           </main>
           
@@ -564,20 +568,19 @@ with the Euclidian norm (Pythagorean distance):</p>
       </div>
     </div>
   
-  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
-
-  <footer class="footer mt-5 mt-md-0">
+  <script src="../_static/js/index.c258f241e0e9126fa012.js"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Deltares.<br/>
+    &copy; Copyright Deltares.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
 </p>
     </div>
     
