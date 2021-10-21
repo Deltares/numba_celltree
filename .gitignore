@@ -29,3 +29,7 @@ docs/examples
 
 # Editor settings
 .vscode
+
+# Coverage reports
+.coverage
+coverage.xml
