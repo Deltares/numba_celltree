@@ -79,6 +79,26 @@ def test_line_box_clip():
     assert line_clip(a, b, poly) == ab(*line_clip(b, a, poly))
 
 
+def test_line_box_clip_through_vertex():
+    a = Point(x=2.0, y=2.0)
+    b = Point(x=1.0, y=4.0)
+    poly = np.array([[2.0, 4.0], [1.0, 4.0], [1.0, 3.0], [2.0, 3.0]])
+    intersects, c, d = line_clip(a, b, poly)
+    assert intersects
+    assert np.allclose(c, [1.5, 3.0])
+    assert np.allclose(d, [1.0, 4.0])
+
+    a = Point(x=2.0, y=0.0)
+    b = Point(x=2.0, y=2.0)
+    poly = np.array([[2.0, 3.0], [1.0, 3.0], [1.0, 2.0], [2.0, 2.0]])
+    intersects, _, _ = line_clip(a, b, poly)
+    assert not intersects
+
+    poly = np.array([[3.0, 3.0], [2.0, 3.0], [2.0, 2.0], [3.0, 2.0]])
+    intersects, c, d = line_clip(a, b, poly)
+    assert not intersects
+
+
 def test_line_triangle_clip():
     # Triangle
     a = Point(1.0, 1.0)

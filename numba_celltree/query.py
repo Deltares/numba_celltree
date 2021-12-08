@@ -1,10 +1,7 @@
 import numba as nb
 import numpy as np
 
-from .algorithms import (  # liang_barsky_line_box_clip,
-    cohen_sutherland_line_box_clip,
-    cyrus_beck_line_polygon_clip,
-)
+from .algorithms import cohen_sutherland_line_box_clip, cyrus_beck_line_polygon_clip
 from .constants import (
     PARALLEL,
     CellTreeData,
@@ -210,7 +207,6 @@ def locate_edge(
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
                 box = as_box(tree.bb_coords[bbox_index])
-                # box_intersect, _, _ = liang_barsky_line_box_clip(a, b, box)
                 box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)
                 if box_intersect:
                     polygon = copy_vertices_into(

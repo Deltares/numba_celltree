@@ -28,6 +28,8 @@ from ..geometry_utils import (
     to_vector,
 )
 
+NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
+
 
 @nb.njit(inline="always")
 def compute_intersection(
@@ -70,17 +72,13 @@ def intersections(
 
 
 @nb.njit(inline="always")
-def is_collinear(a: Point, b: Point, c: Point, d: Point) -> bool:
-    # Calculate the area of the triangle formed by a, b, c
-    # if zero, then points are collinear.
-    u = to_vector(a, b)
-    v = to_vector(c, a)
-    abc = cross_product(u, v)
-    if abc != 0.0:
-        return False
-    w = to_vector(d, a)
-    abd = cross_product(u, w)
-    return abd == 0
+def overlap(ta: Point, tb: Point, t0: Point, t1: Point) -> bool:
+    if ta > tb:
+        ta, tb = tb, ta
+    if t0 > t1:
+        t0, t1 = t1, t0
+    vector_overlap = max(0, min(tb, t1) - max(ta, t0))
+    return vector_overlap > 0.0
 
 
 @nb.njit(inline="always")
@@ -92,6 +90,9 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
     t0 = cross_product(n, v0)
     t1 = cross_product(n, v1)
 
+    if not overlap(ta, tb, t0, t1):
+        return NO_INTERSECTION
+
     if t0 < ta:
         p0 = v0
     else:
@@ -102,7 +103,7 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
     else:
         p1 = b
 
-    return p0, p1
+    return True, p0, p1
 
 
 # Too big to inline. Drives compilation time through the roof for no benefit.
@@ -130,7 +131,6 @@ def cyrus_beck_line_polygon_clip(
     A valid intersection falls on the domain of the parametrized segment:
     0 <= t <= 1.0
     """
-    NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
     length = len(poly)
     s = to_vector(a, b)
 
@@ -149,27 +149,27 @@ def cyrus_beck_line_polygon_clip(
     k = 0
     v = as_point(poly[i])
     ksi = cross_product(to_vector(a, v), s)
+
     while i < length and k < 2:
         v0 = as_point(poly[i])
         v1 = as_point(poly[(i + 1) % length])
         # Check if they can cross at all
         eta = cross_product(to_vector(a, v1), s)
-        ksi_eta = ksi * eta
-        # Don't recompute ksi
-        ksi = eta
 
-        # TODO: Allclose?
-        if ksi_eta == 0 and is_collinear(a, b, v0, v1):
-            p0, p1 = collinear_case(a, b, v0, v1)
-            return True, p0, p1
-        # Note: <= rather than <
-        elif ksi_eta <= 0:
+        # Note; ksi * eta < 0 doesn't work as well
+        if (ksi < 0.0) ^ (eta < 0.0):
             if k == 0:
                 i0 = i
             else:
                 i1 = i
             k += 1
+        # Calculate the area of the triangle formed by a, b, v0
+        # if zero, then points are collinear.
+        elif (ksi == 0.0) and (eta == 0.0):
+            return collinear_case(a, b, v0, v1)
 
+        # Don't recompute ksi
+        ksi = eta
         i += 1
 
     if k == 0:

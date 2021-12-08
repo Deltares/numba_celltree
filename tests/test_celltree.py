@@ -12,7 +12,6 @@ from numba_celltree.constants import MAX_N_VERTEX
 @pytest.fixture
 def datadir(tmpdir, request):
     data = pathlib.Path(__file__).parent / "data"
-    print(data)
     shutil.copy(data / "triangles.txt", tmpdir / "triangles.txt")
     shutil.copy(data / "xy.txt", tmpdir / "xy.txt")
     return tmpdir
