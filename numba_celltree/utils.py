@@ -85,7 +85,6 @@ if STACK_ALLOCATE_STATIC_ARRAYS and os.environ.get("NUMBA_DISABLE_JIT", "0") == 
         arr = nb.carray(arr_ptr, (4, 2), dtype=FloatDType)
         return arr
 
-
 else:
 
     @nb.njit(inline="always")
