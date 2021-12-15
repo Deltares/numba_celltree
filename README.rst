@@ -47,7 +47,7 @@ polygons) in a two dimensional unstructured mesh.
     )
     edge_i, cell_i, intersections = tree.intersect_edges(edge_coords)
 
-.. image:: https://github.com/deltares/numba_celltree/raw/main/docs/_static/intersection-example.svg
+.. image:: https://raw.githubusercontent.com/Deltares/numba_celltree/main/docs/_static/intersection-example.svg
   :target: https://github.com/deltares/numba_celltree
 
 Installation
