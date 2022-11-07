@@ -50,7 +50,7 @@ def centroid_test(bucket: np.void, box: FloatArray, dim: int):
     return (centroid >= bucket.Min) and (centroid < bucket.Max)
 
 
-@nb.njit(inline="never")
+@nb.njit(inline="never", cache=True)
 def stable_partition(
     bb_indices: IntArray,
     bb_coords: FloatArray,
@@ -110,7 +110,7 @@ def stable_partition(
     return start_second
 
 
-@nb.njit(inline="never")
+@nb.njit(inline="never", cache=True)
 def sort_bbox_indices(
     bb_indices: IntArray,
     bb_coords: FloatArray,
@@ -148,7 +148,7 @@ def sort_bbox_indices(
         i += 1
 
 
-@nb.njit(inline="never")
+@nb.njit(inline="never", cache=True)
 def get_bounds(
     index: int,
     size: int,
@@ -169,7 +169,7 @@ def get_bounds(
     return Rmin, Lmax
 
 
-@nb.njit(inline="never")
+@nb.njit(inline="never", cache=True)
 def split_plane(
     buckets: List[Bucket],
     root: np.void,
@@ -199,7 +199,7 @@ def split_plane(
     return plane
 
 
-@nb.njit
+@nb.njit(cache=True)
 def pessimistic_n_nodes(n_polys: int):
     """
     In the worst case, *all* branches end in a leaf with a single cell. Rather
@@ -230,7 +230,7 @@ def pop_both(root_stack, dim_stack, size):
     return root, dim, size_root
 
 
-@nb.njit
+@nb.njit(cache=True)
 def build(
     nodes: NodeArray,
     node_index: int,

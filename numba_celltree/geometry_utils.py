@@ -196,7 +196,7 @@ def bounding_box(
     return (xmin, xmax, ymin, ymax)
 
 
-@nb.njit
+@nb.njit(cache=True)
 def build_bboxes(
     faces: IntArray,
     vertices: FloatArray,

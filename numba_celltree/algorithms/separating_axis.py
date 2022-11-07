@@ -48,7 +48,7 @@ def separating_axes(a: FloatArray, b: FloatArray) -> bool:
     return True
 
 
-@nb.njit(parallel=PARALLEL)
+@nb.njit(parallel=PARALLEL, cache=True)
 def polygons_intersect(
     vertices_a: FloatArray,
     vertices_b: FloatArray,

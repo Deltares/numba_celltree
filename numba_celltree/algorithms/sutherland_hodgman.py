@@ -147,7 +147,7 @@ def polygon_polygon_clip_area(polygon: Sequence, clipper: Sequence) -> float:
     return area
 
 
-@nb.njit(parallel=PARALLEL)
+@nb.njit(parallel=PARALLEL, cache=True)
 def area_of_intersection(
     vertices_a: FloatArray,
     vertices_b: FloatArray,
@@ -167,7 +167,7 @@ def area_of_intersection(
     return area
 
 
-@nb.njit(parallel=PARALLEL)
+@nb.njit(parallel=PARALLEL, cache=True)
 def box_area_of_intersection(
     bbox_coords: FloatArray,
     vertices: FloatArray,
