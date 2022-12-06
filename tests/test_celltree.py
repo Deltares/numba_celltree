@@ -1,11 +1,10 @@
 import pathlib
 import shutil
 
-import meshzoo
 import numpy as np
 import pytest
 
-from numba_celltree import CellTree2d
+from numba_celltree import CellTree2d, demo
 from numba_celltree.constants import MAX_N_VERTEX
 
 
@@ -388,7 +387,7 @@ def test_edge_lookup():
 def test_example_material():
     # Note: the concatenation of lists to get 1D arrays is purely to keep black
     # from formatting everything into very long 1-element columns.
-    vertices, faces = meshzoo.disk(5, 5)
+    vertices, faces = demo.generate_disk(5, 5)
     vertices += 1.0
     vertices *= 5.0
 

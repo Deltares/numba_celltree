@@ -7,12 +7,11 @@ polygons) in a two dimensional unstructured mesh.
 
 .. code:: python
 
-    import meshzoo
     import numpy as np
-    from numba_celltree import CellTree2d
+    from numba_celltree import CellTree2d, demo
 
 
-    vertices, faces = meshzoo.disk(5, 5)
+    vertices, faces = demo.generate_disk(5, 5)
     vertices += 1.0
     vertices *= 5.0
     tree = CellTree2d(vertices, faces, -1)
