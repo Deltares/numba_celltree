@@ -47,7 +47,7 @@ def test_as_triangle():
     assert isinstance(actual, Triangle)
     assert actual.a == Point(1.0, 1.0)
     assert actual.b == Point(0.0, 0.0)
-    assert actual.c == Point(0.0, 1.0)
+    assert actual.c == Point(1.0, 0.0)
 
 
 def test_to_point():
