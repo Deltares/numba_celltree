@@ -313,6 +313,27 @@ performance.</p></li>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="numba_celltree.CellTree2d.compute_barycentric_weights">
+<span class="sig-name descname"><span class="pre">compute_barycentric_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.compute_barycentric_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.compute_barycentric_weights" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes barycentric weights for points located inside of the grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>tree_face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_point,)</span></code>) – For every point, the index of the face it falls in. Points not
+falling in any faces are marked with a value of <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p></li>
+<li><p><strong>barycentric_weights</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">n_max_vert)</span></code>) – For every point, the barycentric weights of the vertices of the
+face in which the point is located. For points not falling in any
+faces, the weight of all vertices is 0.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.intersect_boxes">
 <span class="sig-name descname"><span class="pre">intersect_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.intersect_boxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.intersect_boxes" title="Permalink to this definition">#</a></dt>
 <dd><p>Finds the index of a box intersecting with a face, and the area
@@ -457,6 +478,15 @@ falling in any faces are marked with a value of <code class="docutils literal no
    </code>
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#numba_celltree.CellTree2d.compute_barycentric_weights">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       CellTree2d.compute_barycentric_weights()
+      </span>
+     </code>
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#numba_celltree.CellTree2d.intersect_boxes">
      <code class="docutils literal notranslate">

@@ -329,14 +329,12 @@ efficiently, without exhaustively checking every cell. The implementation in
 </ul>
 <p>This example provides an introduction to searching a cell tree for each of
 these.</p>
-<p>We’ll start by importing the required packages with matplotlib for plotting.
-We will use <code class="docutils literal notranslate"><span class="pre">meshzoo</span></code> to create some examples meshes.</p>
+<p>We’ll start by importing the required packages with matplotlib for plotting.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;NUMBA_DISABLE_JIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>  <span class="c1"># small examples, avoid JIT overhead</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">meshzoo</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
 
@@ -349,11 +347,6 @@ We will use <code class="docutils literal notranslate"><span class="pre">meshzoo
 <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="p">),</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ny</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ny</span><span class="p">)</span>
 <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-
-<span class="c1"># TODO: Replace this one meshzoo R is merged.</span>
-<span class="c1"># lower_left = (0.0, 0.0)</span>
-<span class="c1"># upper_right = (10.0, 10.0)</span>
-<span class="c1"># vertices, faces = meshzoo.rectangle_quad(lower_left, upper_right, n=10)</span>
 </pre></div>
 </div>
 <p>Determine the edges of the cells, and plot them.</p>
@@ -395,7 +388,7 @@ We’ll color the found cells blue, and we’ll draw the nodes to compare.</p>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_spatial_indexing_002.png" srcset="../_images/sphx_glr_spatial_indexing_002.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p>Now let’s try a more exotic example.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">meshzoo</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">demo</span><span class="o">.</span><span class="n">generate_disk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">vertices</span> <span class="o">+=</span> <span class="mf">1.0</span>
 <span class="n">vertices</span> <span class="o">*=</span> <span class="mf">5.0</span>
 <span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -459,11 +452,11 @@ a box.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 1, 1, 1]), array([107, 103,  94,  96,  91, 102, 101, 106, 100, 105,  92,  89,  85,
-        88,  80,  84,  81,  76,  50,  75,  55,  59,   0,   5,   9,  51,
-        25,  30,  26,  34, 118, 111, 115, 120, 122, 114, 117, 123, 124,
-       119, 121,   4,   8,   7,   3,  15,  12,  14,  11,  18,  17,  20,
-        22]))
+       1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 34,  35,  31,  32,  33,  69,  30,  68,  72,  75,  88,  90,  82,
+        84,  83,  86,  85,  78,  80,  87,  73,  77,  43,  79,  47,  48,
+        81, 121, 119, 120,  59,  22,  23,  61,  60,  24,  25,  28,  29,
+        64,  65,  26,  27,  66,  67,  55,  54,  17,  18,  53,  15,  16,
+        50]))
 </pre></div>
 </div>
 <p>Note that this method returns two arrays of equal length. The second array
@@ -647,9 +640,9 @@ This once again returns three arrays of equal length:</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([112, 111, 115, 114, 110, 101, 106, 100, 105,  25,  30,  34,  41,
-        38,  46,  44,  48,  49,  83,  78,  82,  79,  80,  77,  81,  76,
-        75,  14,   0,   5,  10,  13,   9,  17,  20,  22]))
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 56,  22,  23,  24,  69,  71,  68,  72,  75,  47, 121, 120, 112,
+       117, 111,   0, 110,   2,  96,  37,  36,  97,  94,  83,  86,  78,
+        87,  17,  73,  77,  44,  46,  43,  15,  16,  50]))
 </pre></div>
 </div>
 <p>To wrap up, we’ll color the intersect faces with the length of the
@@ -669,7 +662,7 @@ with the Euclidian norm (Pythagorean distance):</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.577 seconds)</p>
+<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.072 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f989545cc7034bd6c0c40e2091705820/spatial_indexing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">spatial_indexing.py</span></code></a></p>

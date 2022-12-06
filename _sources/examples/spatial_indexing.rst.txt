@@ -42,9 +42,8 @@ This example provides an introduction to searching a cell tree for each of
 these.
 
 We'll start by importing the required packages with matplotlib for plotting.
-We will use ``meshzoo`` to create some examples meshes.
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-39
+.. GENERATED FROM PYTHON SOURCE LINES 27-37
 
 .. code-block:: default
 
@@ -53,7 +52,6 @@ We will use ``meshzoo`` to create some examples meshes.
     os.environ["NUMBA_DISABLE_JIT"] = "1"  # small examples, avoid JIT overhead
 
     import matplotlib.pyplot as plt
-    import meshzoo
     import numpy as np
     from matplotlib.collections import LineCollection
 
@@ -66,11 +64,11 @@ We will use ``meshzoo`` to create some examples meshes.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-41
+.. GENERATED FROM PYTHON SOURCE LINES 38-39
 
 Let's start with a rectangular mesh:
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-52
+.. GENERATED FROM PYTHON SOURCE LINES 39-45
 
 .. code-block:: default
 
@@ -80,10 +78,6 @@ Let's start with a rectangular mesh:
     a = np.add.outer(np.arange(nx), nx * np.arange(ny)) + np.arange(ny)
     faces = np.array([a, a + 1, a + nx + 2, a + nx + 1]).reshape(4, -1).T
 
-    # TODO: Replace this one meshzoo R is merged.
-    # lower_left = (0.0, 0.0)
-    # upper_right = (10.0, 10.0)
-    # vertices, faces = meshzoo.rectangle_quad(lower_left, upper_right, n=10)
 
 
 
@@ -91,12 +85,11 @@ Let's start with a rectangular mesh:
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 53-54
+.. GENERATED FROM PYTHON SOURCE LINES 46-47
 
 Determine the edges of the cells, and plot them.
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-60
+.. GENERATED FROM PYTHON SOURCE LINES 47-53
 
 .. code-block:: default
 
@@ -118,14 +111,14 @@ Determine the edges of the cells, and plot them.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-65
+.. GENERATED FROM PYTHON SOURCE LINES 54-58
 
 Locating points
 ---------------
 
 We'll build a cell tree first, then look for some points.
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-76
+.. GENERATED FROM PYTHON SOURCE LINES 58-69
 
 .. code-block:: default
 
@@ -153,7 +146,7 @@ We'll build a cell tree first, then look for some points.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-83
+.. GENERATED FROM PYTHON SOURCE LINES 70-76
 
 These numbers are the cell numbers in which we can find the points.
 
@@ -162,7 +155,7 @@ A value of -1 means that a point is not located in any cell.
 Let's get rid of the -1 values, and take a look which cells have been found.
 We'll color the found cells blue, and we'll draw the nodes to compare.
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-90
+.. GENERATED FROM PYTHON SOURCE LINES 76-83
 
 .. code-block:: default
 
@@ -185,15 +178,15 @@ We'll color the found cells blue, and we'll draw the nodes to compare.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-92
+.. GENERATED FROM PYTHON SOURCE LINES 84-85
 
 Now let's try a more exotic example.
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-101
+.. GENERATED FROM PYTHON SOURCE LINES 85-94
 
 .. code-block:: default
 
-    vertices, faces = meshzoo.disk(5, 5)
+    vertices, faces = demo.generate_disk(5, 5)
     vertices += 1.0
     vertices *= 5.0
     node_x, node_y = vertices.transpose()
@@ -214,13 +207,13 @@ Now let's try a more exotic example.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-105
+.. GENERATED FROM PYTHON SOURCE LINES 95-98
 
 There are certainly no rows or columns to speak of!
 
 Let's build a new tree, and look for the same points as before.
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-114
+.. GENERATED FROM PYTHON SOURCE LINES 98-107
 
 .. code-block:: default
 
@@ -245,7 +238,7 @@ Let's build a new tree, and look for the same points as before.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 115-130
+.. GENERATED FROM PYTHON SOURCE LINES 108-123
 
 It should be clear by now that a point may only fall into a single cell. A
 point may also be out of bounds. If a cell falls exactly on an edge, one of the
@@ -263,7 +256,7 @@ A search of N points will yield N answers (cell numbers). A search of N boxes
 may yield M answers. To illustrate, let's look for all the cells inside of
 a box.
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-144
+.. GENERATED FROM PYTHON SOURCE LINES 123-137
 
 .. code-block:: default
 
@@ -293,11 +286,11 @@ a box.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-146
+.. GENERATED FROM PYTHON SOURCE LINES 138-139
 
 We can also search for multiple boxes:
 
-.. GENERATED FROM PYTHON SOURCE LINES 146-156
+.. GENERATED FROM PYTHON SOURCE LINES 139-149
 
 .. code-block:: default
 
@@ -322,15 +315,15 @@ We can also search for multiple boxes:
 
     (array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-           1, 1, 1, 1, 1, 1, 1, 1, 1]), array([107, 103,  94,  96,  91, 102, 101, 106, 100, 105,  92,  89,  85,
-            88,  80,  84,  81,  76,  50,  75,  55,  59,   0,   5,   9,  51,
-            25,  30,  26,  34, 118, 111, 115, 120, 122, 114, 117, 123, 124,
-           119, 121,   4,   8,   7,   3,  15,  12,  14,  11,  18,  17,  20,
-            22]))
+           1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 34,  35,  31,  32,  33,  69,  30,  68,  72,  75,  88,  90,  82,
+            84,  83,  86,  85,  78,  80,  87,  73,  77,  43,  79,  47,  48,
+            81, 121, 119, 120,  59,  22,  23,  61,  60,  24,  25,  28,  29,
+            64,  65,  26,  27,  66,  67,  55,  54,  17,  18,  53,  15,  16,
+            50]))
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-162
+.. GENERATED FROM PYTHON SOURCE LINES 150-155
 
 Note that this method returns two arrays of equal length. The second array
 contains the cell numbers, as usual. The first array contains the index of
@@ -338,7 +331,7 @@ the bounding box in which the respective cells fall. Note that there are only
 two numbers in ``box_i``: there are no cells located in the third box, as we
 can confirm visually:
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-175
+.. GENERATED FROM PYTHON SOURCE LINES 155-168
 
 .. code-block:: default
 
@@ -367,7 +360,7 @@ can confirm visually:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-187
+.. GENERATED FROM PYTHON SOURCE LINES 169-180
 
 Locating cells
 --------------
@@ -381,7 +374,7 @@ This returns three arrays of equal length:
 * the index of the face in the celtree
 * the area of the intersection
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-219
+.. GENERATED FROM PYTHON SOURCE LINES 180-212
 
 .. code-block:: default
 
@@ -429,14 +422,14 @@ This returns three arrays of equal length:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 220-224
+.. GENERATED FROM PYTHON SOURCE LINES 213-217
 
 Let's color the faces of the mesh by their ratio of overlap. Because our
 mesh is triangular, we can represent the triangles as two collections of
 vectors (V, U). Then the area is half of the absolute value of the cross
 product of U and V.
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-242
+.. GENERATED FROM PYTHON SOURCE LINES 217-235
 
 .. code-block:: default
 
@@ -470,13 +463,13 @@ product of U and V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 243-246
+.. GENERATED FROM PYTHON SOURCE LINES 236-239
 
 ``CellTree2d`` also provides a method to compute overlaps between boxes and a
 mesh. This may come in handy to compute overlap with a raster, for example to
 rasterize a mesh.
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-266
+.. GENERATED FROM PYTHON SOURCE LINES 239-259
 
 .. code-block:: default
 
@@ -507,12 +500,12 @@ rasterize a mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 267-269
+.. GENERATED FROM PYTHON SOURCE LINES 260-262
 
 We can construct a weight matrix with these arrays. This weight matrix stores
 for every raster cell (row) the area of overlap with a triangle (column).
 
-.. GENERATED FROM PYTHON SOURCE LINES 269-276
+.. GENERATED FROM PYTHON SOURCE LINES 262-269
 
 .. code-block:: default
 
@@ -535,13 +528,13 @@ for every raster cell (row) the area of overlap with a triangle (column).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 277-280
+.. GENERATED FROM PYTHON SOURCE LINES 270-273
 
 This weight matrix can be used for translating data from one mesh to another.
 Let's generate some mock elevation data for a valley. Then, we'll compute the
 area weighted mean for every raster cell.
 
-.. GENERATED FROM PYTHON SOURCE LINES 280-306
+.. GENERATED FROM PYTHON SOURCE LINES 273-299
 
 .. code-block:: default
 
@@ -583,7 +576,7 @@ area weighted mean for every raster cell.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-331
+.. GENERATED FROM PYTHON SOURCE LINES 300-324
 
 Such a weight matrix doesn't apply to just boxes and triangles, but to every
 case of mapping one mesh to another by intersecting cell areas. Note however
@@ -610,7 +603,7 @@ This once again returns three arrays of equal length:
 * the index of the cell
 * the location of the intersection
 
-.. GENERATED FROM PYTHON SOURCE LINES 331-340
+.. GENERATED FROM PYTHON SOURCE LINES 324-333
 
 .. code-block:: default
 
@@ -633,19 +626,19 @@ This once again returns three arrays of equal length:
 
 
     (array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([112, 111, 115, 114, 110, 101, 106, 100, 105,  25,  30,  34,  41,
-            38,  46,  44,  48,  49,  83,  78,  82,  79,  80,  77,  81,  76,
-            75,  14,   0,   5,  10,  13,   9,  17,  20,  22]))
+           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 56,  22,  23,  24,  69,  71,  68,  72,  75,  47, 121, 120, 112,
+           117, 111,   0, 110,   2,  96,  37,  36,  97,  94,  83,  86,  78,
+            87,  17,  73,  77,  44,  46,  43,  15,  16,  50]))
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 341-344
+.. GENERATED FROM PYTHON SOURCE LINES 334-337
 
 To wrap up, we'll color the intersect faces with the length of the
 intersected line segments. We can easily compute the length of each segment
 with the Euclidian norm (Pythagorean distance):
 
-.. GENERATED FROM PYTHON SOURCE LINES 344-356
+.. GENERATED FROM PYTHON SOURCE LINES 337-349
 
 .. code-block:: default
 
@@ -676,7 +669,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.577 seconds)
+   **Total running time of the script:** ( 0 minutes  1.072 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing.py:

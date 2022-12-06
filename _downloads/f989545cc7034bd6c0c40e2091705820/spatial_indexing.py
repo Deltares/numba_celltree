@@ -23,14 +23,12 @@ This example provides an introduction to searching a cell tree for each of
 these.
 
 We'll start by importing the required packages with matplotlib for plotting.
-We will use ``meshzoo`` to create some examples meshes.
 """
 import os
 
 os.environ["NUMBA_DISABLE_JIT"] = "1"  # small examples, avoid JIT overhead
 
 import matplotlib.pyplot as plt
-import meshzoo
 import numpy as np
 from matplotlib.collections import LineCollection
 
@@ -43,11 +41,6 @@ x = y = np.linspace(0.0, 10.0, nx + 1)
 vertices = np.array(np.meshgrid(x, y, indexing="ij")).reshape(2, -1).T
 a = np.add.outer(np.arange(nx), nx * np.arange(ny)) + np.arange(ny)
 faces = np.array([a, a + 1, a + nx + 2, a + nx + 1]).reshape(4, -1).T
-
-# TODO: Replace this one meshzoo R is merged.
-# lower_left = (0.0, 0.0)
-# upper_right = (10.0, 10.0)
-# vertices, faces = meshzoo.rectangle_quad(lower_left, upper_right, n=10)
 
 ###############################################################################
 # Determine the edges of the cells, and plot them.
@@ -89,7 +82,7 @@ demo.plot_edges(node_x, node_y, demo.edges(faces[i], -1), ax, color="blue", line
 
 ###############################################################################
 # Now let's try a more exotic example.
-vertices, faces = meshzoo.disk(5, 5)
+vertices, faces = demo.generate_disk(5, 5)
 vertices += 1.0
 vertices *= 5.0
 node_x, node_y = vertices.transpose()
