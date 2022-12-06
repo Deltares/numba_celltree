@@ -81,3 +81,14 @@ def test_plot_boxes():
     _, ax = plt.subplots()
     with pytest.raises(ValueError):
         demo.plot_boxes(boxes, ax)
+
+
+def test_generate_disk():
+    with pytest.raises(ValueError, match="partitions should be >= 3"):
+        demo.data.generate_disk(2, 2)
+
+    nodes, faces = demo.data.generate_disk(4, 1)
+    assert nodes.shape == (5, 2)
+    assert faces.shape == (4, 3)
+    _, faces = demo.data.generate_disk(4, 2)
+    assert faces.shape == (16, 3)

@@ -1,7 +1,7 @@
 from typing import Tuple
 
+import matplotlib.tri
 import numpy as np
-import matplotlib
 from matplotlib import patches
 from matplotlib.collections import LineCollection
 

@@ -301,8 +301,22 @@ class CellTree2d:
     ) -> Tuple[IntArray, FloatArray]:
         """
         Computes barycentric weights for points located inside of the grid.
+
+        Parameters
+        ----------
+        points: ndarray of floats with shape ``(n_point, 2)``
+
+        Returns
+        -------
+        tree_face_indices: ndarray of integers with shape ``(n_point,)``
+            For every point, the index of the face it falls in. Points not
+            falling in any faces are marked with a value of ``-1``.
+        barycentric_weights: ndarray of integers with shape ``(n_point, n_max_vert)``
+            For every point, the barycentric weights of the vertices of the
+            face in which the point is located. For points not falling in any
+            faces, the weight of all vertices is 0.
         """
-        face_indices = locate_points(points)
+        face_indices = self.locate_points(points)
         n_max_vert = self.faces.shape[1]
         if n_max_vert > 3:
             f = barycentric_wachspress_weights
