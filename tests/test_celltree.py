@@ -82,6 +82,15 @@ faces21 = [
 ]
 
 
+def disk():
+    vertices, faces = demo.generate_disk(5, 5)
+    centroids = vertices[faces].mean(axis=1)
+    rsquared = (centroids[:, 0] - -1.0) ** 2 + (centroids[:, 1] - -1.0) ** 2
+    order = np.argsort(rsquared)
+    faces = faces[order]
+    return vertices, faces
+
+
 def test_init():
     """
     can a tree be initialized
@@ -387,7 +396,7 @@ def test_edge_lookup():
 def test_example_material():
     # Note: the concatenation of lists to get 1D arrays is purely to keep black
     # from formatting everything into very long 1-element columns.
-    vertices, faces = demo.generate_disk(5, 5)
+    vertices, faces = disk()
     vertices += 1.0
     vertices *= 5.0
 
@@ -399,7 +408,7 @@ def test_example_material():
             [6.5, 4.5],
         ]
     )
-    expected = [-1, 3, 101]
+    expected = [-1, 24, 63]
     assert np.array_equal(tree.locate_points(points), expected)
 
     box_coords = np.array(
@@ -418,10 +427,10 @@ def test_example_material():
     )
     expected_j = np.concatenate(
         [
-            [36, 37, 33, 34, 35, 84, 32, 89, 87, 90, 39, 20, 97, 99, 98, 101],
-            [102, 88, 44, 100, 31, 92, 91, 56, 55, 57, 58, 63, 62, 64, 74, 23],
-            [24, 76, 75, 25, 26, 29, 30, 79, 80, 27, 28, 81, 82, 70, 69, 16, 17],
-            [68, 14, 15, 65],
+            [107, 109, 99, 106, 95, 93, 92, 80, 62, 73, 86, 97, 81, 79, 65, 63],
+            [76, 57, 44, 59, 54, 58, 50, 45, 43, 31, 41, 36, 38, 27, 123, 112],
+            [120, 117, 121, 108, 110, 115, 116, 101, 104, 103, 111, 88, 98],
+            [90, 100, 72, 84, 85, 66, 75, 69],
         ]
     )
     i, j = tree.locate_boxes(box_coords)
@@ -454,9 +463,10 @@ def test_example_material():
     )
     expected_j = np.concatenate(
         [
-            [97, 99, 103, 98, 101, 102, 44, 100, 104, 51, 29, 30, 79, 80, 77],
-            [27, 28, 81, 82, 78, 16, 17, 93, 95, 31, 92, 94, 96, 11, 8, 91, 14],
-            [13, 12, 9, 10, 66, 67, 2, 7, 55, 63, 62, 64, 59],
+            [81, 79, 61, 65, 63, 76, 44, 59, 48, 40, 115, 116, 101],
+            [104, 91, 103, 111, 88, 98, 83, 72, 84, 68, 74, 54, 58, 55],
+            [67, 47, 35, 50, 66, 46, 53, 26, 34, 49, 56, 29, 37, 43],
+            [36, 38, 27, 30],
         ]
     )
 
@@ -478,9 +488,9 @@ def test_example_material():
     )
     expected_j = np.concatenate(
         [
-            [71, 23, 24, 25, 84, 86, 89, 87, 90, 55, 63, 64, 47, 60, 118, 116],
-            [117, 54, 105, 41, 40, 106, 103, 98, 101, 88, 100, 16, 31, 92, 94],
-            [96, 91, 14, 15, 65],
+            [124, 112, 120, 108, 93, 96, 80, 62, 73, 43, 36, 27, 16],
+            [21, 11, 2, 6, 0, 70, 71, 77, 64, 61, 65, 63, 57, 59],
+            [72, 54, 58, 55, 67, 50, 66, 75, 69],
         ]
     )
     i, j, _ = tree.intersect_edges(edge_coords)
