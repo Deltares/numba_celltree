@@ -13,6 +13,7 @@ from .constants import (
     FloatDType,
     IntArray,
     Point,
+    Triangle,
     Vector,
 )
 from .utils import allocate_box_polygon, allocate_polygon
@@ -35,6 +36,15 @@ def as_box(arr: FloatArray) -> Box:
         arr[1],
         arr[2],
         arr[3],
+    )
+
+
+@nb.njit(inline="always")
+def as_triangle(vertices: FloatArray, face: IntArray) -> Triangle:
+    return Triangle(
+        as_point(vertices[face[0]]),
+        as_point(vertices[face[1]]),
+        as_point(vertices[face[2]]),
     )
 
 

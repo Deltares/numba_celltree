@@ -4,6 +4,8 @@ import numpy as np
 
 from .algorithms import (
     area_of_intersection,
+    barycentric_triangle_weights,
+    barycentric_wachspress_weights,
     box_area_of_intersection,
     polygons_intersect,
 )
@@ -292,3 +294,25 @@ class CellTree2d:
         """
         edge_coords = cast_edges(edge_coords)
         return locate_edges(edge_coords, self.celltree_data)
+
+    def compute_barycentric_weights(
+        self,
+        points: FloatArray,
+    ) -> Tuple[IntArray, FloatArray]:
+        """
+        Computes barycentric weights for points located inside of the grid.
+        """
+        face_indices = locate_points(points)
+        n_max_vert = self.faces.shape[1]
+        if n_max_vert > 3:
+            f = barycentric_wachspress_weights
+        else:
+            f = barycentric_triangle_weights
+
+        weights = f(
+            points,
+            face_indices,
+            self.faces,
+            self.vertices,
+        )
+        return face_indices, weights

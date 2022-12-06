@@ -4,7 +4,7 @@ import numba as nb
 import numpy as np
 
 from numba_celltree import geometry_utils as gu
-from numba_celltree.constants import Box, Point, Vector
+from numba_celltree.constants import Box, Point, Triangle, Vector
 
 
 def test_to_vector():
@@ -22,6 +22,32 @@ def test_as_point():
     assert isinstance(actual, Point)
     assert actual.x == 0.0
     assert actual.y == 1.0
+
+
+def test_as_box():
+    a = np.array([0.0, 1.0, 2.0, 3.0])
+    actual = gu.as_box(a)
+    assert isinstance(actual, Box)
+    assert actual.xmin == 0.0
+    assert actual.xmax == 1.0
+    assert actual.ymin == 2.0
+    assert actual.ymax == 3.0
+
+
+def test_as_triangle():
+    vertices = np.array(
+        [
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+        ]
+    )
+    face = np.array([2, 0, 1])
+    actual = gu.as_triangle(vertices, face)
+    assert isinstance(actual, Triangle)
+    assert actual.a == Point(1.0, 1.0)
+    assert actual.b == Point(0.0, 0.0)
+    assert actual.c == Point(0.0, 1.0)
 
 
 def test_to_point():

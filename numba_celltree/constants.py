@@ -57,6 +57,12 @@ class Box(NamedTuple):
     ymax: float
 
 
+class Triangle(NamedTuple):
+    a: Point
+    b: Point
+    c: Point
+
+
 class Node(NamedTuple):
     child: IntDType
     Lmax: FloatDType
