@@ -2,6 +2,54 @@
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "numba_celltree"
+description = "Cell Tree Spatial Index"
+readme = { file = "README.rst", content-type = "text/x-rst" }
+version = "0.1.2"
+maintainers = [
+    { name = "Huite Bootsma", email = "huite.bootsma@deltares.nl" }
+]
+requires-python = ">=3.7"
+dependencies = [
+    'numba',
+    'numpy',
+]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Topic :: Scientific/Engineering',
+]
+keywords = [
+    'mesh',
+    'spatial index',
+    'ugrid',
+    'unstructured grid',
+]
+license = { text = "MIT" }
+
+[project.urls]
+Home = "https://github.com/deltares/rexgrid"
+Code = "https://github.com/deltares/rexgrid"
+Issues = "https://github.com/deltares/rexgrid/issues"
+
+[project.optional-dependencies]
+all = ["matplotlib"]
+docs = ["matplotlib", "pydata-sphinx-theme", "sphinx", "sphinx-gallery"]
+
+[tool.setuptools]
+packages = ["numba_celltree"]
+license-files = ["LICENSE"]
+
 [tool.isort]
 profile = "black"
 
