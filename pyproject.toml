@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "numba_celltree"
 description = "Cell Tree Spatial Index"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-version = "0.1.2"
+version = "0.1.3"
 maintainers = [
     { name = "Huite Bootsma", email = "huite.bootsma@deltares.nl" }
 ]
@@ -38,9 +38,9 @@ keywords = [
 license = { text = "MIT" }
 
 [project.urls]
-Home = "https://github.com/deltares/rexgrid"
-Code = "https://github.com/deltares/rexgrid"
-Issues = "https://github.com/deltares/rexgrid/issues"
+Home = "https://github.com/deltares/numba_celltree"
+Code = "https://github.com/deltares/numba_celltree"
+Issues = "https://github.com/deltares/numba_celltree/issues"
 
 [project.optional-dependencies]
 all = ["matplotlib"]
