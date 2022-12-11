@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "numba_celltree"
 description = "Cell Tree Spatial Index"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-version = "0.1.3"
+version = "0.1.5"
 maintainers = [
     { name = "Huite Bootsma", email = "huite.bootsma@deltares.nl" }
 ]
@@ -47,7 +47,7 @@ all = ["matplotlib"]
 docs = ["matplotlib", "pydata-sphinx-theme", "sphinx", "sphinx-gallery"]
 
 [tool.setuptools]
-packages = ["numba_celltree"]
+packages = ["numba_celltree", "numba_celltree.algorithms"]
 license-files = ["LICENSE"]
 
 [tool.isort]
