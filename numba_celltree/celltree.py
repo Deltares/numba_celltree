@@ -13,6 +13,7 @@ from .constants import (
     FILL_VALUE,
     MAX_N_FACE,
     MAX_N_VERTEX,
+    BoolArray,
     CellTreeData,
     FloatArray,
     FloatDType,
@@ -21,7 +22,13 @@ from .constants import (
 )
 from .creation import initialize
 from .geometry_utils import build_bboxes, counter_clockwise
-from .query import locate_boxes, locate_edges, locate_points
+from .query import (
+    collect_node_bounds,
+    locate_boxes,
+    locate_edges,
+    locate_points,
+    validate_node_bounds,
+)
 
 
 # Ensure all types are as as statically expected.
@@ -330,3 +337,60 @@ class CellTree2d:
             self.vertices,
         )
         return face_indices, weights
+
+    @property
+    def node_bounds(self):
+        """
+        Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.
+        """
+        return collect_node_bounds(self.celltree_data)
+
+    def validate_node_bounds(self) -> BoolArray:
+        """
+        Traverse the tree. Check whether all children are contained in the bounding
+        box.
+
+        For the leaf nodes, check whether the bounding boxes are contained.
+
+        Returns
+        -------
+        node_validity: np.array of bool
+            For each node, whether all children are fully contained by its
+            bounds.
+        """
+        return validate_node_bounds(self.celltree_data, self.node_bounds)
+
+    def to_dict_of_lists(self):
+        """
+        Convert the tree structure to a dict of lists.
+
+        Such a dict can be ingested by e.g. NetworkX to produce visualize the
+        tree structure.
+
+        Returns
+        -------
+        dict_of_lists: Dict[Int, List[Int]]
+            Contains for every node a list with its children.
+
+        Examples
+        --------
+
+        >>> import networkx
+        >>> from networkx.drawing.nx_pydot import graphviz_layout
+        >>> d = celltree.to_dict_of_lists()
+        >>> G = networkx.DiGraph(d)
+        >>> positions = graphviz_layout(G, prog="dot")
+        >>> networkx.draw(G, positions, with_labels=True)
+
+        Note that computing the graphviz layout may be quite slow!
+        """
+        dict_of_lists = {}
+        for parent_index, node in enumerate(self.celltree_data.nodes):
+            left_child = node["child"]
+            if left_child == -1:
+                dict_of_lists[parent_index] = []
+            else:
+                right_child = left_child + 1
+                dict_of_lists[parent_index] = [left_child, right_child]
+
+        return dict_of_lists

@@ -185,6 +185,21 @@ def boxes_intersect(a: Box, b: Box) -> bool:
 
 
 @nb.njit(inline="always")
+def box_contained(a: Box, b: Box) -> bool:
+    """
+    Whether a is contained by b.
+
+    Parameters
+    ----------
+    a: (xmin, xmax, ymin, ymax)
+    b: (xmin, xmax, ymin, ymax)
+    """
+    return (
+        a.xmin >= b.xmin and a.xmax <= b.xmax and a.ymin >= b.ymin and a.ymax <= b.ymax
+    )
+
+
+@nb.njit(inline="always")
 def bounding_box(
     polygon: IntArray, vertices: FloatArray
 ) -> Tuple[float, float, float, float]:

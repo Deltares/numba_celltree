@@ -13,6 +13,8 @@ def datadir(tmpdir, request):
     data = pathlib.Path(__file__).parent / "data"
     shutil.copy(data / "triangles.txt", tmpdir / "triangles.txt")
     shutil.copy(data / "xy.txt", tmpdir / "xy.txt")
+    shutil.copy(data / "voronoi.txt", tmpdir / "voronoi.txt")
+    shutil.copy(data / "voronoi_xy.txt", tmpdir / "voronoi_xy.txt")
     return tmpdir
 
 
@@ -559,3 +561,54 @@ def test_compute_barycentric_weights_triangle_quads():
     )
     assert np.array_equal(face_indices, expected_indices)
     assert np.allclose(weights, expected_weights)
+
+
+def test_node_bounds(datadir):
+    nodes = np.loadtxt(datadir / "voronoi_xy.txt", dtype=float)
+    faces = np.loadtxt(datadir / "voronoi.txt", dtype=int)
+    tree = CellTree2d(nodes, faces, fill_value)
+    node_bounds = tree.node_bounds
+
+    n_node = len(tree.celltree_data.nodes)
+    xmin, xmax, ymin, ymax = tree.bbox
+    assert node_bounds.shape == (n_node, 4)
+    assert (node_bounds[:, 0] >= xmin).all()
+    assert (node_bounds[:, 1] <= xmax).all()
+    assert (node_bounds[:, 2] >= ymin).all()
+    assert (node_bounds[:, 3] <= ymax).all()
+
+
+def test_node_validity(datadir):
+    nodes = np.loadtxt(datadir / "voronoi_xy.txt", dtype=float)
+    faces = np.loadtxt(datadir / "voronoi.txt", dtype=int)
+    tree = CellTree2d(nodes, faces, fill_value)
+
+    assert tree.validate_node_bounds().all()
+
+    # Introduce a failure as described in:
+    # https://github.com/Deltares/numba_celltree/issues/2
+
+    tree.nodes[71]["Lmax"] = -0.02319655
+    validity = tree.validate_node_bounds()
+    assert not validity[73]
+
+
+def test_find_centroids(datadir):
+    nodes = np.loadtxt(datadir / "xy.txt", dtype=float)
+    faces = np.loadtxt(datadir / "triangles.txt", dtype=int)
+    centroids = nodes[faces].mean(axis=1)
+    tree = CellTree2d(nodes, faces, fill_value)
+    expected = np.arange(len(centroids))
+    actual = tree.locate_points(centroids)
+    assert np.array_equal(expected, actual)
+
+
+def test_to_dict_of_lists(datadir):
+    nodes = np.loadtxt(datadir / "xy.txt", dtype=float)
+    faces = np.loadtxt(datadir / "triangles.txt", dtype=int)
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=4)
+    d = tree.to_dict_of_lists()
+
+    assert isinstance(d, dict)
+    assert list(d.keys()) == list(range(len(tree.celltree_data.nodes)))
+    assert max(len(v) for v in d.values()) == 2

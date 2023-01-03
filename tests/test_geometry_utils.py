@@ -168,6 +168,14 @@ def test_boxes_intersect():
     assert gu.boxes_intersect(b, a)
 
 
+def test_box_contained():
+    a = Box(0.0, 1.0, 0.0, 1.0)
+    b = Box(0.25, 0.75, 0.25, 0.75)
+    assert gu.box_contained(a, a)
+    assert gu.box_contained(b, a)
+    assert not gu.box_contained(a, b)
+
+
 def test_bounding_box():
     face = np.array([0, 1, 2])
     vertices = np.array(

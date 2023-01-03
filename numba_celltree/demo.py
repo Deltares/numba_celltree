@@ -67,9 +67,10 @@ def plot_edges(node_x, node_y, edge_nodes, ax, *args, **kwargs):
     ax.add_collection(line_segments)
     ax.set_aspect(1.0)
     ax.autoscale(enable=True)
+    return
 
 
-def plot_boxes(box_coords, ax, *args, **kwargs):
+def plot_boxes(box_coords, ax, annotate=False, *args, **kwargs):
     box_coords = np.atleast_2d(box_coords)
     nbox, ncoord = box_coords.shape
     if ncoord != 4:
@@ -80,6 +81,11 @@ def plot_boxes(box_coords, ax, *args, **kwargs):
         dy = ymax - ymin
         rect = patches.Rectangle((xmin, ymin), dx, dy, fill=False, *args, **kwargs)
         ax.add_patch(rect)
+        if annotate:
+            ax.annotate(i, (xmin + 0.5 * dx, ymin + 0.5 * dy))
+    ax.set_aspect(1.0)
+    ax.autoscale(enable=True)
+    return
 
 
 def generate_disk(partitions: int, depth: int):

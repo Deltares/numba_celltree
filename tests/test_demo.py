@@ -70,7 +70,7 @@ def test_plot_boxes():
         ]
     )
     _, ax = plt.subplots()
-    demo.plot_boxes(boxes, ax)
+    demo.plot_boxes(boxes, ax, annotate=True)
 
     boxes = np.array(
         [

@@ -196,7 +196,19 @@ def split_plane(
         if plane_cost < plane_min_cost:
             plane_min_cost = plane_cost
             plane = i
-    return plane
+
+    Lmax = FLOAT_MIN
+    Rmin = FLOAT_MAX
+    for i in range(plane):
+        bLmax = buckets[i].Lmax
+        if bLmax > Lmax:
+            Lmax = bLmax
+    for i in range(plane, len(buckets)):
+        bRmin = buckets[i].Rmin
+        if bRmin < Rmin:
+            Rmin = bRmin
+
+    return plane, Lmax, Rmin
 
 
 @nb.njit(cache=True)
@@ -360,14 +372,15 @@ def build(
 
         # plane is the separation line to split on:
         # 0 [bucket0] 1 [bucket1] 2 [bucket2] 3 [bucket3]
-        plane = split_plane(buckets, root, range_Lmax, range_Rmin, bucket_length)
-
+        plane, Lmax, Rmin = split_plane(
+            buckets, root, range_Lmax, range_Rmin, bucket_length
+        )
         right_index = buckets[plane].index
         right_size = root.ptr + root.size - right_index
         left_index = root.ptr
         left_size = root.size - right_size
-        nodes[root_index]["Lmax"] = buckets[plane - 1].Lmax
-        nodes[root_index]["Rmin"] = buckets[plane].Rmin
+        nodes[root_index]["Lmax"] = Lmax
+        nodes[root_index]["Rmin"] = Rmin
         left_child = create_node(left_index, left_size, not dim)
         right_child = create_node(right_index, right_size, not dim)
         nodes[root_index]["child"] = node_index

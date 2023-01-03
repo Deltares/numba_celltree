@@ -4,6 +4,7 @@ import numpy as np
 from .algorithms import cohen_sutherland_line_box_clip, cyrus_beck_line_polygon_clip
 from .constants import (
     PARALLEL,
+    BoolArray,
     CellTreeData,
     FloatArray,
     FloatDType,
@@ -15,6 +16,7 @@ from .geometry_utils import (
     Point,
     as_box,
     as_point,
+    box_contained,
     boxes_intersect,
     copy_vertices_into,
     point_in_polygon,
@@ -322,3 +324,115 @@ def locate_edges(
         locate_edge(a, b, tree, indices, intersections, True)
 
     return ii, jj, xy
+
+
+@nb.njit(cache=True)
+def collect_node_bounds(tree: CellTreeData) -> FloatArray:
+    # Allocate output array.
+    # Per row: xmin, xmax, ymin, ymax
+    node_bounds = np.empty((len(tree.nodes), 4), dtype=FloatDType)
+    # Set bounds of the first node.
+    node_bounds[0, 0] = tree.bbox[0]
+    node_bounds[0, 1] = tree.bbox[1]
+    node_bounds[0, 2] = tree.bbox[2]
+    node_bounds[0, 3] = tree.bbox[3]
+
+    stack = allocate_stack()
+    parent_stack = allocate_stack()
+    side_stack = allocate_stack()
+
+    # Right child
+    stack[0] = 2
+    parent_stack[0] = 0
+    side_stack[0] = 0
+    # Left child
+    stack[1] = 1
+    parent_stack[1] = 0
+    side_stack[1] = 1
+    # Stack size starts at two.
+    size = 2
+
+    while size > 0:
+        # Collect from stacks
+        # Sizes are synchronized.
+        parent_index, _ = pop(parent_stack, size)
+        side, _ = pop(side_stack, size)
+        node_index, size = pop(stack, size)
+
+        parent = tree.nodes[parent_index]
+        bbox = node_bounds[parent_index]
+        dim = 1 if parent["dim"] else 0
+
+        # Set parent bounding box first.
+        # Then place the single new value for the child.
+        node_bounds[node_index, 0] = bbox[0]
+        node_bounds[node_index, 1] = bbox[1]
+        node_bounds[node_index, 2] = bbox[2]
+        node_bounds[node_index, 3] = bbox[3]
+
+        if side:
+            bound = parent["Lmax"]
+        else:
+            bound = parent["Rmin"]
+
+        node_bounds[node_index, dim * 2 + side] = bound
+
+        node = tree.nodes[node_index]
+        if node["child"] == -1:
+            continue
+
+        left_child = node["child"]
+        right_child = left_child + 1
+
+        # Right child
+        push(parent_stack, node_index, size)
+        push(side_stack, 0, size)
+        size = push(stack, right_child, size)
+
+        # Left child
+        push(parent_stack, node_index, size)
+        push(side_stack, 1, size)
+        size = push(stack, left_child, size)
+
+    return node_bounds
+
+
+@nb.njit(cache=True)
+def validate_node_bounds(tree: CellTreeData, node_bounds: FloatArray) -> BoolArray:
+    """
+    Traverse the tree. Check whether all children are contained in the bounding
+    box.
+
+    For the leaf nodes, check whether the bounding boxes are contained.
+    """
+    node_validity = np.full(len(tree.nodes), False, dtype=np.bool_)
+    stack = allocate_stack()
+    size = 1
+
+    while size > 0:
+        node_index, size = pop(stack, size)
+        bbox = as_box(node_bounds[node_index])
+        node = tree.nodes[node_index]
+
+        # Check if it's a leaf:
+        if node["child"] == -1:
+            valid = True
+            for i in range(node["ptr"], node["ptr"] + node["size"]):
+                bbox_index = tree.bb_indices[i]
+                leaf_box = as_box(tree.bb_coords[bbox_index])
+                valid = valid and box_contained(leaf_box, bbox)
+            node_validity[node_index] = valid
+            continue
+
+        left_child = node["child"]
+        right_child = left_child + 1
+        left_box = as_box(node_bounds[left_child])
+        right_box = as_box(node_bounds[right_child])
+        node_validity[node_index] = box_contained(left_box, bbox) and box_contained(
+            right_box, bbox
+        )
+
+        size = push(stack, right_child, size)
+        size = push(stack, left_child, size)
+
+    return node_validity
