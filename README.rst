@@ -1,7 +1,7 @@
 Numba Celltree
 ==============
 
-.. image:: https://img.shields.io/github/workflow/status/deltares/numba_celltree/ci?style=flat-square
+.. image:: https://img.shields.io/github/actions/workflow/status/deltares/numba_celltree/ci.yml?style=flat-square
    :target: https://github.com/deltares/numba_celltree/actions?query=workflows%3Aci
 .. image:: https://img.shields.io/codecov/c/github/deltares/numba_celltree.svg?style=flat-square
    :target: https://app.codecov.io/gh/deltares/numba_celltree
@@ -59,7 +59,7 @@ Installation
 Documentation
 -------------
 
-.. image:: https://img.shields.io/github/workflow/status/deltares/numba_celltree/docs?style=flat-square
+.. image:: https://img.shields.io/github/actions/workflow/status/deltares/numba_celltree/docs.yml?style=flat-square
    :target: https://deltares.github.io/numba_celltree/
 
 Background
