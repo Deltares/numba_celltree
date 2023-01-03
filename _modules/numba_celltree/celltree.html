@@ -37,9 +37,6 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/numba_celltree/celltree';</script>
@@ -98,6 +95,9 @@
   
   
 
+  
+    <img src="../../_static/celltree-logo.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/celltree-logo.svg" class="logo__image only-dark" alt="Logo image">
   
   
     <p class="title logo__title">Numba Celltree</p>
@@ -306,6 +306,7 @@
     <span class="n">FILL_VALUE</span><span class="p">,</span>
     <span class="n">MAX_N_FACE</span><span class="p">,</span>
     <span class="n">MAX_N_VERTEX</span><span class="p">,</span>
+    <span class="n">BoolArray</span><span class="p">,</span>
     <span class="n">CellTreeData</span><span class="p">,</span>
     <span class="n">FloatArray</span><span class="p">,</span>
     <span class="n">FloatDType</span><span class="p">,</span>
@@ -314,7 +315,13 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.creation</span> <span class="kn">import</span> <span class="n">initialize</span>
 <span class="kn">from</span> <span class="nn">.geometry_utils</span> <span class="kn">import</span> <span class="n">build_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
-<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="n">locate_boxes</span><span class="p">,</span> <span class="n">locate_edges</span><span class="p">,</span> <span class="n">locate_points</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">collect_node_bounds</span><span class="p">,</span>
+    <span class="n">locate_boxes</span><span class="p">,</span>
+    <span class="n">locate_edges</span><span class="p">,</span>
+    <span class="n">locate_points</span><span class="p">,</span>
+    <span class="n">validate_node_bounds</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <span class="c1"># Ensure all types are as as statically expected.</span>
@@ -376,7 +383,7 @@
 
 
 <div class="viewcode-block" id="CellTree2d"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d">[docs]</a><span class="k">class</span> <span class="nc">CellTree2d</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct a cell tree from 2D vertices and a faces indexing array.</span>
 
 <span class="sd">    Parameters</span>
@@ -438,7 +445,7 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="CellTree2d.locate_points"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_points">[docs]</a>    <span class="k">def</span> <span class="nf">locate_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Finds the index of a face that contains a point.</span>
 
 <span class="sd">        Parameters</span>
@@ -455,7 +462,7 @@
         <span class="k">return</span> <span class="n">locate_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CellTree2d.locate_boxes"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_boxes">[docs]</a>    <span class="k">def</span> <span class="nf">locate_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Finds the index of a face intersecting with a bounding box.</span>
 
 <span class="sd">        Parameters</span>
@@ -474,7 +481,7 @@
         <span class="k">return</span> <span class="n">locate_boxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CellTree2d.intersect_boxes"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_boxes">[docs]</a>    <span class="k">def</span> <span class="nf">intersect_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Finds the index of a box intersecting with a face, and the area</span>
 <span class="sd">        of intersection.</span>
 
@@ -525,7 +532,7 @@
 <div class="viewcode-block" id="CellTree2d.intersect_faces"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_faces">[docs]</a>    <span class="k">def</span> <span class="nf">intersect_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Finds the index of a face intersecting with another face, and the area</span>
 <span class="sd">        of intersection.</span>
 
@@ -568,7 +575,7 @@
 <div class="viewcode-block" id="CellTree2d.intersect_edges"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_edges">[docs]</a>    <span class="k">def</span> <span class="nf">intersect_edges</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">edge_coords</span><span class="p">:</span> <span class="n">FloatArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Finds the index of a face intersecting with an edge.</span>
 
 <span class="sd">        Parameters</span>
@@ -592,7 +599,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes barycentric weights for points located inside of the grid.</span>
 
 <span class="sd">        Parameters</span>
@@ -622,7 +629,64 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">face_indices</span><span class="p">,</span> <span class="n">weights</span></div></div>
+        <span class="k">return</span> <span class="n">face_indices</span><span class="p">,</span> <span class="n">weights</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">collect_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CellTree2d.validate_node_bounds"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.validate_node_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">validate_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoolArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Traverse the tree. Check whether all children are contained in the bounding</span>
+<span class="sd">        box.</span>
+
+<span class="sd">        For the leaf nodes, check whether the bounding boxes are contained.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        node_validity: np.array of bool</span>
+<span class="sd">            For each node, whether all children are fully contained by its</span>
+<span class="sd">            bounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">validate_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_bounds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CellTree2d.to_dict_of_lists"><a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.to_dict_of_lists">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict_of_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the tree structure to a dict of lists.</span>
+
+<span class="sd">        Such a dict can be ingested by e.g. NetworkX to produce visualize the</span>
+<span class="sd">        tree structure.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict_of_lists: Dict[Int, List[Int]]</span>
+<span class="sd">            Contains for every node a list with its children.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; import networkx</span>
+<span class="sd">        &gt;&gt;&gt; from networkx.drawing.nx_pydot import graphviz_layout</span>
+<span class="sd">        &gt;&gt;&gt; d = celltree.to_dict_of_lists()</span>
+<span class="sd">        &gt;&gt;&gt; G = networkx.DiGraph(d)</span>
+<span class="sd">        &gt;&gt;&gt; positions = graphviz_layout(G, prog=&quot;dot&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; networkx.draw(G, positions, with_labels=True)</span>
+
+<span class="sd">        Note that computing the graphviz layout may be quite slow!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dict_of_lists</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">parent_index</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="n">left_child</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;child&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">left_child</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">dict_of_lists</span><span class="p">[</span><span class="n">parent_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">right_child</span> <span class="o">=</span> <span class="n">left_child</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">dict_of_lists</span><span class="p">[</span><span class="n">parent_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_child</span><span class="p">,</span> <span class="n">right_child</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">dict_of_lists</span></div></div>
 </pre></div>
 
             </article>
@@ -699,7 +763,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.0.0.<br>
 </p>
 
   </div>

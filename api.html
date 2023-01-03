@@ -38,9 +38,6 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
@@ -100,6 +97,9 @@
   
   
 
+  
+    <img src="_static/celltree-logo.svg" class="logo__image only-light" alt="Logo image">
+    <img src="_static/celltree-logo.svg" class="logo__image only-dark" alt="Logo image">
   
   
     <p class="title logo__title">Numba Celltree</p>
@@ -438,6 +438,55 @@ falling in any faces are marked with a value of <code class="docutils literal no
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="numba_celltree.CellTree2d.node_bounds">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_bounds</span></span><a class="headerlink" href="#numba_celltree.CellTree2d.node_bounds" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="numba_celltree.CellTree2d.to_dict_of_lists">
+<span class="sig-name descname"><span class="pre">to_dict_of_lists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.to_dict_of_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.to_dict_of_lists" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert the tree structure to a dict of lists.</p>
+<p>Such a dict can be ingested by e.g. NetworkX to produce visualize the
+tree structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dict_of_lists</strong> – Contains for every node a list with its children.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[Int, List[Int]]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">networkx.drawing.nx_pydot</span> <span class="kn">import</span> <span class="n">graphviz_layout</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">celltree</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">positions</span> <span class="o">=</span> <span class="n">graphviz_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;dot&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">networkx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that computing the graphviz layout may be quite slow!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="numba_celltree.CellTree2d.validate_node_bounds">
+<span class="sig-name descname"><span class="pre">validate_node_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.validate_node_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.validate_node_bounds" title="Permalink to this definition">#</a></dt>
+<dd><p>Traverse the tree. Check whether all children are contained in the bounding
+box.</p>
+<p>For the leaf nodes, check whether the bounding boxes are contained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node_validity</strong> – For each node, whether all children are fully contained by its
+bounds.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array of bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -536,6 +585,33 @@ falling in any faces are marked with a value of <code class="docutils literal no
      </code>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#numba_celltree.CellTree2d.node_bounds">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       CellTree2d.node_bounds
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#numba_celltree.CellTree2d.to_dict_of_lists">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       CellTree2d.to_dict_of_lists()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#numba_celltree.CellTree2d.validate_node_bounds">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       CellTree2d.validate_node_bounds()
+      </span>
+     </code>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -614,7 +690,7 @@ falling in any faces are marked with a value of <code class="docutils literal no
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.0.0.<br>
 </p>
 
   </div>
