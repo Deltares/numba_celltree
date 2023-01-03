@@ -113,6 +113,8 @@ html_theme_options = {
         },
     ],
     "logo": {
+        "image_light": "celltree-logo.svg",
+        "image_dark": "celltree-logo.svg",
         "text": "Numba Celltree",
     },
     "navbar_end": ["navbar-icon-links"],  # remove dark mode switch
