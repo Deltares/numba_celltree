@@ -1,0 +1,15 @@
+[package]
+name = "celltree"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html[lib]
+name = "celltree_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.17.1", features = ["extension-module"] }
+numpy = "0.17.2"
+ndarray = {version = "0.15.6", features = ["rayon"]}
+smallvec = "1.9"

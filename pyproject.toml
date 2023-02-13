@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ['maturin>=0.14,<0.15', 'typing_extensions']
+build-backend = 'maturin'
 
 [project]
 name = "numba_celltree"
@@ -45,10 +45,6 @@ Issues = "https://github.com/deltares/numba_celltree/issues"
 [project.optional-dependencies]
 all = ["matplotlib"]
 docs = ["matplotlib", "pydata-sphinx-theme", "sphinx", "sphinx-gallery"]
-
-[tool.setuptools]
-packages = ["numba_celltree", "numba_celltree.algorithms"]
-license-files = ["LICENSE"]
 
 [tool.isort]
 profile = "black"
