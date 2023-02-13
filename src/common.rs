@@ -1,3 +1,5 @@
+use std::ops::Sub;
+
 #[derive(Clone, Copy, Debug)]
 pub struct Point {
     pub x: f64,
@@ -7,6 +9,18 @@ pub struct Point {
 impl Point {
     pub fn new(x: f64, y: f64) -> Self {
         Self { x, y }
+    }
+
+    pub fn from_array(xy: &[f64]) -> Self {
+        Point::new(xy[0], xy[1])
+    }
+}
+
+impl Sub<Point> for Point {
+    type Output = DVector;
+
+    fn sub(self, other: Point) -> DVector {
+        DVector::new(self.x - other.x, self.y - other.y)
     }
 }
 
@@ -20,6 +34,14 @@ pub struct Triangle {
 impl Triangle {
     pub fn new(a: Point, b: Point, c: Point) -> Self {
         Self { a, b, c }
+    }
+
+    pub fn from_face(vertices: &[&[f64; 2]], face: &[i64]) -> Self {
+        Triangle::new(
+            Point::from_array(vertices[face[0] as usize]),
+            Point::from_array(vertices[face[1] as usize]),
+            Point::from_array(vertices[face[2] as usize]),
+        )
     }
 }
 
