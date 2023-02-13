@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
-mod algorithm;
+mod algorithms;
 mod common;
 
-use crate::algorithm::clip_polygons;
+use crate::algorithms::clip_polygons;
 use ndarray::parallel::prelude::*;
 use ndarray::{Array1, ArrayView3};
 use numpy::{IntoPyArray, PyArray1, PyReadonlyArray3};
@@ -60,5 +60,19 @@ fn celltree_core(_py: Python, m: &PyModule) -> PyResult<()> {
         let areas = area_of_intersection_par(polygons, clippers);
         areas.into_pyarray(py)
     }
+
+    #[pyfn(m)]
+    #[pyo3(name = "barycentric_triangle_weights")]
+    fn barycentric_triangle_weights_py<'py>(
+        py: Python<'py>,
+        polygons: PyReadonlyArray3<'_, f64>,
+        clippers: PyReadonlyArray3<'_, f64>,
+    ) -> &'py PyArray1<f64> {
+        let polygons = polygons.as_array();
+        let clippers = clippers.as_array();
+        let areas = area_of_intersection(polygons, clippers);
+        areas.into_pyarray(py)
+    }
+
     Ok(())
 }
