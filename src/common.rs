@@ -11,21 +11,34 @@ impl Point {
 }
 
 #[derive(Clone, Copy, Debug)]
-pub struct Vector {
+pub struct Triangle {
+    pub a: Point,
+    pub b: Point,
+    pub c: Point,
+}
+
+impl Triangle {
+    pub fn new(a: Point, b: Point, c: Point) -> Self {
+        Self { a, b, c }
+    }
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct DVector {
     pub x: f64,
     pub y: f64,
 }
 
-impl Vector {
+impl DVector {
     pub fn new(x: f64, y: f64) -> Self {
         Self { x, y }
     }
 
-    pub fn cross(&self, other: Vector) -> f64 {
+    pub fn cross(&self, other: DVector) -> f64 {
         self.x * other.y - self.y * other.x
     }
 
-    pub fn dot(&self, other: Vector) -> f64 {
+    pub fn dot(&self, other: DVector) -> f64 {
         self.x * other.x + self.y * other.y
     }
 }

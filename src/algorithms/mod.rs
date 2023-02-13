@@ -1,13 +1,15 @@
-use crate::common::{Point, Vector};
+mod barycentric_triangle;
+
+use crate::common::{DVector, Point};
 use numpy::ndarray::ArrayView2;
 use smallvec::SmallVec;
 
-fn inside(p: Point, r: Point, U: Vector) -> bool {
+fn inside(p: Point, r: Point, U: DVector) -> bool {
     U.x * (p.y - r.y) > U.y * (p.x - r.x)
 }
 
-fn intersection(a: Point, V: Vector, r: Point, N: Vector) -> Option<Point> {
-    let W = Vector::new(r.x - a.x, r.y - a.y);
+fn intersection(a: Point, V: DVector, r: Point, N: DVector) -> Option<Point> {
+    let W = DVector::new(r.x - a.x, r.y - a.y);
     let nw = N.dot(W);
     let nv = N.dot(V);
     if nv != 0.0 {
@@ -25,9 +27,9 @@ fn polygon_area(polygon: impl IntoIterator<Item = Point>) -> f64 {
 
     let a = iter.next().expect("There needs to be a first element.");
     let b = iter.next().expect("There needs to be a second element.");
-    let mut U = Vector::new(b.x - a.x, b.y - a.y);
+    let mut U = DVector::new(b.x - a.x, b.y - a.y);
     for c in iter {
-        let V = Vector::new(a.x - c.x, a.y - c.y);
+        let V = DVector::new(a.x - c.x, a.y - c.y);
         area += U.cross(V).abs();
         U = V;
     }
@@ -47,8 +49,8 @@ pub fn clip_polygons(polygon: ArrayView2<'_, f64>, clipper: ArrayView2<'_, f64>)
     let mut r = Point::new(clipper[[n_clip - 1, 0]], clipper[[n_clip - 1, 1]]);
     for i in 0..n_clip {
         let s = Point::new(clipper[[i, 0]], clipper[[i, 1]]);
-        let U = Vector::new(s.x - r.x, s.y - r.y);
-        let N = Vector::new(-U.y, U.x);
+        let U = DVector::new(s.x - r.x, s.y - r.y);
+        let N = DVector::new(-U.y, U.x);
 
         if U.x == 0. && U.y == 0. {
             continue;
@@ -63,7 +65,7 @@ pub fn clip_polygons(polygon: ArrayView2<'_, f64>, clipper: ArrayView2<'_, f64>)
         let mut a_inside = inside(a, r, U);
 
         for &b in &subject {
-            let V = Vector::new(b.x - a.x, b.y - a.y);
+            let V = DVector::new(b.x - a.x, b.y - a.y);
 
             if V.x == 0. && V.y == 0. {
                 continue;
