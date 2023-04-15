@@ -23,7 +23,7 @@ script or a Jupyter notebook for interactive exploration.
 .. only:: html
 
   .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_thumb.png
-    :alt: Spatial indexing
+    :alt:
 
   :ref:`sphx_glr_examples_spatial_indexing.py`
 
