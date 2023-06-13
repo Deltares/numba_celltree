@@ -117,7 +117,7 @@ html_theme_options = {
         "image_dark": "celltree-logo.svg",
         "text": "Numba Celltree",
     },
-    "navbar_end": [ "theme-switcher", "navbar-icon-links"],
+    "navbar_end": ["theme-switcher", "navbar-icon-links"],
 }
 
 html_context = {
