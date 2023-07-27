@@ -5,7 +5,6 @@ triangles.
 For barycentric interpolation on N-sided convex polygons, see
 barycentric_wachspress.py.
 """
-# %%
 import numba as nb
 import numpy as np
 

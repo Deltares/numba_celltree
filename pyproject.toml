@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "numba_celltree"
 description = "Cell Tree Spatial Index"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-version = "0.1.5"
+version = "0.1.6"
 maintainers = [
     { name = "Huite Bootsma", email = "huite.bootsma@deltares.nl" }
 ]

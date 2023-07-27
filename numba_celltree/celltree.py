@@ -223,6 +223,29 @@ class CellTree2d:
     def _locate_faces(
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
+        """
+        Finds the index of a face intersecting with another face.
+
+        Only sharing an edge also counts as an intersection, due to the use of
+        the separating axis theorem to define intersection. The area of the
+        overlap is zero in such a case.
+
+        Parameters
+        ----------
+        vertices: ndarray of floats with shape ``(n_point, 2)``
+            Corner coordinates (x, y) of the cells.
+        faces: ndarray of integers with shape ``(n_face, n_max_vert)``
+            Index identifying for every face the indices of its corner nodes.
+            If a face has less corner nodes than n_max_vert, its last indices
+            should be equal to ``fill_value``.
+
+        Returns
+        -------
+        face_indices: ndarray of integers with shape ``(n_found,)``
+            Indices of the faces.
+        tree_face_indices: ndarray of integers with shape ``(n_found,)``
+            Indices of the tree faces.
+        """
         counter_clockwise(vertices, faces)
         bbox_coords = build_bboxes(faces, vertices)
         shortlist_i, shortlist_j = locate_boxes(bbox_coords, self.celltree_data)
@@ -256,7 +279,7 @@ class CellTree2d:
 
         Returns
         -------
-        frace_indices: ndarray of integers with shape ``(n_found,)``
+        face_indices: ndarray of integers with shape ``(n_found,)``
             Indices of the faces.
         tree_face_indices: ndarray of integers with shape ``(n_found,)``
             Indices of the tree faces.

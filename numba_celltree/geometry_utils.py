@@ -150,17 +150,23 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
     for i in range(length):
         v1 = as_point(poly[i])
         V = to_vector(p, v1)
-
+        # Compute the (twofold) area of formed by the point (p) and two
+        # vertices of the polygon (v0, v1; vector W). If this area is extremely
+        # small, the point is (nearly) on the edge, or it is collinear.
         twice_area = abs(cross_product(U, V))
         if twice_area < TOLERANCE_ON_EDGE:
+            # Project the point onto W.
             W = to_vector(v0, v1)
             if W.x != 0.0:
                 t = (p.x - v0.x) / W.x
             elif W.y != 0.0:
                 t = (p.y - v0.y) / W.y
             else:
+                # The vector has a length of zero. Do not divide by zero -- so
+                # skip.
                 continue
             if 0 <= t <= 1:
+                # It's on the edge.
                 return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
