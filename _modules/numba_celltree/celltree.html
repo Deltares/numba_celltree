@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>numba_celltree.celltree &#8212; Numba Celltree 0.1.5 documentation</title>
+    <title>numba_celltree.celltree &#8212; Numba Celltree 0.1.6 documentation</title>
   
   
   
@@ -27,20 +27,20 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/theme-deltares.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=e5fbc548" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-deltares.css?v=6c159e45" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0115a918"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/numba_celltree/celltree';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -584,6 +584,29 @@ document.write(`
     <span class="k">def</span> <span class="nf">_locate_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the index of a face intersecting with another face.</span>
+
+<span class="sd">        Only sharing an edge also counts as an intersection, due to the use of</span>
+<span class="sd">        the separating axis theorem to define intersection. The area of the</span>
+<span class="sd">        overlap is zero in such a case.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        vertices: ndarray of floats with shape ``(n_point, 2)``</span>
+<span class="sd">            Corner coordinates (x, y) of the cells.</span>
+<span class="sd">        faces: ndarray of integers with shape ``(n_face, n_max_vert)``</span>
+<span class="sd">            Index identifying for every face the indices of its corner nodes.</span>
+<span class="sd">            If a face has less corner nodes than n_max_vert, its last indices</span>
+<span class="sd">            should be equal to ``fill_value``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        face_indices: ndarray of integers with shape ``(n_found,)``</span>
+<span class="sd">            Indices of the faces.</span>
+<span class="sd">        tree_face_indices: ndarray of integers with shape ``(n_found,)``</span>
+<span class="sd">            Indices of the tree faces.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">counter_clockwise</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
         <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">build_bboxes</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
         <span class="n">shortlist_i</span><span class="p">,</span> <span class="n">shortlist_j</span> <span class="o">=</span> <span class="n">locate_boxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span>
@@ -617,7 +640,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        frace_indices: ndarray of integers with shape ``(n_found,)``</span>
+<span class="sd">        face_indices: ndarray of integers with shape ``(n_found,)``</span>
 <span class="sd">            Indices of the faces.</span>
 <span class="sd">        tree_face_indices: ndarray of integers with shape ``(n_found,)``</span>
 <span class="sd">            Indices of the tree faces.</span>
@@ -807,7 +830,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.0.
     <br/>
   </p>
 </div>

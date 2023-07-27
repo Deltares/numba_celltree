@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Spatial indexing &#8212; Numba Celltree 0.1.5 documentation</title>
+    <title>Spatial indexing &#8212; Numba Celltree 0.1.6 documentation</title>
   
   
   
@@ -28,20 +28,20 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=e5fbc548" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=6c159e45" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=0115a918"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/spatial_indexing';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -524,11 +524,11 @@ a box.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
        0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 34,  35,  31,  32,  33,  69,  30,  68,  72,  75,  88,  90,  82,
-        84,  83,  86,  85,  78,  80,  87,  73,  77,  43,  79,  47,  48,
-        81, 121, 119, 120,  59,  22,  23,  61,  60,  24,  25,  28,  29,
-        64,  65,  26,  27,  66,  67,  55,  54,  17,  18,  53,  15,  16,
-        50]))
+       1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 36,  37,  33,  34,  35,  84,  32,  89,  87,  90,  39,  20,  97,
+        99,  98, 101, 102,  88,  44, 100,  31,  92,  91,  56,  55,  57,
+        58,  63,  62,  64,  74,  23,  24,  76,  75,  25,  26,  29,  30,
+        79,  80,  27,  28,  81,  82,  70,  69,  16,  17,  68,  14,  15,
+        65]))
 </pre></div>
 </div>
 <p>Note that this method returns two arrays of equal length. The second array
@@ -712,9 +712,9 @@ This once again returns three arrays of equal length:</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 56,  22,  23,  24,  69,  71,  68,  72,  75,  47, 121, 120, 112,
-       117, 111,   0, 110,   2,  96,  37,  36,  97,  94,  83,  86,  78,
-        87,  17,  73,  77,  44,  46,  43,  15,  16,  50]))
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 71,  23,  24,  25,  84,  86,  89,  87,  90,  55,  63,  64,  47,
+        60, 118, 116, 117,  54, 105,  41,  40, 106, 103,  98, 101,  88,
+       100,  16,  31,  92,  94,  96,  91,  14,  15,  65]))
 </pre></div>
 </div>
 <p>To wrap up, we’ll color the intersect faces with the length of the
@@ -734,7 +734,7 @@ with the Euclidian norm (Pythagorean distance):</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.192 seconds)</p>
+<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.619 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f989545cc7034bd6c0c40e2091705820/spatial_indexing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">spatial_indexing.py</span></code></a></p>
@@ -856,7 +856,7 @@ with the Euclidian norm (Pythagorean distance):</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.0.
     <br/>
   </p>
 </div>
