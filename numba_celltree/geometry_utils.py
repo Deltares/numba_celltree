@@ -142,6 +142,30 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
+def in_bounds(p: Point, a: Point, b: Point):
+    """
+    Check whether point p falls within the bounding box created by a and b
+    (after we've checked the size of the cross product).
+
+    However, we must take into account that a line may be either vertical
+    (dx=0) or horizontal (dy=0) and only evaluate the non-zero value.
+
+    If the area created by p, a, b is tiny AND p is within the bounds of a and
+    b, the point lies very close to the edge.
+    """
+    dx = b.x - a.x
+    dy = b.y - a.y
+    if abs(dx) >= abs(dy):
+        if dx > 0:
+            return a.x <= p.x and p.x <= b.x
+        return b.x <= p.x and p.x <= a.x
+    else:
+        if dy > 0:
+            return a.y <= p.y and p.y <= b.y
+        return b.y <= p.y and p.y <= a.y
+
+
+@nb.njit(inline="always")
 def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
     length = len(poly)
     v0 = as_point(poly[-1])
@@ -149,25 +173,16 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
     c = False
     for i in range(length):
         v1 = as_point(poly[i])
+        if v1 == v0:
+            continue
         V = to_vector(p, v1)
         # Compute the (twofold) area of formed by the point (p) and two
-        # vertices of the polygon (v0, v1; vector W). If this area is extremely
-        # small, the point is (nearly) on the edge, or it is collinear.
-        twice_area = abs(cross_product(U, V))
-        if twice_area < TOLERANCE_ON_EDGE:
-            # Project the point onto W.
-            W = to_vector(v0, v1)
-            if W.x != 0.0:
-                t = (p.x - v0.x) / W.x
-            elif W.y != 0.0:
-                t = (p.y - v0.y) / W.y
-            else:
-                # The vector has a length of zero. Do not divide by zero -- so
-                # skip.
-                continue
-            if 0 <= t <= 1:
-                # It's on the edge.
-                return True
+        # vertices of the polygon (v0, v1). If this area is extremely small,
+        # the point is (nearly) on the edge, or it is collinear. We can test if
+        # if's collinear by checking whether it falls in the bounding box of
+        # points v0 and v1.
+        if (abs(cross_product(U, V)) < TOLERANCE_ON_EDGE) and in_bounds(p, v0, v1):
+            return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
             (v1.x - v0.x) * (p.y - v0.y) / (v1.y - v0.y) + v0.x
