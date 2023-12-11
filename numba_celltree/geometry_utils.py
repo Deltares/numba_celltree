@@ -142,7 +142,7 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
-def in_bounds(p: Point, a: Point, b: Point):
+def in_bounds(p: Point, a: Point, b: Point) -> bool:
     """
     Check whether point p falls within the bounding box created by a and b
     (after we've checked the size of the cross product).
@@ -246,7 +246,7 @@ def bounding_box(
 def build_bboxes(
     faces: IntArray,
     vertices: FloatArray,
-) -> Tuple[FloatArray, IntArray]:
+) -> FloatArray:
     # Make room for the bounding box of every polygon.
     n_polys = len(faces)
     bbox_coords = np.empty((n_polys, NDIM * 2), FloatDType)
