@@ -29,7 +29,7 @@ def interp_edge_case(a, U, p, weights, i, j):
 
 
 @nb.njit
-def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray):
+def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray) -> None:
     n = len(polygon)
     w_sum = 0.0
 
@@ -43,7 +43,7 @@ def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray):
         # Note: weights may be differently sized than polygon! Hence n-1
         # instead of -1.
         interp_edge_case(a, U, p, weights, n - 1, 0)
-        return weights
+        return
 
     for i in range(n):
         i_next = (i + 1) % n
@@ -58,7 +58,7 @@ def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray):
 
         if Aj < TOLERANCE_ON_EDGE:
             interp_edge_case(b, V, p, weights, i, i_next)
-            return weights
+            return
 
         w = 2 * Ci / (Ai * Aj)
         weights[i] = w
