@@ -540,7 +540,7 @@ document.write(`
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_points">[docs]</a>
     <span class="k">def</span> <span class="nf">locate_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Finds the index of a face that contains a point.</span>
+<span class="sd">        Find the index of a face that contains a point.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -560,7 +560,7 @@ document.write(`
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_boxes">[docs]</a>
     <span class="k">def</span> <span class="nf">locate_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Finds the index of a face intersecting with a bounding box.</span>
+<span class="sd">        Find the index of a face intersecting with a bounding box.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -580,9 +580,11 @@ document.write(`
 
 <div class="viewcode-block" id="CellTree2d.intersect_boxes">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_boxes">[docs]</a>
-    <span class="k">def</span> <span class="nf">intersect_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">intersect_boxes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Finds the index of a box intersecting with a face, and the area</span>
+<span class="sd">        Find the index of a box intersecting with a face, and the area</span>
 <span class="sd">        of intersection.</span>
 
 <span class="sd">        Parameters</span>
@@ -618,7 +620,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Finds the index of a face intersecting with another face.</span>
+<span class="sd">        Find the index of a face intersecting with another face.</span>
 
 <span class="sd">        Only sharing an edge also counts as an intersection, due to the use of</span>
 <span class="sd">        the separating axis theorem to define intersection. The area of the</span>
@@ -659,7 +661,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Finds the index of a face intersecting with another face, and the area</span>
+<span class="sd">        Find the index of a face intersecting with another face, and the area</span>
 <span class="sd">        of intersection.</span>
 
 <span class="sd">        Parameters</span>
@@ -705,7 +707,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span> <span class="n">edge_coords</span><span class="p">:</span> <span class="n">FloatArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Finds the index of a face intersecting with an edge.</span>
+<span class="sd">        Find the index of a face intersecting with an edge.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -732,7 +734,7 @@ document.write(`
         <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computes barycentric weights for points located inside of the grid.</span>
+<span class="sd">        Compute barycentric weights for points located inside of the grid.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -766,9 +768,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">collect_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CellTree2d.validate_node_bounds">
@@ -805,7 +805,6 @@ document.write(`
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-
 <span class="sd">        &gt;&gt;&gt; import networkx</span>
 <span class="sd">        &gt;&gt;&gt; from networkx.drawing.nx_pydot import graphviz_layout</span>
 <span class="sd">        &gt;&gt;&gt; d = celltree.to_dict_of_lists()</span>
