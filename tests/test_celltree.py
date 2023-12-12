@@ -94,9 +94,7 @@ def disk():
 
 
 def test_init():
-    """
-    can a tree be initialized
-    """
+    """Can a tree be initialized?"""
     # with defaults
     CellTree2d(nodes, faces, fill_value)
     # with everything specified
@@ -116,16 +114,12 @@ def test_init_larger_mesh(datadir):
 
 
 def test_lists():
-    """
-    python lists should get converted to numpy arrays
-    """
+    """Python lists should get converted to numpy arrays"""
     CellTree2d(nodes2, faces2, fill_value)
 
 
 def test_types():
-    """
-    It should auto-cast the types to the right types for you
-    """
+    """It should auto-cast the types to the right types for you"""
     nodes = np.array(nodes2, dtype=np.float32)
     faces = np.array(faces2, dtype=np.int32)
     CellTree2d(nodes, faces, fill_value)

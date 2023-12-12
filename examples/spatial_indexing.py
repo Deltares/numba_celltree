@@ -26,13 +26,12 @@ We'll start by importing the required packages with matplotlib for plotting.
 """
 import os
 
-os.environ["NUMBA_DISABLE_JIT"] = "1"  # small examples, avoid JIT overhead
-
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import LineCollection
 
-from numba_celltree import CellTree2d, demo
+os.environ["NUMBA_DISABLE_JIT"] = "1"  # small examples, avoid JIT overhead
+from numba_celltree import CellTree2d, demo  # noqa E402
 
 ###############################################################################
 # Let's start with a rectangular mesh:

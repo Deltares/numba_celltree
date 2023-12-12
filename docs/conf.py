@@ -12,8 +12,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import pkg_resources
-
 import numba_celltree
 
 # -- Project information -----------------------------------------------------
@@ -22,11 +20,10 @@ project = "Numba Celltree"
 copyright = "Deltares"
 author = "Huite Bootsma"
 
-# The full version, including alpha/beta/rc tags
-release = pkg_resources.get_distribution("numba_celltree").version
-# The short version which is displayed
-version = ".".join(release.split(".")[:3]) + ".dev"
-
+# The short X.Y version.
+version = numba_celltree.__version__.split("+")[0]
+# The full version, including alpha/beta/rc tags.
+release = numba_celltree.__version__
 
 # -- General configuration ---------------------------------------------------
 
@@ -47,7 +44,7 @@ extensions = [
 
 sphinx_gallery_conf = {
     "examples_dirs": "../examples",  # path to your example scripts
-    "gallery_dirs": "examples",  # path to where to save gallery generated output
+    "gallery_dirs": "examples",  # path to generated output
     "filename_pattern": ".py",
     "abort_on_example_error": True,
 }

@@ -45,7 +45,7 @@ def edges(
 
 def plot_edges(node_x, node_y, edge_nodes, ax, *args, **kwargs):
     """
-    Plots the edges at a given axes.
+    Plot the edges at a given axes.
     `args` and `kwargs` will be used as parameters of the `plot` method.
 
     Parameters

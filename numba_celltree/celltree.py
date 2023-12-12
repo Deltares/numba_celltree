@@ -153,7 +153,7 @@ class CellTree2d:
 
     def locate_points(self, points: FloatArray) -> IntArray:
         """
-        Finds the index of a face that contains a point.
+        Find the index of a face that contains a point.
 
         Parameters
         ----------
@@ -170,7 +170,7 @@ class CellTree2d:
 
     def locate_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
         """
-        Finds the index of a face intersecting with a bounding box.
+        Find the index of a face intersecting with a bounding box.
 
         Parameters
         ----------
@@ -187,9 +187,11 @@ class CellTree2d:
         bbox_coords = cast_bboxes(bbox_coords)
         return locate_boxes(bbox_coords, self.celltree_data)
 
-    def intersect_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
+    def intersect_boxes(
+        self, bbox_coords: FloatArray
+    ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
-        Finds the index of a box intersecting with a face, and the area
+        Find the index of a box intersecting with a face, and the area
         of intersection.
 
         Parameters
@@ -224,7 +226,7 @@ class CellTree2d:
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
         """
-        Finds the index of a face intersecting with another face.
+        Find the index of a face intersecting with another face.
 
         Only sharing an edge also counts as an intersection, due to the use of
         the separating axis theorem to define intersection. The area of the
@@ -263,7 +265,7 @@ class CellTree2d:
         self, vertices: FloatArray, faces: IntArray, fill_value: int
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
-        Finds the index of a face intersecting with another face, and the area
+        Find the index of a face intersecting with another face, and the area
         of intersection.
 
         Parameters
@@ -306,7 +308,7 @@ class CellTree2d:
         self, edge_coords: FloatArray
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
-        Finds the index of a face intersecting with an edge.
+        Find the index of a face intersecting with an edge.
 
         Parameters
         ----------
@@ -330,7 +332,7 @@ class CellTree2d:
         points: FloatArray,
     ) -> Tuple[IntArray, FloatArray]:
         """
-        Computes barycentric weights for points located inside of the grid.
+        Compute barycentric weights for points located inside of the grid.
 
         Parameters
         ----------
@@ -363,9 +365,7 @@ class CellTree2d:
 
     @property
     def node_bounds(self):
-        """
-        Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.
-        """
+        """Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree."""
         return collect_node_bounds(self.celltree_data)
 
     def validate_node_bounds(self) -> BoolArray:
@@ -397,7 +397,6 @@ class CellTree2d:
 
         Examples
         --------
-
         >>> import networkx
         >>> from networkx.drawing.nx_pydot import graphviz_layout
         >>> d = celltree.to_dict_of_lists()

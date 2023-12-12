@@ -33,3 +33,6 @@ docs/examples
 # Coverage reports
 .coverage
 coverage.xml
+
+# Environments
+.pixi/

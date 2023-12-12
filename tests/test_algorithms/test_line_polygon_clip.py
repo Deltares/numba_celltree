@@ -1,6 +1,4 @@
-"""
-Utilizes same boxes as test_line_box_clip
-"""
+"""Utilizes same boxes as test_line_box_clip"""
 import numpy as np
 
 from numba_celltree.algorithms import cyrus_beck_line_polygon_clip as line_clip

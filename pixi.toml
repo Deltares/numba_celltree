@@ -1,0 +1,34 @@
+[project]
+name = "numba_celltree"
+version = "0.1.6"
+description = "Cell Tree Spatial Index"
+authors = ["Huite Bootsma <huite.bootsma@deltares.nl>"]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-arm64", "osx-64"]
+license = "MIT"
+license-file = "LICENSE"
+homepage = "https://deltares.github.io/numba_celltree/"
+documentation = "https://deltares.github.io/numba_celltree/"
+repository = "https://github.com/Deltares/numba_celltree"
+
+[tasks]
+install = "python -m pip install --no-deps --editable ."
+install-pre-commit = "pre-commit install"
+pre-commit = "pre-commit run --all-files"
+test = { depends_on = ["install"], cmd = "NUMBA_DISABLE_JIT=1 pytest --cov=numba_celltree --cov-report xml --cov-report term"}
+docs = { depends_on = ["install"], cmd = "NUMBA_DISABLE_JIT=1 sphinx-build docs docs/_build"}
+all = { depends_on = ["pre-commit", "test", "docs"]}
+
+[dependencies]
+matplotlib = "*"
+numba = "*"
+numpy = "*"
+pip = "*"
+pre-commit = "*"
+pydata-sphinx-theme = "*"
+pytest = "*"
+pytest-cov = "*"
+python = ">=3.9"
+ruff = "*"
+sphinx = "*"
+sphinx-gallery = "*"

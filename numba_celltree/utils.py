@@ -57,9 +57,7 @@ if STACK_ALLOCATE_STATIC_ARRAYS and os.environ.get("NUMBA_DISABLE_JIT", "0") == 
 
     @nb.njit(inline="always")  # pragma: no cover
     def allocate_stack():
-        arr_ptr = stack_empty(
-            MAX_TREE_DEPTH, IntDType
-        )  # pylint: disable=no-value-for-parameter
+        arr_ptr = stack_empty(MAX_TREE_DEPTH, IntDType)  # pylint: disable=no-value-for-parameter
         arr = nb.carray(arr_ptr, MAX_TREE_DEPTH, dtype=IntDType)
         return arr
 

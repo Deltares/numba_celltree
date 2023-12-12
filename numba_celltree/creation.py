@@ -28,9 +28,7 @@ def create_node(ptr: int, size: int, dim: bool) -> Node:
 
 @nb.njit(inline="always")
 def push_node(nodes: NodeArray, node: Node, index: int) -> int:
-    """
-    Push to the end of the array.
-    """
+    """Push to the end of the array."""
     nodes[index]["child"] = node.child
     nodes[index]["Lmax"] = node.Lmax
     nodes[index]["Rmin"] = node.Rmin
@@ -43,7 +41,7 @@ def push_node(nodes: NodeArray, node: Node, index: int) -> int:
 @nb.njit(inline="always")
 def centroid_test(bucket: np.void, box: FloatArray, dim: int):
     """
-    Tests whether the centroid of the bounding box in the selected dimension falls
+    Test whether the centroid of the bounding box in the selected dimension falls
     within this bucket.
     """
     centroid = box[2 * dim] + 0.5 * (box[2 * dim + 1] - box[2 * dim])
@@ -60,7 +58,7 @@ def stable_partition(
     dim: int,
 ) -> int:
     """
-    Rearranges the elements in the range(begin, end), in such a way that all
+    Rearrange the elements in the range(begin, end), in such a way that all
     the elements for which a predicate returns True precede all those for which it
     returns False. The relative order in each group is maintained.
     In this case, the predicate is a `centroid_test`.
@@ -77,6 +75,7 @@ def stable_partition(
         Element of BucketArray, contains data for a single bucket.
     dim: int
         Dimension number (0: x, 1: y, etc.)
+
     Returns
     -------
     current: int
