@@ -190,7 +190,7 @@ def test_bounding_box():
     assert gu.bounding_box(face, vertices) == (0.0, 1.0, 0.0, 1.0)
 
 
-def test_build_bboxes():
+def test_build_face_bboxes():
     faces = np.array(
         [
             [0, 1, 2, -1],
@@ -211,7 +211,7 @@ def test_build_bboxes():
             [0.0, 5.0, 0.0, 5.0],
         ]
     )
-    actual = gu.build_bboxes(faces, vertices)
+    actual = gu.build_face_bboxes(faces, vertices)
     assert np.array_equal(actual, expected)
 
 

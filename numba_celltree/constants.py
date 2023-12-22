@@ -22,8 +22,6 @@ will expect a 32-bit integer for its index and size fields, yet receive a
 import math
 from typing import NamedTuple
 
-import numba as nb
-import numba.types as nbtypes
 import numpy as np
 
 IntDType = np.intp
@@ -82,7 +80,7 @@ class Bucket(NamedTuple):
 
 
 class CellTreeData(NamedTuple):
-    faces: IntArray
+    elements: IntArray
     vertices: FloatArray
     nodes: NodeArray
     bb_indices: IntArray
@@ -144,25 +142,6 @@ MAX_N_FACE = 2e9  # 2e9 results in a depth of 32
 MAX_TREE_DEPTH = int(math.ceil(math.log(MAX_N_FACE, 2))) + 1
 # Floating point slack
 TOLERANCE_ON_EDGE = 1e-9
-
-# Derived types & constants
-NumbaFloatDType = nb.from_dtype(FloatDType)
-NumbaIntDType = nb.from_dtype(IntDType)
-NumbaNodeDType = nb.from_dtype(NodeDType)
-NumbaBucketDType = nb.from_dtype(BucketDType)
-
-NumbaCellTreeData = nbtypes.NamedTuple(
-    (
-        NumbaIntDType[:, :],  # faces
-        NumbaFloatDType[:, :],  # vertices
-        NumbaNodeDType[:],  # nodes
-        NumbaIntDType[:],  # bb_indices
-        NumbaFloatDType[:, :],  # bb_coords
-        NumbaFloatDType[:],  # bbox
-        NumbaIntDType,  # cells_per_leaf
-    ),
-    CellTreeData,
-)
 
 FLOAT_MIN = np.finfo(FloatDType).min
 FLOAT_MAX = np.finfo(FloatDType).max

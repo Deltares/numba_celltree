@@ -3,7 +3,7 @@ from typing import List, Tuple
 import numba as nb
 import numpy as np
 
-from .constants import (
+from numba_celltree.constants import (
     FLOAT_MAX,
     FLOAT_MIN,
     INT_MAX,
@@ -17,8 +17,7 @@ from .constants import (
     NodeArray,
     NodeDType,
 )
-from .geometry_utils import build_bboxes
-from .utils import allocate_stack, pop, push
+from numba_celltree.utils import allocate_stack, pop, push
 
 
 @nb.njit(inline="always")
@@ -211,15 +210,15 @@ def split_plane(
 
 
 @nb.njit(cache=True)
-def pessimistic_n_nodes(n_polys: int):
+def pessimistic_n_nodes(n_elements: int):
     """
     In the worst case, *all* branches end in a leaf with a single cell. Rather
     unlikely in the case of non-trivial grids, but we need a guess to
     pre-allocate -- overestimation is at maximum two times in case of
     cells_per_leaf == 2.
     """
-    n_nodes = n_polys
-    nodes = int(np.ceil(n_polys / 2))
+    n_nodes = n_elements
+    nodes = int(np.ceil(n_elements / 2))
     while nodes > 1:
         n_nodes += nodes
         nodes = int(np.ceil(nodes / 2))
@@ -395,15 +394,17 @@ def build(
 
 @nb.njit(cache=True)
 def initialize(
-    vertices: FloatArray, faces: IntArray, n_buckets: int = 4, cells_per_leaf: int = 2
+    elements: IntArray,
+    bb_coords: FloatArray,
+    n_buckets: int = 4,
+    cells_per_leaf: int = 2,
 ) -> Tuple[NodeArray, IntArray]:
     # Prepare bounding boxes for tree building.
-    bb_coords = build_bboxes(faces, vertices)
-    bb_indices = np.arange(len(faces), dtype=IntDType)
+    bb_indices = np.arange(len(elements), dtype=IntDType)
 
     # Pre-allocate the space for the tree.
-    n_polys, _ = faces.shape
-    n_nodes = pessimistic_n_nodes(n_polys)
+    n_elements, _ = elements.shape
+    n_nodes = pessimistic_n_nodes(n_elements)
     nodes = np.empty(n_nodes, dtype=NodeDType)
 
     # Insert first node
@@ -420,4 +421,4 @@ def initialize(
     )
 
     # Remove the unused part in nodes.
-    return nodes[:node_index], bb_indices, bb_coords
+    return nodes[:node_index], bb_indices

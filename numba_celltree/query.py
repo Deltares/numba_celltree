@@ -20,6 +20,7 @@ from .geometry_utils import (
     boxes_intersect,
     copy_vertices_into,
     point_in_polygon,
+    point_on_edge,
     to_vector,
 )
 from .utils import allocate_polygon, allocate_stack, pop, push
@@ -42,7 +43,7 @@ def locate_point(point: Point, tree: CellTreeData):
         if node["child"] == -1:
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
-                face = tree.faces[bbox_index]
+                face = tree.elements[bbox_index]
                 # Make sure polygons to test is contiguous (stack allocated) array
                 # This saves about 40-50% runtime
                 poly = copy_vertices_into(tree.vertices, face, polygon_work_array)
@@ -84,6 +85,64 @@ def locate_points(
         point = as_point(points[i])
         result[i] = locate_point(point, tree)
     return result
+
+
+# Inlining saves about 15% runtime
+@nb.njit(inline="always")
+def locate_point_on_edge(point: Point, tree: CellTreeData):
+    stack = allocate_stack()
+    stack[0] = 0
+    return_value = -1
+    size = 1
+
+    while size > 0:
+        node_index, size = pop(stack, size)
+        node = tree.nodes[node_index]
+
+        # Check if it's a leaf
+        if node["child"] == -1:
+            for i in range(node["ptr"], node["ptr"] + node["size"]):
+                bbox_index = tree.bb_indices[i]
+                edge = tree.elements[bbox_index]
+                if point_on_edge(point, edge):
+                    return bbox_index
+            continue
+
+        dim = 1 if node["dim"] else 0
+        left = point[dim] <= node["Lmax"]
+        right = point[dim] >= node["Rmin"]
+        left_child = node["child"]
+        right_child = left_child + 1
+
+        if left and right:
+            # This heuristic is worthwhile because a point will fall into a
+            # single face -- if found, we can stop.
+            if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
+                size = push(stack, left_child, size)
+                size = push(stack, right_child, size)
+            else:
+                size = push(stack, right_child, size)
+                size = push(stack, left_child, size)
+        elif left:
+            size = push(stack, left_child, size)
+        elif right:
+            size = push(stack, right_child, size)
+
+    return return_value
+
+
+@nb.njit(parallel=PARALLEL, cache=True)
+def locate_points_on_edge(
+    points: FloatArray,
+    tree: CellTreeData,
+):
+    n_points = len(points)
+    result = np.empty(n_points, dtype=IntDType)
+    distance = np.empty(n_points, dtype=FloatDType)
+    for i in nb.prange(n_points):  # pylint: disable=not-an-iterable
+        point = as_point(points[i])
+        result[i], distance[i] = locate_point_on_edge(point, tree)
+    return result, distance
 
 
 @nb.njit(inline="always")
@@ -212,7 +271,7 @@ def locate_edge(
                 box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)
                 if box_intersect:
                     polygon = copy_vertices_into(
-                        tree.vertices, tree.faces[bbox_index], polygon_work_array
+                        tree.vertices, tree.elements[bbox_index], polygon_work_array
                     )
                     face_intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
                     if face_intersects:
