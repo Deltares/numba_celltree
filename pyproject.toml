@@ -1,12 +1,12 @@
 [build-system]
-requires = ["setuptools>=64.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "numba_celltree"
 description = "Cell Tree Spatial Index"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-version = "0.1.6"
+dynamic = ["version"]
 maintainers = [
     { name = "Huite Bootsma", email = "huite.bootsma@deltares.nl" }
 ]
@@ -16,7 +16,7 @@ dependencies = [
     'numpy',
 ]
 classifiers = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Science/Research',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python',
@@ -25,6 +25,7 @@ classifiers = [
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: Implementation :: CPython',
     'Topic :: Scientific/Engineering',
 ]
@@ -45,14 +46,79 @@ Issues = "https://github.com/deltares/numba_celltree/issues"
 all = ["matplotlib"]
 docs = ["matplotlib", "pydata-sphinx-theme", "sphinx", "sphinx-gallery"]
 
-[tool.setuptools]
-packages = ["numba_celltree", "numba_celltree.algorithms"]
-license-files = ["LICENSE"]
+[tool.hatch.version]
+path = "numba_celltree/__init__.py"
 
-[tool.isort]
-profile = "black"
+[tool.hatch.build.targets.sdist]
+only-include = ["numba_celltree", "tests"]
 
 [tool.coverage.report]
 exclude_lines = [
   "pragma: no cover",
 ]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+numba_celltree = { path = ".", editable = true }
+
+[tool.pixi.dependencies]
+matplotlib = "*"
+numba = "*"
+numpy = "*"
+pip = "*"
+pre-commit = "*"
+pydata-sphinx-theme = "*"
+pytest = "*"
+pytest-cov = "*"
+python = ">=3.9"
+ruff = "*"
+sphinx = "*"
+sphinx-gallery = "*"
+
+[tool.pixi.tasks]
+pre-commit = "pre-commit run --all-files"
+test = "NUMBA_DISABLE_JIT=1 pytest --cov=numba_celltree --cov-report xml --cov-report term"
+docs = "NUMBA_DISABLE_JIT=1 sphinx-build docs docs/_build"
+all = { depends_on = ["pre-commit", "test", "docs"]}
+pypi-publish = "rm --recursive --force dist && python -m build && twine check dist/* && twine upload dist/*"
+
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+
+[tool.pixi.feature.py310.dependencies]
+python = "3.10.*"
+
+[tool.pixi.environments]
+default = { features = ["py312"], solve-group = "py312" }
+py312 = { features = ["py312"], solve-group = "py312" }
+py311 = ["py311"]
+py310 = ["py310"]
+
+[tool.ruff.lint]
+# See https://docs.astral.sh/ruff/rules/
+select = ["C4", "D2", "D3", "D4", "E", "F", "I", "NPY", "PD"]
+ignore = [
+    "D202",
+    "D205",
+    "D206",
+    "D400",
+    "D404",
+    "E402",
+    "E501",
+    "E703",
+    "PD002",
+    "PD901",
+    "PD003",
+    "PD004",
+]
+fixable = ["I"]
+ignore-init-module-imports = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
