@@ -9257,7 +9257,7 @@ packages:
   name: numba-celltree
   version: 0.1.6
   path: .
-  sha256: 2565c608c555eff3a8369611d549c675bff986709ecda90ffb267bf568a92569
+  sha256: 43f980eff43bc4f6cf8f803a6e950ecae02ebf43c439a0d6ac4a88b4cae80372
   requires_dist:
   - numba
   - numpy
