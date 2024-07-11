@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_examples_spatial_indexing.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -459,6 +459,13 @@ product of U and V.
    :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /home/runner/work/numba_celltree/numba_celltree/examples/spatial_indexing.py:220: DeprecationWarning: Arrays of 2-dimensional vectors are deprecated. Use arrays of 3-dimensional vectors instead. (deprecated in NumPy 2.0)
+      full_area = 0.5 * np.abs(np.cross(V, U))
+
 
 
 
@@ -668,7 +675,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.974 seconds)
+   **Total running time of the script:** (0 minutes 0.743 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing.py:
