@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.794** total execution time for 1 file **from examples**:
+**00:00.773** total execution time for 1 file **from examples**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_spatial_indexing.py` (``spatial_indexing.py``)
-     - 00:00.794
+     - 00:00.773
      - 0.0
