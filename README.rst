@@ -59,7 +59,7 @@ Installation
 Documentation
 -------------
 
-.. image:: https://img.shields.io/github/actions/workflow/status/deltares/numba_celltree/docs.yml?style=flat-square
+.. image:: https://img.shields.io/github/actions/workflow/status/deltares/numba_celltree/ci.yml?style=flat-square
    :target: https://deltares.github.io/numba_celltree/
 
 Background
