@@ -215,7 +215,7 @@ class CellTree2d:
         actual = area > 0
         return i[actual], j[actual], area[actual]
 
-    def _locate_faces(
+    def locate_faces(
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
         """
@@ -283,7 +283,7 @@ class CellTree2d:
         """
         vertices = cast_vertices(vertices)
         faces = cast_faces(faces, fill_value)
-        i, j = self._locate_faces(vertices, faces)
+        i, j = self.locate_faces(vertices, faces)
         area = area_of_intersection(
             vertices_a=vertices,
             vertices_b=self.vertices,
