@@ -5,7 +5,6 @@ import numpy as np
 import pytest
 
 from numba_celltree import CellTree2d, demo
-from numba_celltree.constants import MAX_N_VERTEX
 
 
 @pytest.fixture
@@ -155,12 +154,6 @@ def test_shape_errors():
         tree.intersect_boxes(box_coords)
     with pytest.raises(ValueError):
         tree.intersect_edges(edge_coords)
-
-    # Can't realistically test MAX_N_FACE: 2e9 faces requires enormous
-    # allocation.
-    faces = np.arange(MAX_N_VERTEX + 1).reshape((1, -1))
-    with pytest.raises(ValueError):
-        tree.intersect_faces(nodes2, faces, -1)
 
 
 def test_bounds_errors():

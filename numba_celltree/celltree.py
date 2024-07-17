@@ -11,7 +11,6 @@ from numba_celltree.algorithms import (
 )
 from numba_celltree.constants import (
     FILL_VALUE,
-    MAX_N_FACE,
     MAX_N_VERTEX,
     BoolArray,
     CellTreeData,
@@ -49,13 +48,7 @@ def cast_faces(faces: IntArray, fill_value: int) -> IntArray:
         faces = np.ascontiguousarray(faces, dtype=IntDType)
     if faces.ndim != 2:
         raise ValueError("faces must have shape (n_face, n_max_vert)")
-    n_face, n_max_vert = faces.shape
-    if n_face > MAX_N_FACE:
-        raise ValueError(
-            f"faces contains {n_face} faces. "
-            f"numba_celltree supports a maximum of {MAX_N_FACE} faces. "
-            f"Increase MAX_N_FACE in the source code, or supply a smaller mesh."
-        )
+    _, n_max_vert = faces.shape
     if n_max_vert > MAX_N_VERTEX:
         raise ValueError(
             f"faces contains up to {n_max_vert} vertices for a single face. "
