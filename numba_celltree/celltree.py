@@ -314,8 +314,11 @@ class CellTree2d:
             Indices of the bounding box.
         tree_face_indices: ndarray of integers with shape ``(n_found,)``
             Indices of the face.
-        length: ndarray of floats with shape ``(n_found,)``
-            Length of intersection of the edge inside of the face.
+        intersection_edges: ndarray of floats with shape ``(n_found, 2, 2)``
+            The resulting intersected edges, every row containing:
+            ``((x0, y0), (x1, y1))``.
+            The length of each intersected edge can be computed with:
+            ``np.linalg.norm(intersections[:, 1] - intersections[:, 0], axis=1)``.
         """
         edge_coords = cast_edges(edge_coords)
         return locate_edges(edge_coords, self.celltree_data)
