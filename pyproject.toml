@@ -65,6 +65,7 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 numba_celltree = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
+build = "*"
 matplotlib = "*"
 numba = "*"
 numpy = "*"
@@ -77,6 +78,7 @@ python = ">=3.9"
 ruff = "*"
 sphinx = "*"
 sphinx-gallery = "*"
+twine = "*"
 
 [tool.pixi.tasks]
 pre-commit = "pre-commit run --all-files"
