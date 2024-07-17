@@ -410,6 +410,7 @@ def validate_node_bounds(tree: CellTreeData, node_bounds: FloatArray) -> BoolArr
     """
     node_validity = np.full(len(tree.nodes), False, dtype=np.bool_)
     stack = allocate_stack()
+    stack[0] = 0
     size = 1
 
     while size > 0:
