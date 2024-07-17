@@ -383,14 +383,14 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.algorithms</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">numba_celltree.algorithms</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">area_of_intersection</span><span class="p">,</span>
     <span class="n">barycentric_triangle_weights</span><span class="p">,</span>
     <span class="n">barycentric_wachspress_weights</span><span class="p">,</span>
     <span class="n">box_area_of_intersection</span><span class="p">,</span>
     <span class="n">polygons_intersect</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">numba_celltree.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">FILL_VALUE</span><span class="p">,</span>
     <span class="n">MAX_N_FACE</span><span class="p">,</span>
     <span class="n">MAX_N_VERTEX</span><span class="p">,</span>
@@ -401,9 +401,9 @@ document.write(`
     <span class="n">IntArray</span><span class="p">,</span>
     <span class="n">IntDType</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.creation</span> <span class="kn">import</span> <span class="n">initialize</span>
-<span class="kn">from</span> <span class="nn">.geometry_utils</span> <span class="kn">import</span> <span class="n">build_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
-<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">numba_celltree.creation</span> <span class="kn">import</span> <span class="n">initialize</span>
+<span class="kn">from</span> <span class="nn">numba_celltree.geometry_utils</span> <span class="kn">import</span> <span class="n">build_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
+<span class="kn">from</span> <span class="nn">numba_celltree.query</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">collect_node_bounds</span><span class="p">,</span>
     <span class="n">locate_boxes</span><span class="p">,</span>
     <span class="n">locate_edges</span><span class="p">,</span>
@@ -874,7 +874,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.5.
     <br/>
   </p>
 </div>
