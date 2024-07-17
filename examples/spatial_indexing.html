@@ -620,7 +620,7 @@ product of U and V.</p>
 <span class="n">intersection_vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">intersection_faces</span><span class="p">]</span>
 <span class="n">U</span> <span class="o">=</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">V</span> <span class="o">=</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">intersection_vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="n">full_area</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">U</span><span class="p">))</span>
+<span class="n">full_area</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">V</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">U</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">V</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
 <span class="n">ratio</span> <span class="o">=</span> <span class="n">area</span> <span class="o">/</span> <span class="n">full_area</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -635,11 +635,7 @@ product of U and V.</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">tri_x</span><span class="p">,</span> <span class="n">tri_y</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">triangles</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_spatial_indexing_008.png" srcset="../_images/sphx_glr_spatial_indexing_008.png" alt="spatial indexing" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/numba_celltree/numba_celltree/examples/spatial_indexing.py:221: DeprecationWarning: Arrays of 2-dimensional vectors are deprecated. Use arrays of 3-dimensional vectors instead. (deprecated in NumPy 2.0)
-  full_area = 0.5 * np.abs(np.cross(V, U))
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code> also provides a method to compute overlaps between boxes and a
+<img src="../_images/sphx_glr_spatial_indexing_008.png" srcset="../_images/sphx_glr_spatial_indexing_008.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p><code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code> also provides a method to compute overlaps between boxes and a
 mesh. This may come in handy to compute overlap with a raster, for example to
 rasterize a mesh.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -756,7 +752,7 @@ with the Euclidian norm (Pythagorean distance):</p>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.745 seconds)</p>
+<img src="../_images/sphx_glr_spatial_indexing_011.png" srcset="../_images/sphx_glr_spatial_indexing_011.png" alt="spatial indexing" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.759 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/2898f91a1d3d00e555fa19b6a4d6c98e/spatial_indexing.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">spatial_indexing.ipynb</span></code></a></p>

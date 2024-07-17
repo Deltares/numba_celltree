@@ -437,7 +437,7 @@ product of U and V.
     intersection_vertices = vertices[intersection_faces]
     U = intersection_vertices[:, 1] - intersection_vertices[:, 0]
     V = intersection_vertices[:, 2] - intersection_vertices[:, 0]
-    full_area = 0.5 * np.abs(np.cross(V, U))
+    full_area = 0.5 * np.abs(U[:, 0] * V[:, 1] - U[:, 1] * V[:, 0])
     ratio = area / full_area
 
     fig, ax = plt.subplots()
@@ -459,13 +459,6 @@ product of U and V.
    :srcset: /examples/images/sphx_glr_spatial_indexing_008.png
    :class: sphx-glr-single-img
 
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/runner/work/numba_celltree/numba_celltree/examples/spatial_indexing.py:221: DeprecationWarning: Arrays of 2-dimensional vectors are deprecated. Use arrays of 3-dimensional vectors instead. (deprecated in NumPy 2.0)
-      full_area = 0.5 * np.abs(np.cross(V, U))
 
 
 
@@ -676,7 +669,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.745 seconds)
+   **Total running time of the script:** (0 minutes 0.759 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing.py:
