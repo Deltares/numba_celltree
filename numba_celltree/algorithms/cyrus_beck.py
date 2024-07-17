@@ -13,13 +13,14 @@ Thesis.
 Available at:
 http://graphics.zcu.cz/files/DIS_1999_Bui_Duc_Huy.pdf
 """
+
 from typing import Sequence, Tuple
 
 import numba as nb
 import numpy as np
 
-from ..constants import Point, Vector
-from ..geometry_utils import (
+from numba_celltree.constants import Point, Vector
+from numba_celltree.geometry_utils import (
     as_point,
     cross_product,
     dot_product,

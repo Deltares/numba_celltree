@@ -33,13 +33,14 @@ again the intersection point ~= vertex b. We treat b as if it is just on the
 inside and append it. For consistency, we set b_inside to True, as it will be
 used as a_inside in the next iteration.
 """
+
 from typing import Sequence, Tuple
 
 import numba as nb
 import numpy as np
 
-from ..constants import PARALLEL, FloatArray, FloatDType, IntArray
-from ..geometry_utils import (
+from numba_celltree.constants import PARALLEL, FloatArray, FloatDType, IntArray
+from numba_celltree.geometry_utils import (
     Point,
     Vector,
     as_box,
@@ -49,7 +50,7 @@ from ..geometry_utils import (
     dot_product,
     polygon_area,
 )
-from ..utils import allocate_clip_polygon, copy
+from numba_celltree.utils import allocate_clip_polygon, copy
 
 
 @nb.njit(inline="always")

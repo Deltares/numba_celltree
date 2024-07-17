@@ -3,7 +3,7 @@ from typing import List, Tuple
 import numba as nb
 import numpy as np
 
-from .constants import (
+from numba_celltree.constants import (
     FLOAT_MAX,
     FLOAT_MIN,
     INT_MAX,
@@ -17,8 +17,8 @@ from .constants import (
     NodeArray,
     NodeDType,
 )
-from .geometry_utils import build_bboxes
-from .utils import allocate_stack, pop, push
+from numba_celltree.geometry_utils import build_bboxes
+from numba_celltree.utils import allocate_stack, pop, push
 
 
 @nb.njit(inline="always")

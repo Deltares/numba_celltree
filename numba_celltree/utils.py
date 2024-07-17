@@ -6,7 +6,7 @@ from numba import types
 from numba.core import cgutils
 from numba.extending import intrinsic
 
-from .constants import (
+from numba_celltree.constants import (
     MAX_N_VERTEX,
     MAX_TREE_DEPTH,
     NDIM,

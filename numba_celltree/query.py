@@ -1,8 +1,11 @@
 import numba as nb
 import numpy as np
 
-from .algorithms import cohen_sutherland_line_box_clip, cyrus_beck_line_polygon_clip
-from .constants import (
+from numba_celltree.algorithms import (
+    cohen_sutherland_line_box_clip,
+    cyrus_beck_line_polygon_clip,
+)
+from numba_celltree.constants import (
     PARALLEL,
     BoolArray,
     CellTreeData,
@@ -11,7 +14,7 @@ from .constants import (
     IntArray,
     IntDType,
 )
-from .geometry_utils import (
+from numba_celltree.geometry_utils import (
     Box,
     Point,
     as_box,
@@ -22,7 +25,7 @@ from .geometry_utils import (
     point_in_polygon,
     to_vector,
 )
-from .utils import allocate_polygon, allocate_stack, pop, push
+from numba_celltree.utils import allocate_polygon, allocate_stack, pop, push
 
 
 # Inlining saves about 15% runtime

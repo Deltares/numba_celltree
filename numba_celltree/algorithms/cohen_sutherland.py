@@ -4,12 +4,13 @@ https://github.com/scivision/lineclipping-python-fortran
 
 (MIT License)
 """
+
 from typing import Tuple
 
 import numba as nb
 import numpy as np
 
-from ..constants import Box, Point
+from numba_celltree.constants import Box, Point
 
 INSIDE, LEFT, RIGHT, LOWER, UPPER = 0, 1, 2, 4, 8
 

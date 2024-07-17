@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib import patches
 from matplotlib.collections import LineCollection
 
-from .constants import IntArray, IntDType
+from numba_celltree.constants import IntArray, IntDType
 
 
 def close_polygons(face_node_connectivity: IntArray, fill_value: int) -> IntArray:

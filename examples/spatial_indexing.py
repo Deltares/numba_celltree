@@ -24,6 +24,7 @@ these.
 
 We'll start by importing the required packages with matplotlib for plotting.
 """
+
 import os
 
 import matplotlib.pyplot as plt

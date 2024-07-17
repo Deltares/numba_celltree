@@ -19,6 +19,7 @@ an integer type of ``np.intp``. If IntDType == np.int32, the BucketDType array
 will expect a 32-bit integer for its index and size fields, yet receive a
 64-bit integer (intp), and error during type inferencing.
 """
+
 import math
 from typing import NamedTuple
 

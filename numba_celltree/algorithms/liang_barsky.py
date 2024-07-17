@@ -3,8 +3,8 @@ from typing import Tuple
 import numba as nb
 import numpy as np
 
-from ..constants import Box, Point
-from ..geometry_utils import point_inside_box
+from numba_celltree.constants import Box, Point
+from numba_celltree.geometry_utils import point_inside_box
 
 
 @nb.njit

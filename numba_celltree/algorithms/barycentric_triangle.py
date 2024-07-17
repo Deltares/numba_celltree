@@ -5,11 +5,24 @@ triangles.
 For barycentric interpolation on N-sided convex polygons, see
 barycentric_wachspress.py.
 """
+
 import numba as nb
 import numpy as np
 
-from ..constants import PARALLEL, FloatArray, FloatDType, IntArray, Triangle
-from ..geometry_utils import Point, as_point, as_triangle, cross_product, to_vector
+from numba_celltree.constants import (
+    PARALLEL,
+    FloatArray,
+    FloatDType,
+    IntArray,
+    Triangle,
+)
+from numba_celltree.geometry_utils import (
+    Point,
+    as_point,
+    as_triangle,
+    cross_product,
+    to_vector,
+)
 
 
 @nb.njit(inline="always")

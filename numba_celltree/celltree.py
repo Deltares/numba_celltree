@@ -2,14 +2,14 @@ from typing import Tuple
 
 import numpy as np
 
-from .algorithms import (
+from numba_celltree.algorithms import (
     area_of_intersection,
     barycentric_triangle_weights,
     barycentric_wachspress_weights,
     box_area_of_intersection,
     polygons_intersect,
 )
-from .constants import (
+from numba_celltree.constants import (
     FILL_VALUE,
     MAX_N_FACE,
     MAX_N_VERTEX,
@@ -20,9 +20,9 @@ from .constants import (
     IntArray,
     IntDType,
 )
-from .creation import initialize
-from .geometry_utils import build_bboxes, counter_clockwise
-from .query import (
+from numba_celltree.creation import initialize
+from numba_celltree.geometry_utils import build_bboxes, counter_clockwise
+from numba_celltree.query import (
     collect_node_bounds,
     locate_boxes,
     locate_edges,

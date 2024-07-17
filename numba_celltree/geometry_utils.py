@@ -3,7 +3,7 @@ from typing import Sequence, Tuple
 import numba as nb
 import numpy as np
 
-from .constants import (
+from numba_celltree.constants import (
     FILL_VALUE,
     NDIM,
     PARALLEL,
@@ -16,7 +16,7 @@ from .constants import (
     Triangle,
     Vector,
 )
-from .utils import allocate_box_polygon, allocate_polygon
+from numba_celltree.utils import allocate_box_polygon, allocate_polygon
 
 
 @nb.njit(inline="always")
