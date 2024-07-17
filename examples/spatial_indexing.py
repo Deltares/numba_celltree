@@ -218,7 +218,7 @@ intersection_faces = faces[cell_i]
 intersection_vertices = vertices[intersection_faces]
 U = intersection_vertices[:, 1] - intersection_vertices[:, 0]
 V = intersection_vertices[:, 2] - intersection_vertices[:, 0]
-full_area = 0.5 * np.abs(np.cross(V, U))
+full_area = 0.5 * np.abs(U[:, 0] * V[:, 1] - U[:, 1] * V[:, 0])
 ratio = area / full_area
 
 fig, ax = plt.subplots()
