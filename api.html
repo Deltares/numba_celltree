@@ -465,7 +465,10 @@ of intersection.</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>edge_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the bounding box.</p></li>
 <li><p><strong>tree_face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the face.</p></li>
-<li><p><strong>length</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Length of intersection of the edge inside of the face.</p></li>
+<li><p><strong>intersection_edges</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_found,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>) – The resulting intersected edges, every row containing:
+<code class="docutils literal notranslate"><span class="pre">((x0,</span> <span class="pre">y0),</span> <span class="pre">(x1,</span> <span class="pre">y1))</span></code>.
+The length of each intersected edge can be computed with:
+<code class="docutils literal notranslate"><span class="pre">np.linalg.norm(intersections[:,</span> <span class="pre">1]</span> <span class="pre">-</span> <span class="pre">intersections[:,</span> <span class="pre">0],</span> <span class="pre">axis=1)</span></code>.</p></li>
 </ul>
 </p>
 </dd>

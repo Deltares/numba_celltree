@@ -714,8 +714,11 @@ document.write(`
 <span class="sd">            Indices of the bounding box.</span>
 <span class="sd">        tree_face_indices: ndarray of integers with shape ``(n_found,)``</span>
 <span class="sd">            Indices of the face.</span>
-<span class="sd">        length: ndarray of floats with shape ``(n_found,)``</span>
-<span class="sd">            Length of intersection of the edge inside of the face.</span>
+<span class="sd">        intersection_edges: ndarray of floats with shape ``(n_found, 2, 2)``</span>
+<span class="sd">            The resulting intersected edges, every row containing:</span>
+<span class="sd">            ``((x0, y0), (x1, y1))``.</span>
+<span class="sd">            The length of each intersected edge can be computed with:</span>
+<span class="sd">            ``np.linalg.norm(intersections[:, 1] - intersections[:, 0], axis=1)``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">edge_coords</span> <span class="o">=</span> <span class="n">cast_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">locate_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span></div>
