@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>numba_celltree.celltree &#8212; Numba Celltree 0.1.6 documentation</title>
+    <title>numba_celltree.celltree &#8212; Numba Celltree 0.1.7 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=6e0256f3"></script>
+    <script src="../../_static/documentation_options.js?v=ca7ad2ea"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/numba_celltree/celltree';</script>
@@ -392,7 +392,6 @@ document.write(`
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">numba_celltree.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">FILL_VALUE</span><span class="p">,</span>
-    <span class="n">MAX_N_FACE</span><span class="p">,</span>
     <span class="n">MAX_N_VERTEX</span><span class="p">,</span>
     <span class="n">BoolArray</span><span class="p">,</span>
     <span class="n">CellTreeData</span><span class="p">,</span>
@@ -430,13 +429,7 @@ document.write(`
         <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">IntDType</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">faces</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;faces must have shape (n_face, n_max_vert)&quot;</span><span class="p">)</span>
-    <span class="n">n_face</span><span class="p">,</span> <span class="n">n_max_vert</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">shape</span>
-    <span class="k">if</span> <span class="n">n_face</span> <span class="o">&gt;</span> <span class="n">MAX_N_FACE</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;faces contains </span><span class="si">{</span><span class="n">n_face</span><span class="si">}</span><span class="s2"> faces. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;numba_celltree supports a maximum of </span><span class="si">{</span><span class="n">MAX_N_FACE</span><span class="si">}</span><span class="s2"> faces. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Increase MAX_N_FACE in the source code, or supply a smaller mesh.&quot;</span>
-        <span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">n_max_vert</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">if</span> <span class="n">n_max_vert</span> <span class="o">&gt;</span> <span class="n">MAX_N_VERTEX</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;faces contains up to </span><span class="si">{</span><span class="n">n_max_vert</span><span class="si">}</span><span class="s2"> vertices for a single face. &quot;</span>
@@ -614,7 +607,9 @@ document.write(`
         <span class="k">return</span> <span class="n">i</span><span class="p">[</span><span class="n">actual</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="n">actual</span><span class="p">],</span> <span class="n">area</span><span class="p">[</span><span class="n">actual</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_locate_faces</span><span class="p">(</span>
+<div class="viewcode-block" id="CellTree2d.locate_faces">
+<a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_faces">[docs]</a>
+    <span class="k">def</span> <span class="nf">locate_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -651,7 +646,8 @@ document.write(`
             <span class="n">indices_a</span><span class="o">=</span><span class="n">shortlist_i</span><span class="p">,</span>
             <span class="n">indices_b</span><span class="o">=</span><span class="n">shortlist_j</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">shortlist_i</span><span class="p">[</span><span class="n">intersects</span><span class="p">],</span> <span class="n">shortlist_j</span><span class="p">[</span><span class="n">intersects</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">shortlist_i</span><span class="p">[</span><span class="n">intersects</span><span class="p">],</span> <span class="n">shortlist_j</span><span class="p">[</span><span class="n">intersects</span><span class="p">]</span></div>
+
 
 <div class="viewcode-block" id="CellTree2d.intersect_faces">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_faces">[docs]</a>
@@ -684,7 +680,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
         <span class="n">faces</span> <span class="o">=</span> <span class="n">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locate_faces</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate_faces</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
         <span class="n">area</span> <span class="o">=</span> <span class="n">area_of_intersection</span><span class="p">(</span>
             <span class="n">vertices_a</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span>
             <span class="n">vertices_b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span>

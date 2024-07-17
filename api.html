@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CellTree2d &#8212; Numba Celltree 0.1.6 documentation</title>
+    <title>CellTree2d &#8212; Numba Celltree 0.1.7 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6e0256f3"></script>
+    <script src="_static/documentation_options.js?v=ca7ad2ea"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
@@ -517,6 +517,32 @@ should be equal to <code class="docutils literal notranslate"><span class="pre">
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="numba_celltree.CellTree2d.locate_faces">
+<span class="sig-name descname"><span class="pre">locate_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_faces" title="Link to this definition">#</a></dt>
+<dd><p>Find the index of a face intersecting with another face.</p>
+<p>Only sharing an edge also counts as an intersection, due to the use of
+the separating axis theorem to define intersection. The area of the
+overlap is zero in such a case.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Corner coordinates (x, y) of the cells.</p></li>
+<li><p><strong>faces</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_face,</span> <span class="pre">n_max_vert)</span></code>) – Index identifying for every face the indices of its corner nodes.
+If a face has less corner nodes than n_max_vert, its last indices
+should be equal to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the faces.</p></li>
+<li><p><strong>tree_face_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the tree faces.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.locate_points">
 <span class="sig-name descname"><span class="pre">locate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_points" title="Link to this definition">#</a></dt>
 <dd><p>Find the index of a face that contains a point.</p>
@@ -630,6 +656,7 @@ bounds.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.intersect_edges"><code class="docutils literal notranslate"><span class="pre">CellTree2d.intersect_edges()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.intersect_faces"><code class="docutils literal notranslate"><span class="pre">CellTree2d.intersect_faces()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.locate_boxes"><code class="docutils literal notranslate"><span class="pre">CellTree2d.locate_boxes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.locate_faces"><code class="docutils literal notranslate"><span class="pre">CellTree2d.locate_faces()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.locate_points"><code class="docutils literal notranslate"><span class="pre">CellTree2d.locate_points()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.node_bounds"><code class="docutils literal notranslate"><span class="pre">CellTree2d.node_bounds</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.to_dict_of_lists"><code class="docutils literal notranslate"><span class="pre">CellTree2d.to_dict_of_lists()</span></code></a></li>
