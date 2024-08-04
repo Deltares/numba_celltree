@@ -669,7 +669,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.752 seconds)
+   **Total running time of the script:** (0 minutes 0.731 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing.py:
@@ -685,6 +685,10 @@ with the Euclidian norm (Pythagorean distance):
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: spatial_indexing.py <spatial_indexing.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: spatial_indexing.zip <spatial_indexing.zip>`
 
 
 .. only:: html

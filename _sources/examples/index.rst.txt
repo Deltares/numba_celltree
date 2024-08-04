@@ -19,7 +19,7 @@ script or a Jupyter notebook for interactive exploration.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The goal of a cell tree is to quickly locate cells of an unstructured mesh. Unstructured meshes...">
+    <div class="sphx-glr-thumbcontainer" tooltip="The goal of a cell tree is to quickly locate cells of an unstructured mesh. Unstructured meshes are challenging in this regard: for a given point, we cannot simply compute a row and column number as we would for structured data such as rasters. The most straightforward procedure is checking every single cell, until we find the cell which contains the point we&#x27;re looking for. This is clearly not efficient.">
 
 .. only:: html
 
