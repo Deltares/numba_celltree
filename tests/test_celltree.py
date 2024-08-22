@@ -538,12 +538,12 @@ def test_compute_barycentric_weights_triangle_quads():
     )
     face_indices, weights = tree.compute_barycentric_weights(points)
 
-    expected_indices = np.array([0, 0, 1])
+    expected_indices = np.array([0, 0, 0])
     expected_weights = np.array(
         [
             [1.0, 0.0, 0.0, 0.0],
             [0.25, 0.25, 0.25, 0.25],
-            [0.5, 0.0, 0.0, 0.5],
+            [0.0, 0.5, 0.5, 0.0],
         ]
     )
     assert np.array_equal(face_indices, expected_indices)
@@ -599,3 +599,71 @@ def test_to_dict_of_lists(datadir):
     assert isinstance(d, dict)
     assert list(d.keys()) == list(range(len(tree.celltree_data.nodes)))
     assert max(len(v) for v in d.values()) == 2
+
+
+def test_locate_point_on_edge():
+    nodes = np.array(
+        [
+            [0.0, 0.0],
+            [3.0, 0.0],
+            [1.0, 1.0],
+            [0.0, 2.0],
+            [3.0, 2.0],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 2],
+            [0, 2, 3],
+            [2, 4, 3],
+        ]
+    )
+    fill_value = -1
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=4)
+    points = np.array(
+        [
+            [0.0, 0.0],
+            [0.01, 0.01],
+            [0.05, 0.05],
+            [0.15, 0.15],
+            [0.25, 0.25],
+            [0.35, 0.35],
+            [0.45, 0.45],
+            [0.55, 0.55],
+            [0.65, 0.65],
+            [0.75, 0.75],
+        ]
+    )
+    result = tree.locate_points(points)
+    assert (result != -1).all()
+
+    nodes = np.array(
+        [
+            [0.0, 0.0],  # 0
+            [2.0, 0.0],  # 1
+            [2.0, 2.0],  # 2
+            [0.0, 2.0],  # 3
+            [4.0, 0.0],  # 4
+            [4.0, 4.0],  # 5
+            [0.0, 4.0],  # 6
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 2, 3],
+            [1, 4, 5, 2],
+            [3, 2, 5, 6],
+        ]
+    )
+    fill_value = -1
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=4)
+    points = np.array(
+        [
+            [0.0, 0.0],
+            [0.0, 4.0],
+            [2.0, 2.0],
+            [4.0, 0.0],
+            [4.0, 4.0],
+        ]
+    )
+    assert (result != -1).all()

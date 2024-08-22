@@ -22,7 +22,7 @@ from numba_celltree.geometry_utils import (
     box_contained,
     boxes_intersect,
     copy_vertices_into,
-    point_in_polygon,
+    point_in_polygon_or_on_edge,
     to_vector,
 )
 from numba_celltree.utils import allocate_polygon, allocate_stack, pop, push
@@ -49,7 +49,7 @@ def locate_point(point: Point, tree: CellTreeData):
                 # Make sure polygons to test is contiguous (stack allocated) array
                 # This saves about 40-50% runtime
                 poly = copy_vertices_into(tree.vertices, face, polygon_work_array)
-                if point_in_polygon(point, poly):
+                if point_in_polygon_or_on_edge(point, poly):
                     return bbox_index
             continue
 

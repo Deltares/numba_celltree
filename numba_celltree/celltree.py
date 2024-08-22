@@ -148,6 +148,9 @@ class CellTree2d:
         """
         Find the index of a face that contains a point.
 
+        Points that are very close near an edge of a face will also be
+        identified as falling within that face.
+
         Parameters
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
