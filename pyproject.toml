@@ -65,7 +65,7 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 numba_celltree = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
-build = "*"
+python-build = "*"
 matplotlib = "*"
 numba = "*"
 numpy = "*"
