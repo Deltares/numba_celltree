@@ -229,8 +229,8 @@ def pessimistic_n_nodes(n_polys: int):
 
 @nb.njit(inline="always")
 def push_both(root_stack, dim_stack, root, dim, size):
-    size_root = push(root_stack, root, size)
-    _ = push(dim_stack, dim, size)
+    root_stack, size_root = push(root_stack, root, size)
+    _, _ = push(dim_stack, dim, size)
     return size_root
 
 

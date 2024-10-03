@@ -63,15 +63,15 @@ def locate_point(point: Point, tree: CellTreeData):
             # This heuristic is worthwhile because a point will fall into a
             # single face -- if found, we can stop.
             if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
-                size = push(stack, left_child, size)
-                size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
             else:
-                size = push(stack, right_child, size)
-                size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
         elif left:
-            size = push(stack, left_child, size)
+            stack, size = push(stack, left_child, size)
         elif right:
-            size = push(stack, right_child, size)
+            stack, size = push(stack, right_child, size)
 
     return return_value
 
@@ -123,12 +123,12 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
             right_child = left_child + 1
 
             if left and right:
-                size = push(stack, left_child, size)
-                size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
             elif left:
-                size = push(stack, left_child, size)
+                stack, size = push(stack, left_child, size)
             elif right:
-                size = push(stack, right_child, size)
+                stack, size = push(stack, right_child, size)
 
     return count
 
@@ -270,12 +270,12 @@ def locate_edge(
         right_child = left_child + 1
 
         if left and right:
-            size = push(stack, left_child, size)
-            size = push(stack, right_child, size)
+            stack, size = push(stack, left_child, size)
+            stack, size = push(stack, right_child, size)
         elif left:
-            size = push(stack, left_child, size)
+            stack, size = push(stack, left_child, size)
         elif right:
-            size = push(stack, right_child, size)
+            stack, size = push(stack, right_child, size)
 
     return count
 
@@ -390,12 +390,12 @@ def collect_node_bounds(tree: CellTreeData) -> FloatArray:
         # Right child
         push(parent_stack, node_index, size)
         push(side_stack, 0, size)
-        size = push(stack, right_child, size)
+        stack, size = push(stack, right_child, size)
 
         # Left child
         push(parent_stack, node_index, size)
         push(side_stack, 1, size)
-        size = push(stack, left_child, size)
+        stack, size = push(stack, left_child, size)
 
     return node_bounds
 
@@ -436,7 +436,7 @@ def validate_node_bounds(tree: CellTreeData, node_bounds: FloatArray) -> BoolArr
             right_box, bbox
         )
 
-        size = push(stack, right_child, size)
-        size = push(stack, left_child, size)
+        stack, size = push(stack, right_child, size)
+        stack, size = push(stack, left_child, size)
 
     return node_validity

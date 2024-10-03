@@ -2,7 +2,7 @@ import numba as nb
 import numpy as np
 
 from numba_celltree import utils as ut
-from numba_celltree.constants import MAX_N_VERTEX, MAX_TREE_DEPTH
+from numba_celltree.constants import INITIAL_TREE_DEPTH, MAX_N_VERTEX
 
 
 def test_pop():
@@ -22,9 +22,9 @@ def test_pop():
 def test_push():
     size = 0
     stack = np.empty(3)
-    size = ut.push(stack, 0, size)
-    size = ut.push(stack, 1, size)
-    size = ut.push(stack, 2, size)
+    stack, size = ut.push(stack, 0, size)
+    stack, size = ut.push(stack, 1, size)
+    stack, size = ut.push(stack, 2, size)
     assert size == 3
     assert np.array_equal(stack, [0, 1, 2])
 
@@ -41,7 +41,7 @@ def test_copy():
 @nb.njit
 def do_allocate_stack():
     stack = ut.allocate_stack()
-    return (stack.size == MAX_TREE_DEPTH) and (stack[:5].size == 5)
+    return (stack.size == INITIAL_TREE_DEPTH) and (stack[:5].size == 5)
 
 
 def test_allocate_stack():
