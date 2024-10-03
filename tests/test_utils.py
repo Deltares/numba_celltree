@@ -29,6 +29,16 @@ def test_push():
     assert np.array_equal(stack, [0, 1, 2])
 
 
+def test_push_size_increases():
+    size = 0
+    stack = np.empty(1)
+    size_before = stack.size
+    stack, size = ut.push(stack, 0, size)
+    stack, size = ut.push(stack, 1, size)
+    assert stack.size == 2
+    assert size_before < stack.size
+
+
 def test_copy():
     dst = np.zeros(5)
     src = np.arange(5)
