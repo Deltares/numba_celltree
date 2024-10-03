@@ -1,7 +1,7 @@
 Numba Celltree
 ==============
 
-Finding your way around in an unstructured meshes is difficult. Numba Celltree
+Finding your way around in unstructured meshes is difficult. Numba Celltree
 provides methods for searching for points, lines, boxes, and cells (convex
 polygons) in a two dimensional unstructured mesh.
 
