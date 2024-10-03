@@ -37,6 +37,9 @@ def test_push_size_increases():
     stack, size = ut.push(stack, 1, size)
     assert stack.size == 2
     assert size_before < stack.size
+    stack, size = ut.push(stack, 10, size)
+    assert stack.size == 4
+    assert np.array_equal(stack[:3], [0, 1, 10])
 
 
 def test_copy():
