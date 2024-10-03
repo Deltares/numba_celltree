@@ -3465,7 +3465,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/accessible-pygments?source=hash-mapping
+  - pkg:pypi/accessible-pygments?source=conda-forge-mapping
   size: 1328908
   timestamp: 1718718120070
 - kind: conda
@@ -3482,7 +3482,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/alabaster?source=hash-mapping
+  - pkg:pypi/alabaster?source=conda-forge-mapping
   size: 18365
   timestamp: 1704848898483
 - kind: conda
@@ -3499,7 +3499,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/alabaster?source=hash-mapping
+  - pkg:pypi/alabaster?source=conda-forge-mapping
   size: 18522
   timestamp: 1722035895436
 - kind: conda
@@ -3533,7 +3533,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/babel?source=hash-mapping
+  - pkg:pypi/babel?source=conda-forge-mapping
   size: 7609750
   timestamp: 1702422720584
 - kind: conda
@@ -3569,7 +3569,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/backports-tarfile?source=hash-mapping
+  - pkg:pypi/backports-tarfile?source=conda-forge-mapping
   size: 31951
   timestamp: 1712700751335
 - kind: conda
@@ -3587,7 +3587,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/beautifulsoup4?source=hash-mapping
+  - pkg:pypi/beautifulsoup4?source=conda-forge-mapping
   size: 118200
   timestamp: 1705564819537
 - kind: conda
@@ -3763,7 +3763,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 362793
   timestamp: 1725268121746
 - kind: conda
@@ -3786,7 +3786,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 321576
   timestamp: 1725268612274
 - kind: conda
@@ -3809,7 +3809,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 339329
   timestamp: 1725268335778
 - kind: conda
@@ -3832,7 +3832,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 349668
   timestamp: 1725267875087
 - kind: conda
@@ -3855,7 +3855,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 339584
   timestamp: 1725268241628
 - kind: conda
@@ -3877,7 +3877,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 363793
   timestamp: 1725267947069
 - kind: conda
@@ -3900,7 +3900,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 322114
   timestamp: 1725268368720
 - kind: conda
@@ -3923,7 +3923,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 350367
   timestamp: 1725267768486
 - kind: conda
@@ -3946,7 +3946,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 321874
   timestamp: 1725268491976
 - kind: conda
@@ -3969,7 +3969,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 349867
   timestamp: 1725267732089
 - kind: conda
@@ -3991,7 +3991,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 363178
   timestamp: 1725267893889
 - kind: conda
@@ -4014,7 +4014,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 339360
   timestamp: 1725268143995
 - kind: conda
@@ -4036,7 +4036,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 362967
   timestamp: 1725268063367
 - kind: conda
@@ -4059,7 +4059,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 321820
   timestamp: 1725268551147
 - kind: conda
@@ -4082,7 +4082,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 349166
   timestamp: 1725267838006
 - kind: conda
@@ -4105,7 +4105,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/brotli?source=hash-mapping
+  - pkg:pypi/brotli?source=conda-forge-mapping
   size: 338488
   timestamp: 1725268478900
 - kind: conda
@@ -4294,7 +4294,7 @@ packages:
   - python >=3.7
   license: ISC
   purls:
-  - pkg:pypi/certifi?source=hash-mapping
+  - pkg:pypi/certifi?source=conda-forge-mapping
   size: 163752
   timestamp: 1725278204397
 - kind: conda
@@ -4315,7 +4315,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 229224
   timestamp: 1725560797724
 - kind: conda
@@ -4336,7 +4336,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 243532
   timestamp: 1725560630552
 - kind: conda
@@ -4357,7 +4357,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 238887
   timestamp: 1725561032032
 - kind: conda
@@ -4377,7 +4377,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 229844
   timestamp: 1725560765436
 - kind: conda
@@ -4397,7 +4397,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 288762
   timestamp: 1725560945833
 - kind: conda
@@ -4418,7 +4418,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 288211
   timestamp: 1725560745212
 - kind: conda
@@ -4439,7 +4439,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 297627
   timestamp: 1725561079708
 - kind: conda
@@ -4460,7 +4460,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 302115
   timestamp: 1725560701719
 - kind: conda
@@ -4481,7 +4481,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 294403
   timestamp: 1725560714366
 - kind: conda
@@ -4502,7 +4502,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 281206
   timestamp: 1725560813378
 - kind: conda
@@ -4523,7 +4523,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 288142
   timestamp: 1725560896359
 - kind: conda
@@ -4543,7 +4543,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 282425
   timestamp: 1725560725144
 - kind: conda
@@ -4564,7 +4564,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 241610
   timestamp: 1725571230934
 - kind: conda
@@ -4585,7 +4585,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 227265
   timestamp: 1725560892881
 - kind: conda
@@ -4605,7 +4605,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 229582
   timestamp: 1725560793066
 - kind: conda
@@ -4626,7 +4626,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=hash-mapping
+  - pkg:pypi/cffi?source=conda-forge-mapping
   size: 236935
   timestamp: 1725561195746
 - kind: conda
@@ -4643,7 +4643,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cfgv?source=hash-mapping
+  - pkg:pypi/cfgv?source=conda-forge-mapping
   size: 10788
   timestamp: 1629909423398
 - kind: conda
@@ -4660,7 +4660,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/charset-normalizer?source=hash-mapping
+  - pkg:pypi/charset-normalizer?source=conda-forge-mapping
   size: 46597
   timestamp: 1698833765762
 - kind: conda
@@ -4680,7 +4680,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 136512
   timestamp: 1695669881333
 - kind: conda
@@ -4700,7 +4700,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 111525
   timestamp: 1695670246277
 - kind: conda
@@ -4719,7 +4719,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 111259
   timestamp: 1695670126662
 - kind: conda
@@ -4741,7 +4741,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 118179
   timestamp: 1695670479124
 - kind: conda
@@ -4760,7 +4760,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 113116
   timestamp: 1695670250339
 - kind: conda
@@ -4780,7 +4780,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 136524
   timestamp: 1695669889658
 - kind: conda
@@ -4802,7 +4802,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 120405
   timestamp: 1695670523318
 - kind: conda
@@ -4822,7 +4822,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 114180
   timestamp: 1695670152127
 - kind: conda
@@ -4842,7 +4842,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 113474
   timestamp: 1695670347968
 - kind: conda
@@ -4861,7 +4861,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 112756
   timestamp: 1695670021195
 - kind: conda
@@ -4881,7 +4881,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 135963
   timestamp: 1695669875921
 - kind: conda
@@ -4903,7 +4903,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 119774
   timestamp: 1695670282391
 - kind: conda
@@ -4923,7 +4923,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 111618
   timestamp: 1695670294215
 - kind: conda
@@ -4945,7 +4945,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 118320
   timestamp: 1695670429248
 - kind: conda
@@ -4965,7 +4965,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 134184
   timestamp: 1695669860514
 - kind: conda
@@ -4984,7 +4984,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cmarkgfm?source=hash-mapping
+  - pkg:pypi/cmarkgfm?source=conda-forge-mapping
   size: 111203
   timestamp: 1695670154384
 - kind: conda
@@ -5001,7 +5001,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/colorama?source=hash-mapping
+  - pkg:pypi/colorama?source=conda-forge-mapping
   size: 25170
   timestamp: 1666700778190
 - kind: conda
@@ -5023,7 +5023,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 261308
   timestamp: 1727293755823
 - kind: conda
@@ -5045,7 +5045,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 235777
   timestamp: 1727293885973
 - kind: conda
@@ -5067,7 +5067,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 200314
   timestamp: 1727294089550
 - kind: conda
@@ -5088,7 +5088,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 245117
   timestamp: 1727293794001
 - kind: conda
@@ -5110,7 +5110,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 253595
   timestamp: 1727293810778
 - kind: conda
@@ -5132,7 +5132,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 216421
   timestamp: 1727294331402
 - kind: conda
@@ -5154,7 +5154,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 277946
   timestamp: 1727293740030
 - kind: conda
@@ -5175,7 +5175,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 262424
   timestamp: 1727293723800
 - kind: conda
@@ -5197,7 +5197,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 250774
   timestamp: 1727293812329
 - kind: conda
@@ -5219,7 +5219,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 276004
   timestamp: 1727293728397
 - kind: conda
@@ -5240,7 +5240,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 260301
   timestamp: 1727293933046
 - kind: conda
@@ -5262,7 +5262,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 216606
   timestamp: 1727294254434
 - kind: conda
@@ -5283,7 +5283,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 244499
   timestamp: 1727294043111
 - kind: conda
@@ -5305,7 +5305,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 235067
   timestamp: 1727293974174
 - kind: conda
@@ -5327,7 +5327,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 196844
   timestamp: 1727294312191
 - kind: conda
@@ -5349,7 +5349,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/contourpy?source=hash-mapping
+  - pkg:pypi/contourpy?source=conda-forge-mapping
   size: 261801
   timestamp: 1727293684267
 - kind: conda
@@ -5370,7 +5370,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 292441
   timestamp: 1724954024268
 - kind: conda
@@ -5390,7 +5390,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 291934
   timestamp: 1724954021866
 - kind: conda
@@ -5411,7 +5411,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 292581
   timestamp: 1724953907705
 - kind: conda
@@ -5433,7 +5433,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 319752
   timestamp: 1724954239230
 - kind: conda
@@ -5453,7 +5453,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 372985
   timestamp: 1724953967565
 - kind: conda
@@ -5474,7 +5474,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 371962
   timestamp: 1724954000079
 - kind: conda
@@ -5495,7 +5495,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 373574
   timestamp: 1724953900154
 - kind: conda
@@ -5517,7 +5517,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 399320
   timestamp: 1724954655576
 - kind: conda
@@ -5538,7 +5538,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 363130
   timestamp: 1724954141864
 - kind: conda
@@ -5560,7 +5560,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 388697
   timestamp: 1724954338520
 - kind: conda
@@ -5581,7 +5581,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 363627
   timestamp: 1724953903049
 - kind: conda
@@ -5601,7 +5601,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 362574
   timestamp: 1724954071768
 - kind: conda
@@ -5621,7 +5621,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 289095
   timestamp: 1724953987384
 - kind: conda
@@ -5642,7 +5642,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 289833
   timestamp: 1724954009278
 - kind: conda
@@ -5663,7 +5663,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 290388
   timestamp: 1724953961477
 - kind: conda
@@ -5685,7 +5685,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/coverage?source=hash-mapping
+  - pkg:pypi/coverage?source=conda-forge-mapping
   size: 315279
   timestamp: 1724954429213
 - kind: conda
@@ -5708,7 +5708,7 @@ packages:
   license: Apache-2.0 AND BSD-3-Clause AND PSF-2.0 AND MIT
   license_family: BSD
   purls:
-  - pkg:pypi/cryptography?source=hash-mapping
+  - pkg:pypi/cryptography?source=conda-forge-mapping
   size: 1460744
   timestamp: 1725443337516
 - kind: conda
@@ -5731,7 +5731,7 @@ packages:
   license: Apache-2.0 AND BSD-3-Clause AND PSF-2.0 AND MIT
   license_family: BSD
   purls:
-  - pkg:pypi/cryptography?source=hash-mapping
+  - pkg:pypi/cryptography?source=conda-forge-mapping
   size: 1501817
   timestamp: 1725443251219
 - kind: conda
@@ -5754,7 +5754,7 @@ packages:
   license: Apache-2.0 AND BSD-3-Clause AND PSF-2.0 AND MIT
   license_family: BSD
   purls:
-  - pkg:pypi/cryptography?source=hash-mapping
+  - pkg:pypi/cryptography?source=conda-forge-mapping
   size: 1497649
   timestamp: 1725443252315
 - kind: conda
@@ -5777,7 +5777,7 @@ packages:
   license: Apache-2.0 AND BSD-3-Clause AND PSF-2.0 AND MIT
   license_family: BSD
   purls:
-  - pkg:pypi/cryptography?source=hash-mapping
+  - pkg:pypi/cryptography?source=conda-forge-mapping
   size: 1455737
   timestamp: 1725443252982
 - kind: conda
@@ -5794,7 +5794,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/cycler?source=hash-mapping
+  - pkg:pypi/cycler?source=conda-forge-mapping
   size: 13458
   timestamp: 1696677888423
 - kind: conda
@@ -5829,7 +5829,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/distlib?source=hash-mapping
+  - pkg:pypi/distlib?source=conda-forge-mapping
   size: 274915
   timestamp: 1702383349284
 - kind: conda
@@ -5845,7 +5845,7 @@ packages:
   - python >=3.9
   license: CC-PDDC AND BSD-3-Clause AND BSD-2-Clause AND ZPL-2.1
   purls:
-  - pkg:pypi/docutils?source=hash-mapping
+  - pkg:pypi/docutils?source=conda-forge-mapping
   size: 403226
   timestamp: 1713930478970
 - kind: conda
@@ -5894,7 +5894,7 @@ packages:
   - python >=3.7
   license: MIT and PSF-2.0
   purls:
-  - pkg:pypi/exceptiongroup?source=hash-mapping
+  - pkg:pypi/exceptiongroup?source=conda-forge-mapping
   size: 20418
   timestamp: 1720869435725
 - kind: conda
@@ -5945,7 +5945,7 @@ packages:
   - python >=3.7
   license: Unlicense
   purls:
-  - pkg:pypi/filelock?source=hash-mapping
+  - pkg:pypi/filelock?source=conda-forge-mapping
   size: 17357
   timestamp: 1726613593584
 - kind: conda
@@ -6099,7 +6099,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2246472
   timestamp: 1727206587445
 - kind: conda
@@ -6120,7 +6120,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2277119
   timestamp: 1727206650182
 - kind: conda
@@ -6142,7 +6142,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2389998
   timestamp: 1727206489927
 - kind: conda
@@ -6165,7 +6165,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 1947058
   timestamp: 1727206808713
 - kind: conda
@@ -6185,7 +6185,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2810733
   timestamp: 1727206513366
 - kind: conda
@@ -6206,7 +6206,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2800413
   timestamp: 1727206555938
 - kind: conda
@@ -6227,7 +6227,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2868064
   timestamp: 1727206484680
 - kind: conda
@@ -6249,7 +6249,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2478991
   timestamp: 1727207392167
 - kind: conda
@@ -6270,7 +6270,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2739123
   timestamp: 1727206644985
 - kind: conda
@@ -6292,7 +6292,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2448344
   timestamp: 1727206919876
 - kind: conda
@@ -6313,7 +6313,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2845915
   timestamp: 1727206550625
 - kind: conda
@@ -6333,7 +6333,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2743146
   timestamp: 1727206498541
 - kind: conda
@@ -6354,7 +6354,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2253925
   timestamp: 1727206618282
 - kind: conda
@@ -6376,7 +6376,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2224102
   timestamp: 1727206688745
 - kind: conda
@@ -6398,7 +6398,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 2354375
   timestamp: 1727206567082
 - kind: conda
@@ -6421,7 +6421,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=hash-mapping
+  - pkg:pypi/fonttools?source=conda-forge-mapping
   size: 1928951
   timestamp: 1727206912227
 - kind: conda
@@ -6543,7 +6543,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/h2?source=hash-mapping
+  - pkg:pypi/h2?source=conda-forge-mapping
   size: 46754
   timestamp: 1634280590080
 - kind: conda
@@ -6606,7 +6606,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/hpack?source=hash-mapping
+  - pkg:pypi/hpack?source=conda-forge-mapping
   size: 25341
   timestamp: 1598856368685
 - kind: conda
@@ -6623,7 +6623,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/hyperframe?source=hash-mapping
+  - pkg:pypi/hyperframe?source=conda-forge-mapping
   size: 14646
   timestamp: 1619110249723
 - kind: conda
@@ -6675,7 +6675,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/identify?source=hash-mapping
+  - pkg:pypi/identify?source=conda-forge-mapping
   size: 78078
   timestamp: 1726369674008
 - kind: conda
@@ -6692,7 +6692,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/idna?source=hash-mapping
+  - pkg:pypi/idna?source=conda-forge-mapping
   size: 49837
   timestamp: 1726459583613
 - kind: conda
@@ -6709,7 +6709,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/imagesize?source=hash-mapping
+  - pkg:pypi/imagesize?source=conda-forge-mapping
   size: 10164
   timestamp: 1656939625410
 - kind: conda
@@ -6727,7 +6727,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/importlib-metadata?source=hash-mapping
+  - pkg:pypi/importlib-metadata?source=conda-forge-mapping
   size: 28646
   timestamp: 1726082927916
 - kind: conda
@@ -6744,7 +6744,8 @@ packages:
   - python >=3.8
   license: Apache-2.0
   license_family: APACHE
-  purls: []
+  purls:
+  - pkg:pypi/importlib-resources?source=conda-forge-mapping
   size: 9595
   timestamp: 1725921472017
 - kind: conda
@@ -6764,7 +6765,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/importlib-resources?source=hash-mapping
+  - pkg:pypi/importlib-resources?source=conda-forge-mapping
   size: 32725
   timestamp: 1725921462405
 - kind: conda
@@ -6781,7 +6782,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/iniconfig?source=hash-mapping
+  - pkg:pypi/iniconfig?source=conda-forge-mapping
   size: 11101
   timestamp: 1673103208955
 - kind: conda
@@ -6814,7 +6815,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/jaraco-classes?source=hash-mapping
+  - pkg:pypi/jaraco-classes?source=conda-forge-mapping
   size: 12223
   timestamp: 1713939433204
 - kind: conda
@@ -6833,7 +6834,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/jaraco-context?source=hash-mapping
+  - pkg:pypi/jaraco-context?source=conda-forge-mapping
   size: 12456
   timestamp: 1714372284922
 - kind: conda
@@ -6851,7 +6852,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/jaraco-functools?source=hash-mapping
+  - pkg:pypi/jaraco-functools?source=conda-forge-mapping
   size: 15192
   timestamp: 1701695329516
 - kind: conda
@@ -6868,7 +6869,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/jeepney?source=hash-mapping
+  - pkg:pypi/jeepney?source=conda-forge-mapping
   size: 36895
   timestamp: 1649085298891
 - kind: conda
@@ -6886,7 +6887,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/jinja2?source=hash-mapping
+  - pkg:pypi/jinja2?source=conda-forge-mapping
   size: 111565
   timestamp: 1715127275924
 - kind: conda
@@ -6909,7 +6910,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/keyring?source=hash-mapping
+  - pkg:pypi/keyring?source=conda-forge-mapping
   size: 37045
   timestamp: 1726971145252
 - kind: conda
@@ -6933,7 +6934,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/keyring?source=hash-mapping
+  - pkg:pypi/keyring?source=conda-forge-mapping
   size: 37407
   timestamp: 1726971355676
 - kind: conda
@@ -6958,7 +6959,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/keyring?source=hash-mapping
+  - pkg:pypi/keyring?source=conda-forge-mapping
   size: 36717
   timestamp: 1726971094601
 - kind: conda
@@ -6992,7 +6993,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 71864
   timestamp: 1725459334634
 - kind: conda
@@ -7012,7 +7013,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 59106
   timestamp: 1725459558097
 - kind: conda
@@ -7032,7 +7033,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 55447
   timestamp: 1725459813185
 - kind: conda
@@ -7051,7 +7052,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 60075
   timestamp: 1725459409910
 - kind: conda
@@ -7071,7 +7072,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 59357
   timestamp: 1725459504453
 - kind: conda
@@ -7091,7 +7092,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 55867
   timestamp: 1725459681416
 - kind: conda
@@ -7111,7 +7112,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 72393
   timestamp: 1725459421768
 - kind: conda
@@ -7130,7 +7131,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 60398
   timestamp: 1725459431458
 - kind: conda
@@ -7150,7 +7151,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 60966
   timestamp: 1725459569843
 - kind: conda
@@ -7170,7 +7171,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 70922
   timestamp: 1725459412788
 - kind: conda
@@ -7189,7 +7190,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 62176
   timestamp: 1725459509941
 - kind: conda
@@ -7209,7 +7210,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 55405
   timestamp: 1725459633511
 - kind: conda
@@ -7228,7 +7229,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 60192
   timestamp: 1725459428281
 - kind: conda
@@ -7248,7 +7249,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 59272
   timestamp: 1725459740832
 - kind: conda
@@ -7268,7 +7269,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 55579
   timestamp: 1725459633517
 - kind: conda
@@ -7288,7 +7289,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/kiwisolver?source=hash-mapping
+  - pkg:pypi/kiwisolver?source=conda-forge-mapping
   size: 72123
   timestamp: 1725459398524
 - kind: conda
@@ -9551,7 +9552,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 17050042
   timestamp: 1725305419951
 - kind: conda
@@ -9574,7 +9575,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 3379851
   timestamp: 1725305141536
 - kind: conda
@@ -9596,7 +9597,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 304605
   timestamp: 1725305594292
 - kind: conda
@@ -9619,7 +9620,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 305736
   timestamp: 1725305540839
 - kind: conda
@@ -9641,7 +9642,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 379249
   timestamp: 1725305363038
 - kind: conda
@@ -9664,7 +9665,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 17126019
   timestamp: 1725305442517
 - kind: conda
@@ -9687,7 +9688,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 3471295
   timestamp: 1725305248888
 - kind: conda
@@ -9710,7 +9711,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 378145
   timestamp: 1725305457011
 - kind: conda
@@ -9733,7 +9734,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 17112697
   timestamp: 1725305550641
 - kind: conda
@@ -9756,7 +9757,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 3442782
   timestamp: 1725305160474
 - kind: conda
@@ -9779,7 +9780,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 370106
   timestamp: 1725305440993
 - kind: conda
@@ -9801,7 +9802,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 369643
   timestamp: 1725305415971
 - kind: conda
@@ -9824,7 +9825,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 300843
   timestamp: 1725305392603
 - kind: conda
@@ -9846,7 +9847,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 301489
   timestamp: 1725305447214
 - kind: conda
@@ -9869,7 +9870,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 17051676
   timestamp: 1725305620665
 - kind: conda
@@ -9892,7 +9893,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/llvmlite?source=hash-mapping
+  - pkg:pypi/llvmlite?source=conda-forge-mapping
   size: 3371422
   timestamp: 1725305201868
 - kind: conda
@@ -9910,7 +9911,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/markdown-it-py?source=hash-mapping
+  - pkg:pypi/markdown-it-py?source=conda-forge-mapping
   size: 64356
   timestamp: 1686175179621
 - kind: conda
@@ -9932,7 +9933,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 23892
   timestamp: 1724959703915
 - kind: conda
@@ -9953,7 +9954,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 22853
   timestamp: 1724959699510
 - kind: conda
@@ -9975,7 +9976,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 24034
   timestamp: 1724959588717
 - kind: conda
@@ -9998,7 +9999,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 26730
   timestamp: 1724959968228
 - kind: conda
@@ -10019,7 +10020,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 26060
   timestamp: 1724959631776
 - kind: conda
@@ -10041,7 +10042,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 26854
   timestamp: 1724959777591
 - kind: conda
@@ -10063,7 +10064,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 27027
   timestamp: 1724959560283
 - kind: conda
@@ -10086,7 +10087,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 30051
   timestamp: 1724960057288
 - kind: conda
@@ -10108,7 +10109,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 25840
   timestamp: 1724959900292
 - kind: conda
@@ -10131,7 +10132,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 29136
   timestamp: 1724959968176
 - kind: conda
@@ -10153,7 +10154,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 26772
   timestamp: 1724959630484
 - kind: conda
@@ -10174,7 +10175,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 25414
   timestamp: 1724959688117
 - kind: conda
@@ -10195,7 +10196,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 22958
   timestamp: 1724959739657
 - kind: conda
@@ -10217,7 +10218,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 23718
   timestamp: 1724959806156
 - kind: conda
@@ -10239,7 +10240,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 24195
   timestamp: 1724959597998
 - kind: conda
@@ -10262,7 +10263,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/markupsafe?source=hash-mapping
+  - pkg:pypi/markupsafe?source=conda-forge-mapping
   size: 26671
   timestamp: 1724960110739
 - kind: conda
@@ -10281,7 +10282,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8857
   timestamp: 1726165241060
 - kind: conda
@@ -10301,7 +10303,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 9128
   timestamp: 1726166028932
 - kind: conda
@@ -10320,7 +10323,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8916
   timestamp: 1726165146389
 - kind: conda
@@ -10340,7 +10344,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8796
   timestamp: 1726165015502
 - kind: conda
@@ -10360,7 +10365,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 9210
   timestamp: 1726165882790
 - kind: conda
@@ -10380,7 +10386,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8795
   timestamp: 1726165022112
 - kind: conda
@@ -10399,7 +10406,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8842
   timestamp: 1726165082526
 - kind: conda
@@ -10418,7 +10426,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8908
   timestamp: 1726165112568
 - kind: conda
@@ -10437,7 +10446,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8924
   timestamp: 1726165048680
 - kind: conda
@@ -10457,7 +10467,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 9231
   timestamp: 1726165963481
 - kind: conda
@@ -10477,7 +10488,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8821
   timestamp: 1726164949072
 - kind: conda
@@ -10496,7 +10508,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8847
   timestamp: 1726165120341
 - kind: conda
@@ -10515,7 +10528,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8847
   timestamp: 1726165077974
 - kind: conda
@@ -10535,7 +10549,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 9152
   timestamp: 1726166210979
 - kind: conda
@@ -10554,7 +10569,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8903
   timestamp: 1726165061125
 - kind: conda
@@ -10574,7 +10590,8 @@ packages:
   - tornado >=5
   license: PSF-2.0
   license_family: PSF
-  purls: []
+  purls:
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8819
   timestamp: 1726165021132
 - kind: conda
@@ -10608,7 +10625,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 6866757
   timestamp: 1726165116518
 - kind: conda
@@ -10642,7 +10659,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 6739898
   timestamp: 1726165988243
 - kind: conda
@@ -10675,7 +10692,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7097910
   timestamp: 1726165205545
 - kind: conda
@@ -10710,7 +10727,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7008876
   timestamp: 1726164994128
 - kind: conda
@@ -10745,7 +10762,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 8026168
   timestamp: 1726164999361
 - kind: conda
@@ -10778,7 +10795,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7851098
   timestamp: 1726165050863
 - kind: conda
@@ -10812,7 +10829,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7916452
   timestamp: 1726165835683
 - kind: conda
@@ -10846,7 +10863,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7909507
   timestamp: 1726165084871
 - kind: conda
@@ -10879,7 +10896,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7678288
   timestamp: 1726165095191
 - kind: conda
@@ -10913,7 +10930,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7803682
   timestamp: 1726165916612
 - kind: conda
@@ -10947,7 +10964,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7790076
   timestamp: 1726165022207
 - kind: conda
@@ -10982,7 +10999,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 7892651
   timestamp: 1726164930325
 - kind: conda
@@ -11018,7 +11035,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 6961892
   timestamp: 1726164998538
 - kind: conda
@@ -11053,7 +11070,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 6923804
   timestamp: 1726166180036
 - kind: conda
@@ -11087,7 +11104,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 6943985
   timestamp: 1726165043011
 - kind: conda
@@ -11122,7 +11139,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/matplotlib?source=hash-mapping
+  - pkg:pypi/matplotlib?source=conda-forge-mapping
   size: 6725837
   timestamp: 1726165035852
 - kind: conda
@@ -11139,7 +11156,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/mdurl?source=hash-mapping
+  - pkg:pypi/mdurl?source=conda-forge-mapping
   size: 14680
   timestamp: 1704317789138
 - kind: conda
@@ -11173,7 +11190,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/more-itertools?source=hash-mapping
+  - pkg:pypi/more-itertools?source=conda-forge-mapping
   size: 57345
   timestamp: 1725630183289
 - kind: conda
@@ -11190,7 +11207,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/munkres?source=hash-mapping
+  - pkg:pypi/munkres?source=conda-forge-mapping
   size: 12452
   timestamp: 1600387789153
 - kind: conda
@@ -11298,7 +11315,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 496398
   timestamp: 1725342476011
 - kind: conda
@@ -11319,7 +11336,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 545618
   timestamp: 1725341838481
 - kind: conda
@@ -11341,7 +11358,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 657487
   timestamp: 1725341728930
 - kind: conda
@@ -11363,7 +11380,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 575217
   timestamp: 1725341924070
 - kind: conda
@@ -11385,7 +11402,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 574982
   timestamp: 1725342173999
 - kind: conda
@@ -11406,7 +11423,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 496149
   timestamp: 1725342334862
 - kind: conda
@@ -11427,7 +11444,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 545351
   timestamp: 1725341849687
 - kind: conda
@@ -11449,7 +11466,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 659400
   timestamp: 1725341817888
 - kind: conda
@@ -11471,7 +11488,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 658988
   timestamp: 1725341823258
 - kind: conda
@@ -11492,7 +11509,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 545674
   timestamp: 1725341831349
 - kind: conda
@@ -11513,7 +11530,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 496587
   timestamp: 1725342544012
 - kind: conda
@@ -11535,7 +11552,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 575359
   timestamp: 1725341903030
 - kind: conda
@@ -11556,7 +11573,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 545573
   timestamp: 1725341908549
 - kind: conda
@@ -11577,7 +11594,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 496092
   timestamp: 1725342488154
 - kind: conda
@@ -11599,7 +11616,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 574937
   timestamp: 1725341988448
 - kind: conda
@@ -11621,7 +11638,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=hash-mapping
+  - pkg:pypi/nh3?source=conda-forge-mapping
   size: 659999
   timestamp: 1725341789978
 - kind: conda
@@ -11639,7 +11656,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/nodeenv?source=hash-mapping
+  - pkg:pypi/nodeenv?source=conda-forge-mapping
   size: 34489
   timestamp: 1717585382642
 - kind: conda
@@ -11671,7 +11688,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4357036
   timestamp: 1718888347041
 - kind: conda
@@ -11701,7 +11718,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4376821
   timestamp: 1718888164099
 - kind: conda
@@ -11731,7 +11748,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4370592
   timestamp: 1718888808848
 - kind: conda
@@ -11762,7 +11779,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4367873
   timestamp: 1718888635269
 - kind: conda
@@ -11792,7 +11809,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5807308
   timestamp: 1718888792863
 - kind: conda
@@ -11823,7 +11840,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5773011
   timestamp: 1718888442395
 - kind: conda
@@ -11853,7 +11870,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5801568
   timestamp: 1718888179690
 - kind: conda
@@ -11885,7 +11902,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5778831
   timestamp: 1718888718616
 - kind: conda
@@ -11917,7 +11934,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5653160
   timestamp: 1718888513922
 - kind: conda
@@ -11947,7 +11964,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5695278
   timestamp: 1718888170104
 - kind: conda
@@ -11978,7 +11995,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5681460
   timestamp: 1718888693068
 - kind: conda
@@ -12008,7 +12025,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 5677692
   timestamp: 1718888811663
 - kind: conda
@@ -12038,7 +12055,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4315457
   timestamp: 1718888222324
 - kind: conda
@@ -12070,7 +12087,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4296443
   timestamp: 1718888710552
 - kind: conda
@@ -12100,7 +12117,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4308214
   timestamp: 1718888747778
 - kind: conda
@@ -12131,14 +12148,14 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numba?source=hash-mapping
+  - pkg:pypi/numba?source=conda-forge-mapping
   size: 4282051
   timestamp: 1718888686982
 - kind: pypi
   name: numba-celltree
   version: 0.2.0
   path: .
-  sha256: 994d58d8ff3370085b862936063fb3fb56d8c9db3ce5e455c59cf24efa782fda
+  sha256: 2bd3845e2ef418031ed6547ed4a50525b73be2ccae26e299dad0f6f6f824e02f
   requires_dist:
   - numba
   - numpy
@@ -12170,7 +12187,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6988486
   timestamp: 1724749260693
 - kind: conda
@@ -12195,7 +12212,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6380394
   timestamp: 1724749492450
 - kind: conda
@@ -12220,7 +12237,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 5796087
   timestamp: 1724749545902
 - kind: conda
@@ -12245,7 +12262,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 7808998
   timestamp: 1724749161643
 - kind: conda
@@ -12270,7 +12287,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 7507136
   timestamp: 1724749843736
 - kind: conda
@@ -12294,7 +12311,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 8106762
   timestamp: 1724749068929
 - kind: conda
@@ -12319,7 +12336,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6995279
   timestamp: 1724749148131
 - kind: conda
@@ -12344,7 +12361,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 8961918
   timestamp: 1724749067277
 - kind: conda
@@ -12369,7 +12386,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6889345
   timestamp: 1724749766610
 - kind: conda
@@ -12394,7 +12411,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 8383737
   timestamp: 1724749066469
 - kind: conda
@@ -12419,7 +12436,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6328764
   timestamp: 1724749137209
 - kind: conda
@@ -12443,7 +12460,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 7427254
   timestamp: 1724749204501
 - kind: conda
@@ -12468,7 +12485,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6347646
   timestamp: 1724750187056
 - kind: conda
@@ -12493,7 +12510,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 7804229
   timestamp: 1724749057623
 - kind: conda
@@ -12518,7 +12535,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 5813117
   timestamp: 1724749218579
 - kind: conda
@@ -12542,7 +12559,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=conda-forge-mapping
   size: 6787211
   timestamp: 1724749378964
 - kind: conda
@@ -12701,7 +12718,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/packaging?source=hash-mapping
+  - pkg:pypi/packaging?source=conda-forge-mapping
   size: 50290
   timestamp: 1718189540074
 - kind: conda
@@ -12768,7 +12785,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42490403
   timestamp: 1726075319904
 - kind: conda
@@ -12797,7 +12814,7 @@ packages:
   - vc14_runtime >=14.29.30139
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42223178
   timestamp: 1726075720583
 - kind: conda
@@ -12824,7 +12841,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42531285
   timestamp: 1726075316302
 - kind: conda
@@ -12852,7 +12869,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42749655
   timestamp: 1726075255401
 - kind: conda
@@ -12879,7 +12896,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42013162
   timestamp: 1726075338857
 - kind: conda
@@ -12907,7 +12924,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42313057
   timestamp: 1726075231648
 - kind: conda
@@ -12936,7 +12953,7 @@ packages:
   - vc14_runtime >=14.29.30139
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42115215
   timestamp: 1726075618733
 - kind: conda
@@ -12964,7 +12981,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 41501394
   timestamp: 1726075331633
 - kind: conda
@@ -12993,7 +13010,7 @@ packages:
   - vc14_runtime >=14.29.30139
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42468305
   timestamp: 1726075694989
 - kind: conda
@@ -13021,7 +13038,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42689452
   timestamp: 1726075285193
 - kind: conda
@@ -13048,7 +13065,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42329265
   timestamp: 1726075276862
 - kind: conda
@@ -13076,7 +13093,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42413280
   timestamp: 1726075422684
 - kind: conda
@@ -13103,7 +13120,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 42280077
   timestamp: 1726075335719
 - kind: conda
@@ -13131,7 +13148,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 41219502
   timestamp: 1726075227476
 - kind: conda
@@ -13159,7 +13176,7 @@ packages:
   - tk >=8.6.13,<8.7.0a0
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 41915861
   timestamp: 1726075367372
 - kind: conda
@@ -13188,7 +13205,7 @@ packages:
   - vc14_runtime >=14.29.30139
   license: HPND
   purls:
-  - pkg:pypi/pillow?source=hash-mapping
+  - pkg:pypi/pillow?source=conda-forge-mapping
   size: 41691766
   timestamp: 1726075914878
 - kind: conda
@@ -13208,7 +13225,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pip?source=hash-mapping
+  - pkg:pypi/pip?source=conda-forge-mapping
   size: 1237976
   timestamp: 1724954490262
 - kind: conda
@@ -13258,7 +13275,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pkginfo?source=hash-mapping
+  - pkg:pypi/pkginfo?source=conda-forge-mapping
   size: 28142
   timestamp: 1709561205511
 - kind: conda
@@ -13275,7 +13292,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/platformdirs?source=hash-mapping
+  - pkg:pypi/platformdirs?source=conda-forge-mapping
   size: 20625
   timestamp: 1726613611845
 - kind: conda
@@ -13292,7 +13309,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pluggy?source=hash-mapping
+  - pkg:pypi/pluggy?source=conda-forge-mapping
   size: 23815
   timestamp: 1713667175451
 - kind: conda
@@ -13315,7 +13332,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pre-commit?source=hash-mapping
+  - pkg:pypi/pre-commit?source=conda-forge-mapping
   size: 180526
   timestamp: 1725795837882
 - kind: conda
@@ -13399,7 +13416,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pycparser?source=hash-mapping
+  - pkg:pypi/pycparser?source=conda-forge-mapping
   size: 105098
   timestamp: 1711811634025
 - kind: conda
@@ -13424,7 +13441,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pydata-sphinx-theme?source=hash-mapping
+  - pkg:pypi/pydata-sphinx-theme?source=conda-forge-mapping
   size: 1393462
   timestamp: 1719344980505
 - kind: conda
@@ -13441,7 +13458,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pygments?source=hash-mapping
+  - pkg:pypi/pygments?source=conda-forge-mapping
   size: 879295
   timestamp: 1714846885370
 - kind: conda
@@ -13458,7 +13475,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyparsing?source=hash-mapping
+  - pkg:pypi/pyparsing?source=conda-forge-mapping
   size: 90129
   timestamp: 1724616224956
 - kind: conda
@@ -13476,7 +13493,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyproject-hooks?source=hash-mapping
+  - pkg:pypi/pyproject-hooks?source=conda-forge-mapping
   size: 15391
   timestamp: 1727644193632
 - kind: conda
@@ -13502,8 +13519,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 9227291
   timestamp: 1727246811570
 - kind: conda
@@ -13532,8 +13548,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 10562849
   timestamp: 1727246358516
 - kind: conda
@@ -13559,8 +13574,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 9253328
   timestamp: 1727246844053
 - kind: conda
@@ -13589,8 +13603,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 10558948
   timestamp: 1727246644119
 - kind: conda
@@ -13616,8 +13629,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 9256222
   timestamp: 1727246872144
 - kind: conda
@@ -13646,8 +13658,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 10545427
   timestamp: 1727246336535
 - kind: conda
@@ -13673,8 +13684,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 9269053
   timestamp: 1727247065519
 - kind: conda
@@ -13703,8 +13713,7 @@ packages:
   license: LGPL-3.0-only
   license_family: LGPL
   purls:
-  - pkg:pypi/pyside6?source=hash-mapping
-  - pkg:pypi/shiboken6?source=hash-mapping
+  - pkg:pypi/pyside6?source=conda-forge-mapping
   size: 10542197
   timestamp: 1727246577087
 - kind: conda
@@ -13724,7 +13733,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pysocks?source=hash-mapping
+  - pkg:pypi/pysocks?source=conda-forge-mapping
   size: 19348
   timestamp: 1661605138291
 - kind: conda
@@ -13743,7 +13752,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pysocks?source=hash-mapping
+  - pkg:pypi/pysocks?source=conda-forge-mapping
   size: 18981
   timestamp: 1661604969727
 - kind: conda
@@ -13768,7 +13777,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pytest?source=hash-mapping
+  - pkg:pypi/pytest?source=conda-forge-mapping
   size: 258293
   timestamp: 1725977334143
 - kind: conda
@@ -13788,7 +13797,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pytest-cov?source=hash-mapping
+  - pkg:pypi/pytest-cov?source=conda-forge-mapping
   size: 25507
   timestamp: 1711411153367
 - kind: conda
@@ -14272,7 +14281,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/build?source=hash-mapping
+  - pkg:pypi/build?source=conda-forge-mapping
   size: 25019
   timestamp: 1725676759343
 - kind: conda
@@ -14290,7 +14299,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/python-dateutil?source=hash-mapping
+  - pkg:pypi/python-dateutil?source=conda-forge-mapping
   size: 222742
   timestamp: 1709299922152
 - kind: conda
@@ -14563,7 +14572,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pytz?source=hash-mapping
+  - pkg:pypi/pytz?source=conda-forge-mapping
   size: 186995
   timestamp: 1726055625738
 - kind: conda
@@ -14581,7 +14590,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pywin32-ctypes?source=hash-mapping
+  - pkg:pypi/pywin32-ctypes?source=conda-forge-mapping
   size: 47515
   timestamp: 1727282324594
 - kind: conda
@@ -14599,7 +14608,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pywin32-ctypes?source=hash-mapping
+  - pkg:pypi/pywin32-ctypes?source=conda-forge-mapping
   size: 59457
   timestamp: 1727282412683
 - kind: conda
@@ -14617,7 +14626,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pywin32-ctypes?source=hash-mapping
+  - pkg:pypi/pywin32-ctypes?source=conda-forge-mapping
   size: 57449
   timestamp: 1727282288065
 - kind: conda
@@ -14635,7 +14644,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/pywin32-ctypes?source=hash-mapping
+  - pkg:pypi/pywin32-ctypes?source=conda-forge-mapping
   size: 47118
   timestamp: 1727282302968
 - kind: conda
@@ -14656,7 +14665,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 162312
   timestamp: 1725456439220
 - kind: conda
@@ -14676,7 +14685,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 164184
   timestamp: 1725456348769
 - kind: conda
@@ -14697,7 +14706,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 182609
   timestamp: 1725456280173
 - kind: conda
@@ -14719,7 +14728,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 156987
   timestamp: 1725456772886
 - kind: conda
@@ -14739,7 +14748,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 193941
   timestamp: 1725456465818
 - kind: conda
@@ -14760,7 +14769,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 192321
   timestamp: 1725456528007
 - kind: conda
@@ -14781,7 +14790,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 212644
   timestamp: 1725456264282
 - kind: conda
@@ -14803,7 +14812,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 187901
   timestamp: 1725456808581
 - kind: conda
@@ -14824,7 +14833,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 187143
   timestamp: 1725456547263
 - kind: conda
@@ -14846,7 +14855,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 181227
   timestamp: 1725456516473
 - kind: conda
@@ -14867,7 +14876,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 206553
   timestamp: 1725456256213
 - kind: conda
@@ -14887,7 +14896,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 189347
   timestamp: 1725456465705
 - kind: conda
@@ -14907,7 +14916,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 163637
   timestamp: 1725456332138
 - kind: conda
@@ -14928,7 +14937,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 161903
   timestamp: 1725456557842
 - kind: conda
@@ -14949,7 +14958,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 181692
   timestamp: 1725456337437
 - kind: conda
@@ -14971,7 +14980,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=conda-forge-mapping
   size: 157276
   timestamp: 1725456761667
 - kind: conda
@@ -15206,7 +15215,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/readme-renderer?source=hash-mapping
+  - pkg:pypi/readme-renderer?source=conda-forge-mapping
   size: 17186
   timestamp: 1720528649611
 - kind: conda
@@ -15229,7 +15238,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/requests?source=hash-mapping
+  - pkg:pypi/requests?source=conda-forge-mapping
   size: 58810
   timestamp: 1717057174842
 - kind: conda
@@ -15247,7 +15256,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/requests-toolbelt?source=hash-mapping
+  - pkg:pypi/requests-toolbelt?source=conda-forge-mapping
   size: 43939
   timestamp: 1682953467574
 - kind: conda
@@ -15264,7 +15273,7 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/rfc3986?source=hash-mapping
+  - pkg:pypi/rfc3986?source=conda-forge-mapping
   size: 34075
   timestamp: 1641825125307
 - kind: conda
@@ -15284,7 +15293,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/rich?source=hash-mapping
+  - pkg:pypi/rich?source=conda-forge-mapping
   size: 185885
   timestamp: 1727820622331
 - kind: conda
@@ -15304,7 +15313,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6850507
   timestamp: 1727405717385
 - kind: conda
@@ -15325,7 +15334,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6696624
   timestamp: 1727404975477
 - kind: conda
@@ -15345,7 +15354,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6949617
   timestamp: 1727404750107
 - kind: conda
@@ -15367,7 +15376,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6334030
   timestamp: 1727404871194
 - kind: conda
@@ -15389,7 +15398,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6333616
   timestamp: 1727404969607
 - kind: conda
@@ -15410,7 +15419,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6687445
   timestamp: 1727404939968
 - kind: conda
@@ -15430,7 +15439,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6853561
   timestamp: 1727405813675
 - kind: conda
@@ -15450,7 +15459,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6932483
   timestamp: 1727404840096
 - kind: conda
@@ -15472,7 +15481,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6335176
   timestamp: 1727405062904
 - kind: conda
@@ -15492,7 +15501,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6852016
   timestamp: 1727406055615
 - kind: conda
@@ -15512,7 +15521,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6938416
   timestamp: 1727404839725
 - kind: conda
@@ -15533,7 +15542,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6692590
   timestamp: 1727404886046
 - kind: conda
@@ -15553,7 +15562,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6934138
   timestamp: 1727404683110
 - kind: conda
@@ -15574,7 +15583,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6693601
   timestamp: 1727404955201
 - kind: conda
@@ -15594,7 +15603,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6858224
   timestamp: 1727406034979
 - kind: conda
@@ -15616,7 +15625,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ruff?source=hash-mapping
+  - pkg:pypi/ruff?source=conda-forge-mapping
   size: 6339959
   timestamp: 1727405348822
 - kind: conda
@@ -15637,7 +15646,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/secretstorage?source=hash-mapping
+  - pkg:pypi/secretstorage?source=conda-forge-mapping
   size: 27103
   timestamp: 1725915731942
 - kind: conda
@@ -15658,7 +15667,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/secretstorage?source=hash-mapping
+  - pkg:pypi/secretstorage?source=conda-forge-mapping
   size: 32190
   timestamp: 1725915725812
 - kind: conda
@@ -15679,7 +15688,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/secretstorage?source=hash-mapping
+  - pkg:pypi/secretstorage?source=conda-forge-mapping
   size: 31601
   timestamp: 1725915741329
 - kind: conda
@@ -15700,7 +15709,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/secretstorage?source=hash-mapping
+  - pkg:pypi/secretstorage?source=conda-forge-mapping
   size: 26998
   timestamp: 1725915722997
 - kind: conda
@@ -15717,7 +15726,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/setuptools?source=compressed-mapping
+  - pkg:pypi/setuptools?source=conda-forge-mapping
   size: 777462
   timestamp: 1727249510532
 - kind: conda
@@ -15734,7 +15743,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/six?source=hash-mapping
+  - pkg:pypi/six?source=conda-forge-mapping
   size: 14259
   timestamp: 1620240338595
 - kind: conda
@@ -15751,7 +15760,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/snowballstemmer?source=hash-mapping
+  - pkg:pypi/snowballstemmer?source=conda-forge-mapping
   size: 58824
   timestamp: 1637143137377
 - kind: conda
@@ -15769,7 +15778,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/soupsieve?source=hash-mapping
+  - pkg:pypi/soupsieve?source=conda-forge-mapping
   size: 36754
   timestamp: 1693929424267
 - kind: conda
@@ -15804,7 +15813,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinx?source=hash-mapping
+  - pkg:pypi/sphinx?source=conda-forge-mapping
   size: 1358660
   timestamp: 1721487658869
 - kind: conda
@@ -15838,7 +15847,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinx?source=hash-mapping
+  - pkg:pypi/sphinx?source=conda-forge-mapping
   size: 1391426
   timestamp: 1722330245553
 - kind: conda
@@ -15857,7 +15866,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinx-gallery?source=hash-mapping
+  - pkg:pypi/sphinx-gallery?source=conda-forge-mapping
   size: 383931
   timestamp: 1723008995166
 - kind: conda
@@ -15875,7 +15884,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinxcontrib-applehelp?source=hash-mapping
+  - pkg:pypi/sphinxcontrib-applehelp?source=conda-forge-mapping
   size: 29617
   timestamp: 1722244567894
 - kind: conda
@@ -15893,7 +15902,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinxcontrib-devhelp?source=hash-mapping
+  - pkg:pypi/sphinxcontrib-devhelp?source=conda-forge-mapping
   size: 24138
   timestamp: 1722245127289
 - kind: conda
@@ -15911,7 +15920,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinxcontrib-htmlhelp?source=hash-mapping
+  - pkg:pypi/sphinxcontrib-htmlhelp?source=conda-forge-mapping
   size: 32798
   timestamp: 1722248429933
 - kind: conda
@@ -15928,7 +15937,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinxcontrib-jsmath?source=hash-mapping
+  - pkg:pypi/sphinxcontrib-jsmath?source=conda-forge-mapping
   size: 10431
   timestamp: 1691604844204
 - kind: conda
@@ -15946,7 +15955,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinxcontrib-qthelp?source=hash-mapping
+  - pkg:pypi/sphinxcontrib-qthelp?source=conda-forge-mapping
   size: 26794
   timestamp: 1722245959953
 - kind: conda
@@ -15964,7 +15973,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/sphinxcontrib-serializinghtml?source=hash-mapping
+  - pkg:pypi/sphinxcontrib-serializinghtml?source=conda-forge-mapping
   size: 28776
   timestamp: 1705118378942
 - kind: conda
@@ -16065,7 +16074,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/toml?source=hash-mapping
+  - pkg:pypi/toml?source=conda-forge-mapping
   size: 18433
   timestamp: 1604308660817
 - kind: conda
@@ -16082,7 +16091,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/tomli?source=hash-mapping
+  - pkg:pypi/tomli?source=conda-forge-mapping
   size: 15940
   timestamp: 1644342331069
 - kind: conda
@@ -16102,7 +16111,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 653350
   timestamp: 1724956638966
 - kind: conda
@@ -16121,7 +16130,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 651869
   timestamp: 1724956270046
 - kind: conda
@@ -16141,7 +16150,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 650505
   timestamp: 1724960822818
 - kind: conda
@@ -16162,7 +16171,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 653867
   timestamp: 1724956678451
 - kind: conda
@@ -16181,7 +16190,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 856251
   timestamp: 1724956238423
 - kind: conda
@@ -16201,7 +16210,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 859139
   timestamp: 1724956356600
 - kind: conda
@@ -16221,7 +16230,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 856725
   timestamp: 1724956239832
 - kind: conda
@@ -16242,7 +16251,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 860730
   timestamp: 1724956581349
 - kind: conda
@@ -16262,7 +16271,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 841722
   timestamp: 1724956439106
 - kind: conda
@@ -16283,7 +16292,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 841567
   timestamp: 1724956763418
 - kind: conda
@@ -16303,7 +16312,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 837665
   timestamp: 1724956252424
 - kind: conda
@@ -16322,7 +16331,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 841028
   timestamp: 1724956347530
 - kind: conda
@@ -16341,7 +16350,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 642733
   timestamp: 1724956282002
 - kind: conda
@@ -16361,7 +16370,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 642374
   timestamp: 1724956313228
 - kind: conda
@@ -16381,7 +16390,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 640284
   timestamp: 1724956072666
 - kind: conda
@@ -16402,7 +16411,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/tornado?source=hash-mapping
+  - pkg:pypi/tornado?source=conda-forge-mapping
   size: 644070
   timestamp: 1724956728297
 - kind: conda
@@ -16428,7 +16437,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/twine?source=hash-mapping
+  - pkg:pypi/twine?source=conda-forge-mapping
   size: 33938
   timestamp: 1719431080574
 - kind: conda
@@ -16445,7 +16454,7 @@ packages:
   license: PSF-2.0
   license_family: PSF
   purls:
-  - pkg:pypi/typing-extensions?source=hash-mapping
+  - pkg:pypi/typing-extensions?source=conda-forge-mapping
   size: 39888
   timestamp: 1717802653893
 - kind: conda
@@ -16496,7 +16505,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13756
   timestamp: 1725784148759
 - kind: conda
@@ -16518,7 +16527,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13565
   timestamp: 1725784246850
 - kind: conda
@@ -16540,7 +16549,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 17065
   timestamp: 1725784497818
 - kind: conda
@@ -16561,7 +16570,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 12925
   timestamp: 1725784218557
 - kind: conda
@@ -16583,7 +16592,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13603
   timestamp: 1725784278728
 - kind: conda
@@ -16605,7 +16614,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 17253
   timestamp: 1725784407361
 - kind: conda
@@ -16627,7 +16636,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13858
   timestamp: 1725784165345
 - kind: conda
@@ -16648,7 +16657,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13060
   timestamp: 1725784205661
 - kind: conda
@@ -16670,7 +16679,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13605
   timestamp: 1725784243533
 - kind: conda
@@ -16692,7 +16701,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13904
   timestamp: 1725784191021
 - kind: conda
@@ -16713,7 +16722,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13031
   timestamp: 1725784199719
 - kind: conda
@@ -16735,7 +16744,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 17213
   timestamp: 1725784449622
 - kind: conda
@@ -16756,7 +16765,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 12930
   timestamp: 1725784201570
 - kind: conda
@@ -16778,7 +16787,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13559
   timestamp: 1725784256846
 - kind: conda
@@ -16800,7 +16809,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 17080
   timestamp: 1725784577983
 - kind: conda
@@ -16822,7 +16831,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/ukkonen?source=hash-mapping
+  - pkg:pypi/ukkonen?source=conda-forge-mapping
   size: 13784
   timestamp: 1725784171221
 - kind: conda
@@ -16840,7 +16849,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 374055
   timestamp: 1695848183607
 - kind: conda
@@ -16858,7 +16867,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 377237
   timestamp: 1695848435303
 - kind: conda
@@ -16875,7 +16884,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 366573
   timestamp: 1695848504604
 - kind: conda
@@ -16895,7 +16904,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 370116
   timestamp: 1695848575933
 - kind: conda
@@ -16913,7 +16922,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 376309
   timestamp: 1695848358752
 - kind: conda
@@ -16933,7 +16942,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 373257
   timestamp: 1695848310896
 - kind: conda
@@ -16951,7 +16960,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 373822
   timestamp: 1695848128416
 - kind: conda
@@ -16968,7 +16977,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/unicodedata2?source=hash-mapping
+  - pkg:pypi/unicodedata2?source=conda-forge-mapping
   size: 369843
   timestamp: 1695848310939
 - kind: conda
@@ -16989,7 +16998,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/urllib3?source=hash-mapping
+  - pkg:pypi/urllib3?source=conda-forge-mapping
   size: 98076
   timestamp: 1726496531769
 - kind: conda
@@ -17045,7 +17054,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/virtualenv?source=hash-mapping
+  - pkg:pypi/virtualenv?source=conda-forge-mapping
   size: 4875601
   timestamp: 1727513873376
 - kind: conda
@@ -17097,7 +17106,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/wheel?source=hash-mapping
+  - pkg:pypi/wheel?source=conda-forge-mapping
   size: 58585
   timestamp: 1722797131787
 - kind: conda
@@ -17115,7 +17124,7 @@ packages:
   - python >=3.6
   license: LicenseRef-Public-Domain
   purls:
-  - pkg:pypi/win-inet-pton?source=hash-mapping
+  - pkg:pypi/win-inet-pton?source=conda-forge-mapping
   size: 9602
   timestamp: 1727796413384
 - kind: conda
@@ -17696,7 +17705,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/zipp?source=hash-mapping
+  - pkg:pypi/zipp?source=conda-forge-mapping
   size: 21409
   timestamp: 1726248679175
 - kind: conda
@@ -17755,7 +17764,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 320810
   timestamp: 1725305704555
 - kind: conda
@@ -17777,7 +17786,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 400765
   timestamp: 1725305605347
 - kind: conda
@@ -17800,7 +17809,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 408309
   timestamp: 1725305719512
 - kind: conda
@@ -17824,7 +17833,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 311278
   timestamp: 1725306039901
 - kind: conda
@@ -17848,7 +17857,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 321357
   timestamp: 1725305930669
 - kind: conda
@@ -17871,7 +17880,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 332271
   timestamp: 1725305847224
 - kind: conda
@@ -17894,7 +17903,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 417923
   timestamp: 1725305669690
 - kind: conda
@@ -17916,7 +17925,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 411350
   timestamp: 1725305723486
 - kind: conda
@@ -17939,7 +17948,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 330788
   timestamp: 1725305806565
 - kind: conda
@@ -17961,7 +17970,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 410873
   timestamp: 1725305688706
 - kind: conda
@@ -17985,7 +17994,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 320624
   timestamp: 1725305934189
 - kind: conda
@@ -18008,7 +18017,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 419552
   timestamp: 1725305670210
 - kind: conda
@@ -18031,7 +18040,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 407017
   timestamp: 1725305769438
 - kind: conda
@@ -18055,7 +18064,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 311116
   timestamp: 1725305993710
 - kind: conda
@@ -18077,7 +18086,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 401328
   timestamp: 1725305650930
 - kind: conda
@@ -18100,7 +18109,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/zstandard?source=hash-mapping
+  - pkg:pypi/zstandard?source=conda-forge-mapping
   size: 320027
   timestamp: 1725305723442
 - kind: conda
