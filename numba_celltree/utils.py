@@ -7,8 +7,8 @@ from numba.core import cgutils
 from numba.extending import intrinsic
 
 from numba_celltree.constants import (
+    INITIAL_TREE_DEPTH,
     MAX_N_VERTEX,
-    MAX_TREE_DEPTH,
     NDIM,
     STACK_ALLOCATE_STATIC_ARRAYS,
     FloatDType,
@@ -23,8 +23,12 @@ def pop(array, size):
 
 @nb.njit(inline="always")
 def push(array, value, size):
+    if size >= array.size:
+        new = np.empty(array.size * 2, dtype=array.dtype)
+        new[: array.size] = array[:]
+        array = new
     array[size] = value
-    return size + 1
+    return array, size + 1
 
 
 @nb.njit(inline="always")
@@ -56,12 +60,6 @@ if STACK_ALLOCATE_STATIC_ARRAYS and os.environ.get("NUMBA_DISABLE_JIT", "0") == 
         return sig, impl
 
     @nb.njit(inline="always")  # pragma: no cover
-    def allocate_stack():
-        arr_ptr = stack_empty(MAX_TREE_DEPTH, IntDType)  # pylint: disable=no-value-for-parameter
-        arr = nb.carray(arr_ptr, MAX_TREE_DEPTH, dtype=IntDType)
-        return arr
-
-    @nb.njit(inline="always")  # pragma: no cover
     def allocate_polygon():
         arr_ptr = stack_empty(  # pylint: disable=no-value-for-parameter
             POLYGON_SIZE, FloatDType
@@ -86,10 +84,6 @@ if STACK_ALLOCATE_STATIC_ARRAYS and os.environ.get("NUMBA_DISABLE_JIT", "0") == 
 else:
 
     @nb.njit(inline="always")
-    def allocate_stack():
-        return np.empty(MAX_TREE_DEPTH, dtype=IntDType)
-
-    @nb.njit(inline="always")
     def allocate_polygon():
         return np.empty((MAX_N_VERTEX, NDIM), dtype=FloatDType)
 
@@ -100,3 +94,8 @@ else:
     @nb.njit(inline="always")
     def allocate_box_polygon():
         return np.empty((4, 2), dtype=FloatDType)
+
+
+@nb.njit(inline="always")
+def allocate_stack():
+    return np.empty(INITIAL_TREE_DEPTH, dtype=IntDType)
