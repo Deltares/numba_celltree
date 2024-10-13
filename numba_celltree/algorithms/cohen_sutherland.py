@@ -92,4 +92,10 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
             b = Point(x, y)
             k2 = get_clip(b, box)
 
+        # Recompute (dx, dy) with new points.
+        dx = b.x - a.x
+        dy = b.y - a.y
+        if dx == 0.0 and dy == 0.0:
+            return NO_INTERSECTION
+
     return True, a, b

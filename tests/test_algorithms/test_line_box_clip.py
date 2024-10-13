@@ -130,6 +130,8 @@ def test_line_box_clip_degeneracy(line_clip, box):
         b = Point(*b)
         # c, d are the clipped points
         actual, actual_c, actual_d = line_clip(a, b, box)
+        print(actual_c, c)
+        print(actual_d, d)
         assert intersects is actual
         assert np.allclose(actual_c, c, equal_nan=True)
         assert np.allclose(actual_d, d, equal_nan=True)
@@ -280,4 +282,13 @@ def test_line_box_clip_degeneracy(line_clip, box):
         True,
         (2.0, 0.0),
         (2.0, 2.0),
+    )
+
+    # Diagonal line of length (1, 1), touching upper left corner.
+    assert_expected(
+        (-1.0, 1.0),
+        (0.0, 2.0),
+        False,
+        (np.nan, np.nan),
+        (np.nan, np.nan),
     )
