@@ -330,7 +330,8 @@ class CellTree2d:
             ``np.linalg.norm(intersections[:, 1] - intersections[:, 0], axis=1)``.
         """
         edge_coords = cast_edges(edge_coords)
-        return locate_edges(edge_coords, self.celltree_data)
+        n_chunks = nb.get_num_threads()
+        return locate_edges(edge_coords, self.celltree_data, n_chunks)
 
     def compute_barycentric_weights(
         self,
