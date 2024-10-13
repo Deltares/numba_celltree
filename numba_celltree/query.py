@@ -391,7 +391,7 @@ def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
         )
 
     total_size = sum(counts)
-    xy = np.empty((total_size, 2, 2), dtype=IntDType)
+    xy = np.empty((total_size, 2, 2), dtype=FloatDType)
     start = 0
     for i, size in enumerate(counts):
         end = start + size
