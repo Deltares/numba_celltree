@@ -371,12 +371,18 @@ def test_edge_lookup():
     expected_i = np.array([0, 1, 2])
     expected_j = np.array([0, 1, 2])
     expected_intersections = edge_coords[:3]
+    print(actual_i, expected_i)
+    print(actual_j, expected_j)
+    print(intersections, expected_intersections)
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
     assert np.allclose(intersections, expected_intersections)
 
     # Flip edge orientation
     actual_i, actual_j, intersections = tree.intersect_edges(edge_coords[:, ::-1])
+    print(actual_i, expected_i)
+    print(actual_j, expected_j)
+    print(intersections, expected_intersections[:, ::-1])
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
     assert np.allclose(intersections, expected_intersections[:, ::-1])
