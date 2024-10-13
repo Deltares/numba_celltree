@@ -350,7 +350,7 @@ def locate_edges_helper(
     # Ensure the initial indices array isn't too small.
     n = max(n_edge, 256)
     indices = np.empty((n, 2), dtype=IntDType)
-    xy = np.empty((n, 2, 2), dtype=FloatDType)
+    xy = np.zeros((n, 2, 2), dtype=FloatDType)
 
     total_count = 0
     indices_size = 0
@@ -391,7 +391,7 @@ def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
         )
 
     total_size = sum(counts)
-    xy = np.empty((total_size, 2, 2), dtype=FloatDType)
+    xy = np.zeros((total_size, 2, 2), dtype=FloatDType)
     start = 0
     for i, size in enumerate(counts):
         end = start + size
