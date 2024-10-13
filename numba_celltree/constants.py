@@ -143,7 +143,7 @@ FILL_VALUE = -1
 # (int(math.ceil(math.log(MAX_N_FACE, 2))) + 1)
 # This is only true for relatively balanced trees. MAX_N_FACE = int(2e9)
 # results in required stack of 32.
-INITIAL_TREE_DEPTH = 32
+INITIAL_STACK_LENGTH = 32
 # Floating point slack
 TOLERANCE_ON_EDGE = 1e-9
 

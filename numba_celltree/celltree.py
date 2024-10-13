@@ -1,5 +1,6 @@
 from typing import Tuple
 
+import numba as nb
 import numpy as np
 
 from numba_celltree.algorithms import (
@@ -181,7 +182,8 @@ class CellTree2d:
             Indices of the face.
         """
         bbox_coords = cast_bboxes(bbox_coords)
-        return locate_boxes(bbox_coords, self.celltree_data)
+        n_chunks = nb.get_num_threads()
+        return locate_boxes(bbox_coords, self.celltree_data, n_chunks)
 
     def intersect_boxes(
         self, bbox_coords: FloatArray
@@ -205,7 +207,8 @@ class CellTree2d:
             Area of intersection between the two intersecting faces.
         """
         bbox_coords = cast_bboxes(bbox_coords)
-        i, j = locate_boxes(bbox_coords, self.celltree_data)
+        n_chunks = nb.get_num_threads()
+        i, j = locate_boxes(bbox_coords, self.celltree_data, n_chunks)
         area = box_area_of_intersection(
             bbox_coords=bbox_coords,
             vertices=self.vertices,
@@ -246,7 +249,10 @@ class CellTree2d:
         """
         counter_clockwise(vertices, faces)
         bbox_coords = build_bboxes(faces, vertices)
-        shortlist_i, shortlist_j = locate_boxes(bbox_coords, self.celltree_data)
+        n_chunks = nb.get_num_threads()
+        shortlist_i, shortlist_j = locate_boxes(
+            bbox_coords, self.celltree_data, n_chunks
+        )
         intersects = polygons_intersect(
             vertices_a=vertices,
             vertices_b=self.vertices,

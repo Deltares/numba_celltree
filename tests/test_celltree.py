@@ -1,3 +1,7 @@
+import os
+
+os.environ["NUMBA_DISABLE_JIT"] = "1"
+
 import pathlib
 import shutil
 
