@@ -280,10 +280,10 @@ def locate_edge(
                             return -1, indices_size
                         indices[indices_size, 0] = index
                         indices[indices_size, 1] = bbox_index
-                        intersections[count, 0, 0] = c.x
-                        intersections[count, 0, 1] = c.y
-                        intersections[count, 1, 0] = d.x
-                        intersections[count, 1, 1] = d.y
+                        intersections[indices_size, 0, 0] = c.x
+                        intersections[indices_size, 0, 1] = c.y
+                        intersections[indices_size, 1, 0] = d.x
+                        intersections[indices_size, 1, 1] = d.y
                         indices_size += 1
                         count += 1
             continue

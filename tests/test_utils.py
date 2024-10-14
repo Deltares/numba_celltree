@@ -75,7 +75,7 @@ def test_double_stack():
     stack, size = ut.push_both(stack, 1, 2, size)
     assert len(stack) == INITIAL_STACK_LENGTH * 2
     assert size == INITIAL_STACK_LENGTH + 1
-    assert np.array_equal(stack[32], (1, 2))
+    assert np.array_equal(stack[INITIAL_STACK_LENGTH], (1, 2))
 
     a, b, size = ut.pop_both(stack, size)
     assert size == INITIAL_STACK_LENGTH
@@ -98,7 +98,7 @@ def test_triple_stack():
     stack, size = ut.push_triple(stack, 1, 2, 3, size)
     assert len(stack) == INITIAL_STACK_LENGTH * 2
     assert size == INITIAL_STACK_LENGTH + 1
-    assert np.array_equal(stack[32], (1, 2, 3))
+    assert np.array_equal(stack[INITIAL_STACK_LENGTH], (1, 2, 3))
 
     a, b, c, size = ut.pop_triple(stack, size)
     assert size == INITIAL_STACK_LENGTH
