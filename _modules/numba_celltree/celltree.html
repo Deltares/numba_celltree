@@ -730,7 +730,8 @@ document.write(`
 <span class="sd">            ``np.linalg.norm(intersections[:, 1] - intersections[:, 0], axis=1)``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">edge_coords</span> <span class="o">=</span> <span class="n">cast_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">locate_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span></div>
+        <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">locate_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CellTree2d.compute_barycentric_weights">
