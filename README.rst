@@ -135,7 +135,7 @@ With regards to performance:
   but appears to be on net ~30% faster than the query-twice scheme. The net
   gain may disappear with a sufficiently large number of CPUs as at some point the
   serial merge and larger number of dynamic allocations starts dominating the
-  total run time (on my 24 CPU laptop, querying once is still superior).
+  total run time (on my 16 core laptop, querying once is still superior).
 
 To debug, set the environmental variable ``NUMBA_DISABLE_JIT=1``. Re-enable by
 setting ``NUMBA_DISABLE_JIT=0``.
