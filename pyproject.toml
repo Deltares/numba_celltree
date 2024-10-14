@@ -83,6 +83,8 @@ twine = "*"
 [tool.pixi.tasks]
 pre-commit = "pre-commit run --all-files"
 test = "NUMBA_DISABLE_JIT=1 pytest --cov=numba_celltree --cov-report xml --cov-report term"
+test-single-thread = "NUMBA_DISABLE_JIT=1 NUMBA_NUM_THREADS=1 pytest"
+test-jit = "NUMBA_DISABLE_JIT=0 pytest"
 docs = "NUMBA_DISABLE_JIT=1 sphinx-build docs docs/_build"
 all = { depends_on = ["pre-commit", "test", "docs"]}
 pypi-publish = "rm --recursive --force dist && python -m build && twine check dist/* && twine upload dist/*"
