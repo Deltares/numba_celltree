@@ -617,6 +617,34 @@ bounds.</p>
 </dd></dl>
 
 </section>
+<section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="unreleased">
+<h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#numba_celltree.CellTree2d.intersect_edges" title="numba_celltree.CellTree2d.intersect_edges"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_edges()</span></code></a> could hang indefinitely due to a while
+loop with faulty logic in
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numba_celltree.algorithms.cohen_sutherland_line_box_clip()</span></code>. This issue
+seems to appears when an edge vertex lies exactly on top of a bounding box
+vertex of the celltree. The logic has been updated and this has been fixed.</p></li>
+</ul>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The parallellization strategy of <a class="reference internal" href="#numba_celltree.CellTree2d.locate_boxes" title="numba_celltree.CellTree2d.locate_boxes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_boxes()</span></code></a>,
+<a class="reference internal" href="#numba_celltree.CellTree2d.intersect_boxes" title="numba_celltree.CellTree2d.intersect_boxes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_boxes()</span></code></a>, <a class="reference internal" href="#numba_celltree.CellTree2d.locate_faces" title="numba_celltree.CellTree2d.locate_faces"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_faces()</span></code></a>,
+<a class="reference internal" href="#numba_celltree.CellTree2d.intersect_faces" title="numba_celltree.CellTree2d.intersect_faces"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_faces()</span></code></a>, and <a class="reference internal" href="#numba_celltree.CellTree2d.intersect_edges" title="numba_celltree.CellTree2d.intersect_edges"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_edges()</span></code></a>
+has been changed. Instead of querying twice – once to count, then
+pre-allocate, then again to store result values – has been replaced by
+manual chunking of input and dynamic allocation per chunk (thread). This
+should result in a net ~30% performance gain in most cases.</p></li>
+</ul>
+</section>
+</section>
+</section>
 
 
                 </article>
@@ -655,6 +683,7 @@ bounds.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CellTree2d</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d"><code class="docutils literal notranslate"><span class="pre">CellTree2d</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.compute_barycentric_weights"><code class="docutils literal notranslate"><span class="pre">CellTree2d.compute_barycentric_weights()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.intersect_boxes"><code class="docutils literal notranslate"><span class="pre">CellTree2d.intersect_boxes()</span></code></a></li>
@@ -669,6 +698,17 @@ bounds.</p>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">Unreleased</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
   <div class="sidebar-secondary-item">
