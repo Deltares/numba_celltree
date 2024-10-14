@@ -12153,9 +12153,9 @@ packages:
   timestamp: 1718888686982
 - kind: pypi
   name: numba-celltree
-  version: 0.2.0
+  version: 0.2.1
   path: .
-  sha256: 2bd3845e2ef418031ed6547ed4a50525b73be2ccae26e299dad0f6f6f824e02f
+  sha256: 71e0b33c7b3a2ab6350e6dc49d6a69ec26fbc81275fe0251e28f32dd48cdcb64
   requires_dist:
   - numba
   - numpy

@@ -100,30 +100,42 @@ With regards to performance:
 * Building the tree is marginally faster compared to the C++ implementation
   (~15%).
 * Serial point queries are somewhat slower (~50%), but Numba's automatic
-  parallellization speeds things up significantly (down to 20% runtime on my 4
-  core laptop). (Of course the C++ code can be parallellized in the same manner
-  with ``pragma omp parallel for``.)
+  parallelization speeds things up significantly. (Of course the C++ code can
+  be parallelized in the same manner with ``pragma omp parallel for``.)
 * The other queries have not been compared, as the C++ code lacks the
   functionality.
 * In traversing the tree, recursion in Numba appears to be less performant than
   maintaining a stack of nodes to traverse. The VTK implementation also uses
-  a stack rather than recursion.
+  a stack rather than recursion. Ideally, we would use a stack memory allocated
+  array since this seems to result in a ~30% speed-up (especially when running
+  multi-threaded), but these stack allocated arrays cannot be grown
+  dynamically.
 * Numba (like its `LLVM JIT sister Julia <https://julialang.org/>`_) does not
   allocate small arrays on the stack automatically, like C++ and Fortran
   compilers do. However, it can be done `manually
-  <https://github.com/numba/numba/issues/5084>`_. This cuts down runtimes by
-  at least a factor 2, more so in parallel. However, these stack allocated
-  arrays work only in the context of Numba. They must be disabled when running
-  in uncompiled Python -- there is some code in ``numba_celltree.utils`` which
-  takes care of this.
-* All methods have been carefully written to keep heap allocations to a
-  minimum. This also helps in parallellization, as at the time of writing
-  Numba's lists are `not thread safe
-  <https://github.com/numba/numba/issues/5878>`_.  Unfortunately, this means we
-  have to query twice when the number of answers is unknown: once to count,
-  after which we can allocate, then another time to store the answers. Since
-  parallelization results in speedups over a factor 2, this still results in a
-  net gain.
+  <https://github.com/numba/numba/issues/5084>`_. This cuts down runtimes for
+  some functions by at least a factor 2, more so in parallel. However, these
+  stack allocated arrays work only in the context of Numba. They must be
+  disabled when running in uncompiled Python -- there is some code in
+  ``numba_celltree.utils`` which takes care of this.
+* Some methods like ``locate_points`` are trivially parallelizable, since
+  there is one return value for each point. In that case, we can pre-allocate
+  the output array immediately and apply ``nb.prange``, letting it spawn threads
+  as needed.
+* Some methods, however, return an a priori unknown number of values. At the
+  time of writing, Numba's lists are 
+  `not thread safe <https://github.com/numba/numba/issues/5878>`_. There are
+  two options here. The first option is to query twice: the first time we only
+  count, then we allocate the results array(s), and the second time we store
+  the actual values. Since parallelization generally results in speedups over a
+  factor 2, this still results in a net gain. The second option is to chunk
+  manually, and assign one chunk per thread. Each chunk can then allocate
+  dynamically; we store the output of each thread in a list (of numpy arrays).
+  This has overhead in terms of continuous bounds-checking and a final merge,
+  but appears to be on net ~30% faster than the query-twice scheme. The net
+  gain may disappear with a sufficiently large number of CPUs as at some point the
+  serial merge and larger number of dynamic allocations starts dominating the
+  total run time (on my 24 CPU laptop, querying once is still superior).
 
 To debug, set the environmental variable ``NUMBA_DISABLE_JIT=1``. Re-enable by
 setting ``NUMBA_DISABLE_JIT=0``.

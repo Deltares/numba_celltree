@@ -2,7 +2,19 @@ import numba as nb
 import numpy as np
 
 from numba_celltree import utils as ut
-from numba_celltree.constants import INITIAL_TREE_DEPTH, MAX_N_VERTEX
+from numba_celltree.constants import INITIAL_STACK_LENGTH, MAX_N_VERTEX
+
+
+def test_grow():
+    a = np.arange(10)
+    b = ut.grow(a)
+    assert b.shape == (20,)
+    assert np.array_equal(a, b[:10])
+
+    a = np.arange(20).reshape((10, 2))
+    b = ut.grow(a)
+    assert b.shape == (20, 2)
+    assert np.array_equal(a, b[:10])
 
 
 def test_pop():
@@ -49,12 +61,59 @@ def test_copy():
     assert np.array_equal(dst, [0, 1, 2, 0, 0])
 
 
+def test_double_stack():
+    stack = ut.allocate_double_stack()
+    assert stack.shape == (INITIAL_STACK_LENGTH, 2)
+
+    size = 1
+    stack, size = ut.push_both(stack, 1, 2, size)
+    assert size == 2
+    assert len(stack) == INITIAL_STACK_LENGTH
+    assert np.array_equal(stack[1], (1, 2))
+
+    size = INITIAL_STACK_LENGTH
+    stack, size = ut.push_both(stack, 1, 2, size)
+    assert len(stack) == INITIAL_STACK_LENGTH * 2
+    assert size == INITIAL_STACK_LENGTH + 1
+    assert np.array_equal(stack[INITIAL_STACK_LENGTH], (1, 2))
+
+    a, b, size = ut.pop_both(stack, size)
+    assert size == INITIAL_STACK_LENGTH
+    assert len(stack) == INITIAL_STACK_LENGTH * 2
+    assert a == 1
+    assert b == 2
+
+
+def test_triple_stack():
+    stack = ut.allocate_triple_stack()
+    assert stack.shape == (INITIAL_STACK_LENGTH, 3)
+
+    size = 1
+    stack, size = ut.push_triple(stack, 1, 2, 3, size)
+    assert size == 2
+    assert len(stack) == INITIAL_STACK_LENGTH
+    assert np.array_equal(stack[1], (1, 2, 3))
+
+    size = INITIAL_STACK_LENGTH
+    stack, size = ut.push_triple(stack, 1, 2, 3, size)
+    assert len(stack) == INITIAL_STACK_LENGTH * 2
+    assert size == INITIAL_STACK_LENGTH + 1
+    assert np.array_equal(stack[INITIAL_STACK_LENGTH], (1, 2, 3))
+
+    a, b, c, size = ut.pop_triple(stack, size)
+    assert size == INITIAL_STACK_LENGTH
+    assert len(stack) == INITIAL_STACK_LENGTH * 2
+    assert a == 1
+    assert b == 2
+    assert c == 3
+
+
 # These array is not returned properly to dynamic python. This is OK: these
 # arrays are exclusively for internal use to temporarily store values.
 @nb.njit
 def do_allocate_stack():
     stack = ut.allocate_stack()
-    return (stack.size == INITIAL_TREE_DEPTH) and (stack[:5].size == 5)
+    return (stack.size == INITIAL_STACK_LENGTH) and (stack[:5].size == 5)
 
 
 def test_allocate_stack():

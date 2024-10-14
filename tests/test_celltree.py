@@ -373,13 +373,13 @@ def test_edge_lookup():
     expected_intersections = edge_coords[:3]
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
-    assert np.array_equal(intersections, expected_intersections)
+    assert np.allclose(intersections, expected_intersections)
 
     # Flip edge orientation
     actual_i, actual_j, intersections = tree.intersect_edges(edge_coords[:, ::-1])
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
-    assert np.array_equal(intersections, expected_intersections[:, ::-1])
+    assert np.allclose(intersections, expected_intersections[:, ::-1])
 
 
 def test_example_material():

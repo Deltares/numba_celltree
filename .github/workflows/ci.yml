@@ -45,7 +45,10 @@ jobs:
         with:
           manifest-path: pyproject.toml
       - name: Run Tests
-        run: pixi run --environment ${{ matrix.pixi-environment }} test
+        run: |
+          pixi run --environment ${{ matrix.pixi-environment }} test &&
+          pixi run --environment ${{ matrix.pixi-environment }} test-single-thread &&
+          pixi run --environment ${{ matrix.pixi-environment }} test-jit
 
   build:
     runs-on: ubuntu-latest
