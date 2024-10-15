@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CellTree2d &#8212; Numba Celltree 0.2.1 documentation</title>
+    <title>CellTree2d &#8212; Numba Celltree 0.2.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=37f418d5"></script>
+    <script src="_static/documentation_options.js?v=000c92bf"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
@@ -619,8 +619,8 @@ bounds.</p>
 </section>
 <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
-<section id="unreleased">
-<h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h2>[0.2.2 2024-10-15]<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -628,7 +628,8 @@ bounds.</p>
 loop with faulty logic in
 <code class="xref py py-func docutils literal notranslate"><span class="pre">numba_celltree.algorithms.cohen_sutherland_line_box_clip()</span></code>. This issue
 seems to appears when an edge vertex lies exactly on top of a bounding box
-vertex of the celltree. The logic has been updated and this has been fixed.</p></li>
+vertex of the celltree. The logic has been updated and the while loop exits
+correctly now.</p></li>
 </ul>
 </section>
 <section id="changed">
@@ -700,7 +701,7 @@ should result in a net ~30% performance gain in most cases.</p></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">Unreleased</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[0.2.2 2024-10-15]</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
 </ul>
