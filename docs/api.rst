@@ -10,8 +10,8 @@ CellTree2d
 Changelog
 =========
 
-Unreleased
-----------
+[0.2.2 2024-10-15]
+------------------
 
 Fixed
 ~~~~~
@@ -20,7 +20,8 @@ Fixed
   loop with faulty logic in
   :func:`numba_celltree.algorithms.cohen_sutherland_line_box_clip`. This issue
   seems to appears when an edge vertex lies exactly on top of a bounding box
-  vertex of the celltree. The logic has been updated and this has been fixed.
+  vertex of the celltree. The logic has been updated and the while loop exits
+  correctly now.
 
 Changed
 ~~~~~~~
