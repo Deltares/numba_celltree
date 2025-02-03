@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -359,19 +359,19 @@
                 <article class="bd-article">
                   
   <h1>Source code for numba_celltree.celltree</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">numba</span> <span class="k">as</span> <span class="nn">nb</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">numba_celltree.algorithms</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">area_of_intersection</span><span class="p">,</span>
     <span class="n">barycentric_triangle_weights</span><span class="p">,</span>
     <span class="n">barycentric_wachspress_weights</span><span class="p">,</span>
     <span class="n">box_area_of_intersection</span><span class="p">,</span>
     <span class="n">polygons_intersect</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">numba_celltree.constants</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">FILL_VALUE</span><span class="p">,</span>
     <span class="n">MAX_N_VERTEX</span><span class="p">,</span>
     <span class="n">BoolArray</span><span class="p">,</span>
@@ -381,9 +381,9 @@
     <span class="n">IntArray</span><span class="p">,</span>
     <span class="n">IntDType</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">numba_celltree.creation</span> <span class="kn">import</span> <span class="n">initialize</span>
-<span class="kn">from</span> <span class="nn">numba_celltree.geometry_utils</span> <span class="kn">import</span> <span class="n">build_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
-<span class="kn">from</span> <span class="nn">numba_celltree.query</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.creation</span><span class="w"> </span><span class="kn">import</span> <span class="n">initialize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.geometry_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.query</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">collect_node_bounds</span><span class="p">,</span>
     <span class="n">locate_boxes</span><span class="p">,</span>
     <span class="n">locate_edges</span><span class="p">,</span>
@@ -393,7 +393,7 @@
 
 
 <span class="c1"># Ensure all types are as as statically expected.</span>
-<span class="k">def</span> <span class="nf">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">FloatDType</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -403,7 +403,7 @@
     <span class="k">return</span> <span class="n">vertices</span>
 
 
-<span class="k">def</span> <span class="nf">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">IntDType</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -422,21 +422,21 @@
     <span class="k">return</span> <span class="n">faces</span>
 
 
-<span class="k">def</span> <span class="nf">cast_bboxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cast_bboxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
     <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FloatDType</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">bbox_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">bbox_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;bbox_coords must have shape (n_box, 4)&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">bbox_coords</span>
 
 
-<span class="k">def</span> <span class="nf">cast_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cast_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FloatDType</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">edges</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edges must have shape (n_edge, 2, 2)&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">edges</span>
 
 
-<span class="k">def</span> <span class="nf">bbox_tree</span><span class="p">(</span><span class="n">bb_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bbox_tree</span><span class="p">(</span><span class="n">bb_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
     <span class="n">xmin</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="n">xmax</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
     <span class="n">ymin</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -446,7 +446,7 @@
 
 <div class="viewcode-block" id="CellTree2d">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d">[docs]</a>
-<span class="k">class</span> <span class="nc">CellTree2d</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CellTree2d</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct a cell tree from 2D vertices and a faces indexing array.</span>
 
@@ -470,7 +470,7 @@
 <span class="sd">        Fill value marking empty nodes in ``faces``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
         <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span>
@@ -510,7 +510,7 @@
 
 <div class="viewcode-block" id="CellTree2d.locate_points">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_points">[docs]</a>
-    <span class="k">def</span> <span class="nf">locate_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">locate_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the index of a face that contains a point.</span>
 
@@ -533,7 +533,7 @@
 
 <div class="viewcode-block" id="CellTree2d.locate_boxes">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_boxes">[docs]</a>
-    <span class="k">def</span> <span class="nf">locate_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">locate_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the index of a face intersecting with a bounding box.</span>
 
@@ -556,7 +556,7 @@
 
 <div class="viewcode-block" id="CellTree2d.intersect_boxes">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_boxes">[docs]</a>
-    <span class="k">def</span> <span class="nf">intersect_boxes</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intersect_boxes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -595,7 +595,7 @@
 
 <div class="viewcode-block" id="CellTree2d.locate_faces">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_faces">[docs]</a>
-    <span class="k">def</span> <span class="nf">locate_faces</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">locate_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -640,7 +640,7 @@
 
 <div class="viewcode-block" id="CellTree2d.intersect_faces">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_faces">[docs]</a>
-    <span class="k">def</span> <span class="nf">intersect_faces</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intersect_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -686,7 +686,7 @@
 
 <div class="viewcode-block" id="CellTree2d.intersect_edges">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.intersect_edges">[docs]</a>
-    <span class="k">def</span> <span class="nf">intersect_edges</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intersect_edges</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">edge_coords</span><span class="p">:</span> <span class="n">FloatArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -716,7 +716,7 @@
 
 <div class="viewcode-block" id="CellTree2d.compute_barycentric_weights">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.compute_barycentric_weights">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_barycentric_weights</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_barycentric_weights</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
@@ -754,13 +754,13 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">collect_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CellTree2d.validate_node_bounds">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.validate_node_bounds">[docs]</a>
-    <span class="k">def</span> <span class="nf">validate_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoolArray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoolArray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Traverse the tree. Check whether all children are contained in the bounding</span>
 <span class="sd">        box.</span>
@@ -778,7 +778,7 @@
 
 <div class="viewcode-block" id="CellTree2d.to_dict_of_lists">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.to_dict_of_lists">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_dict_of_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict_of_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the tree structure to a dict of lists.</span>
 
