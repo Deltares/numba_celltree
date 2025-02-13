@@ -26,6 +26,7 @@ classifiers = [
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
     'Programming Language :: Python :: Implementation :: CPython',
     'Topic :: Scientific/Engineering',
 ]
@@ -86,8 +87,11 @@ test = "NUMBA_DISABLE_JIT=1 pytest --cov=numba_celltree --cov-report xml --cov-r
 test-single-thread = "NUMBA_DISABLE_JIT=1 NUMBA_NUM_THREADS=1 pytest"
 test-jit = "NUMBA_DISABLE_JIT=0 pytest"
 docs = "NUMBA_DISABLE_JIT=1 sphinx-build docs docs/_build"
-all = { depends_on = ["pre-commit", "test", "docs"]}
+all = { depends-on = ["pre-commit", "test", "docs"]}
 pypi-publish = "rm --recursive --force dist && python -m build && twine check dist/* && twine upload dist/*"
+
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
@@ -104,6 +108,7 @@ python = "3.9.*"
 [tool.pixi.environments]
 default = { features = ["py312"], solve-group = "py312" }
 py312 = { features = ["py312"], solve-group = "py312" }
+py313 = ["py313"]
 py311 = ["py311"]
 py310 = ["py310"]
 py309 = ["py309"]
