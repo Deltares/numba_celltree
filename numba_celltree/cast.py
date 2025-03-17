@@ -1,4 +1,6 @@
 # Ensure all types are as as statically expected.
+import numpy as np
+
 from numba_celltree.constants import (
     FILL_VALUE,
     MAX_N_VERTEX,
@@ -7,9 +9,6 @@ from numba_celltree.constants import (
     IntArray,
     IntDType,
 )
-
-
-import numpy as np
 
 
 def cast_vertices(vertices: FloatArray, copy: bool = False) -> FloatArray:

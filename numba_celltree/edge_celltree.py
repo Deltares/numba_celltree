@@ -47,9 +47,7 @@ class EdgeCellTree2d(CellTree2dBase):
         vertices = cast_vertices(vertices, copy=True)
 
         bb_coords = build_edge_bboxes(edges, vertices)
-        nodes, bb_indices = initialize(
-            vertices, edges, bb_coords, n_buckets, cells_per_leaf
-        )
+        nodes, bb_indices = initialize(edges, bb_coords, n_buckets, cells_per_leaf)
         self.vertices = vertices
         self.edges = edges
         self.n_buckets = n_buckets
