@@ -67,9 +67,7 @@ class CellTree2d(CellTree2dBase):
         counter_clockwise(vertices, faces)
 
         bb_coords = build_face_bboxes(faces, vertices)
-        nodes, bb_indices= initialize(
-            faces, bb_coords, n_buckets, cells_per_leaf
-        )
+        nodes, bb_indices = initialize(faces, bb_coords, n_buckets, cells_per_leaf)
         self.vertices = vertices
         self.faces = faces
         self.n_buckets = n_buckets
