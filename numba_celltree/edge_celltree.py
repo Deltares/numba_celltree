@@ -1,8 +1,9 @@
 from typing import Tuple
 
-from numba_celltree.celltree_base import CellTree2dBase
+from numba_celltree.cast import cast_vertices
+from numba_celltree.celltree_base import CellTree2dBase, bbox_tree
 from numba_celltree.constants import (
-    EdgeCellTreeData,
+    CellTreeData,
     FloatArray,
     IntArray,
 )
@@ -43,7 +44,7 @@ class EdgeCellTree2d(CellTree2dBase):
         if cells_per_leaf < 1:
             raise ValueError("cells_per_leaf must be >= 1")
 
-        vertices = self.cast_vertices(vertices, copy=True)
+        vertices = cast_vertices(vertices, copy=True)
 
         bb_coords = build_edge_bboxes(edges, vertices)
         nodes, bb_indices = initialize(
@@ -56,8 +57,8 @@ class EdgeCellTree2d(CellTree2dBase):
         self.nodes = nodes
         self.bb_indices = bb_indices
         self.bb_coords = bb_coords
-        self.bbox = self.bbox_tree(bb_coords)
-        self.celltree_data = EdgeCellTreeData(
+        self.bbox = bbox_tree(bb_coords)
+        self.celltree_data = CellTreeData(
             self.edges,
             self.vertices,
             self.nodes,
@@ -81,7 +82,7 @@ class EdgeCellTree2d(CellTree2dBase):
             For every point, the index of the edge it falls on. Points not
             falling on any edge are marked with a value of ``-1``.
         """
-        points = self.cast_vertices(points)
+        points = cast_vertices(points)
         return locate_points_on_edge(points, self.celltree_data)
 
     def intersect_edges(
@@ -105,5 +106,5 @@ class EdgeCellTree2d(CellTree2dBase):
             Coordinate pair of the intersection.
         """
         raise NotImplementedError
-        # edge_coords = self.cast_edges(edge_coords)
+        # edge_coords = cast_edges(edge_coords)
         # return locate_edges(edge_coords, self.celltree_data)

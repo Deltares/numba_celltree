@@ -14,11 +14,15 @@ from numba_celltree.query import (
 )
 
 
-class CellTree2dBase(abc.ABC):
-    @abc.abstractmethod
-    def build_bboxes(self, elements: IntArray, vertices: FloatArray) -> FloatArray:
-        pass
+def bbox_tree(bb_coords: FloatArray) -> FloatArray:
+    xmin = bb_coords[:, 0].min()
+    xmax = bb_coords[:, 1].max()
+    ymin = bb_coords[:, 2].min()
+    ymax = bb_coords[:, 3].max()
+    return np.array([xmin, xmax, ymin, ymax], dtype=FloatDType)
 
+
+class CellTree2dBase(abc.ABC):
     @abc.abstractmethod
     def locate_points(self, points: FloatArray) -> IntArray:
         pass
@@ -76,36 +80,3 @@ class CellTree2dBase(abc.ABC):
                 dict_of_lists[parent_index] = [left_child, right_child]
 
         return dict_of_lists
-
-    @staticmethod
-    # Ensure all types are as as statically expected.
-    def cast_vertices(vertices: FloatArray, copy: bool = False) -> FloatArray:
-        if isinstance(vertices, np.ndarray):
-            vertices = vertices.astype(FloatDType, copy=copy)
-        else:
-            vertices = np.ascontiguousarray(vertices, dtype=FloatDType)
-        if vertices.ndim != 2 or vertices.shape[1] != 2:
-            raise ValueError("vertices must have shape (n_points, 2)")
-        return vertices
-
-    @staticmethod
-    def cast_bboxes(bbox_coords: FloatArray) -> FloatArray:
-        bbox_coords = np.ascontiguousarray(bbox_coords, dtype=FloatDType)
-        if bbox_coords.ndim != 2 or bbox_coords.shape[1] != 4:
-            raise ValueError("bbox_coords must have shape (n_box, 4)")
-        return bbox_coords
-
-    @staticmethod
-    def cast_edges(edges: FloatArray) -> FloatArray:
-        edges = np.ascontiguousarray(edges, dtype=FloatDType)
-        if edges.ndim != 3 or edges.shape[1] != 2 or edges.shape[2] != 2:
-            raise ValueError("edges must have shape (n_edge, 2, 2)")
-        return edges
-
-    @staticmethod
-    def bbox_tree(bb_coords: FloatArray) -> FloatArray:
-        xmin = bb_coords[:, 0].min()
-        xmax = bb_coords[:, 1].max()
-        ymin = bb_coords[:, 2].min()
-        ymax = bb_coords[:, 3].max()
-        return np.array([xmin, xmax, ymin, ymax], dtype=FloatDType)
