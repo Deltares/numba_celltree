@@ -70,7 +70,7 @@ def test_to_point():
 def test_cross_product():
     u = Vector(1.0, 2.0)
     v = Vector(3.0, 4.0)
-    assert np.allclose(gu.cross_product(u, v), np.cross(u, v))
+    assert np.allclose(gu.cross_product(u, v), u.x * v.y - u.y * v.x)
 
 
 def test_dot_product():

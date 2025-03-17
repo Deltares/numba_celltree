@@ -3,8 +3,15 @@ from typing import Tuple
 import numba as nb
 import numpy as np
 
-from ..constants import FLOAT_MAX, FLOAT_MIN, PARALLEL, BoolArray, FloatArray, IntArray
-from ..geometry_utils import Vector, as_point, copy_vertices, dot_product
+from numba_celltree.constants import (
+    FLOAT_MAX,
+    FLOAT_MIN,
+    PARALLEL,
+    BoolArray,
+    FloatArray,
+    IntArray,
+)
+from numba_celltree.geometry_utils import Vector, as_point, copy_vertices, dot_product
 
 
 @nb.njit(inline="always")

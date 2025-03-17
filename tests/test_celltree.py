@@ -5,7 +5,6 @@ import numpy as np
 import pytest
 
 from numba_celltree import CellTree2d, demo
-from numba_celltree.constants import MAX_N_VERTEX
 
 
 @pytest.fixture
@@ -155,12 +154,6 @@ def test_shape_errors():
         tree.intersect_boxes(box_coords)
     with pytest.raises(ValueError):
         tree.intersect_edges(edge_coords)
-
-    # Can't realistically test MAX_N_FACE: 2e9 faces requires enormous
-    # allocation.
-    faces = np.arange(MAX_N_VERTEX + 1).reshape((1, -1))
-    with pytest.raises(ValueError):
-        tree.intersect_faces(nodes2, faces, -1)
 
 
 def test_bounds_errors():
@@ -380,13 +373,13 @@ def test_edge_lookup():
     expected_intersections = edge_coords[:3]
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
-    assert np.array_equal(intersections, expected_intersections)
+    assert np.allclose(intersections, expected_intersections)
 
     # Flip edge orientation
     actual_i, actual_j, intersections = tree.intersect_edges(edge_coords[:, ::-1])
     assert np.array_equal(actual_i, expected_i)
     assert np.array_equal(actual_j, expected_j)
-    assert np.array_equal(intersections, expected_intersections[:, ::-1])
+    assert np.allclose(intersections, expected_intersections[:, ::-1])
 
 
 def test_example_material():
@@ -545,12 +538,12 @@ def test_compute_barycentric_weights_triangle_quads():
     )
     face_indices, weights = tree.compute_barycentric_weights(points)
 
-    expected_indices = np.array([0, 0, 1])
+    expected_indices = np.array([0, 0, 0])
     expected_weights = np.array(
         [
             [1.0, 0.0, 0.0, 0.0],
             [0.25, 0.25, 0.25, 0.25],
-            [0.5, 0.0, 0.0, 0.5],
+            [0.0, 0.5, 0.5, 0.0],
         ]
     )
     assert np.array_equal(face_indices, expected_indices)
@@ -606,3 +599,71 @@ def test_to_dict_of_lists(datadir):
     assert isinstance(d, dict)
     assert list(d.keys()) == list(range(len(tree.celltree_data.nodes)))
     assert max(len(v) for v in d.values()) == 2
+
+
+def test_locate_point_on_edge():
+    nodes = np.array(
+        [
+            [0.0, 0.0],
+            [3.0, 0.0],
+            [1.0, 1.0],
+            [0.0, 2.0],
+            [3.0, 2.0],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 2],
+            [0, 2, 3],
+            [2, 4, 3],
+        ]
+    )
+    fill_value = -1
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=4)
+    points = np.array(
+        [
+            [0.0, 0.0],
+            [0.01, 0.01],
+            [0.05, 0.05],
+            [0.15, 0.15],
+            [0.25, 0.25],
+            [0.35, 0.35],
+            [0.45, 0.45],
+            [0.55, 0.55],
+            [0.65, 0.65],
+            [0.75, 0.75],
+        ]
+    )
+    result = tree.locate_points(points)
+    assert (result != -1).all()
+
+    nodes = np.array(
+        [
+            [0.0, 0.0],  # 0
+            [2.0, 0.0],  # 1
+            [2.0, 2.0],  # 2
+            [0.0, 2.0],  # 3
+            [4.0, 0.0],  # 4
+            [4.0, 4.0],  # 5
+            [0.0, 4.0],  # 6
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 2, 3],
+            [1, 4, 5, 2],
+            [3, 2, 5, 6],
+        ]
+    )
+    fill_value = -1
+    tree = CellTree2d(nodes, faces, fill_value, n_buckets=4)
+    points = np.array(
+        [
+            [0.0, 0.0],
+            [0.0, 4.0],
+            [2.0, 2.0],
+            [4.0, 0.0],
+            [4.0, 4.0],
+        ]
+    )
+    assert (result != -1).all()

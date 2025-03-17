@@ -1,5 +1,6 @@
 from typing import Tuple
 
+import numba as nb
 import numpy as np
 
 from numba_celltree.algorithms import (
@@ -12,20 +13,73 @@ from numba_celltree.algorithms import (
 from numba_celltree.celltree_base import CellTree2dBase
 from numba_celltree.constants import (
     FILL_VALUE,
-    MAX_N_FACE,
     MAX_N_VERTEX,
     CellTreeData,
     FloatArray,
+    FloatDType,
     IntArray,
     IntDType,
 )
 from numba_celltree.creation import initialize
 from numba_celltree.geometry_utils import build_face_bboxes, counter_clockwise
 from numba_celltree.query import (
+    collect_node_bounds,
     locate_boxes,
     locate_edges,
     locate_points,
 )
+
+
+# Ensure all types are as as statically expected.
+def cast_vertices(vertices: FloatArray, copy: bool = False) -> FloatArray:
+    if isinstance(vertices, np.ndarray):
+        vertices = vertices.astype(FloatDType, copy=copy)
+    else:
+        vertices = np.ascontiguousarray(vertices, dtype=FloatDType)
+    if vertices.ndim != 2 or vertices.shape[1] != 2:
+        raise ValueError("vertices must have shape (n_points, 2)")
+    return vertices
+
+
+def cast_faces(faces: IntArray, fill_value: int) -> IntArray:
+    if isinstance(faces, np.ndarray):
+        faces = faces.astype(IntDType, copy=True)
+    else:
+        faces = np.ascontiguousarray(faces, dtype=IntDType)
+    if faces.ndim != 2:
+        raise ValueError("faces must have shape (n_face, n_max_vert)")
+    _, n_max_vert = faces.shape
+    if n_max_vert > MAX_N_VERTEX:
+        raise ValueError(
+            f"faces contains up to {n_max_vert} vertices for a single face. "
+            f"numba_celltree supports a maximum of {MAX_N_VERTEX} vertices. "
+            f"Increase MAX_N_VERTEX in the source code, or alter the mesh."
+        )
+    if fill_value != FILL_VALUE:
+        faces[faces == fill_value] = FILL_VALUE
+    return faces
+
+
+def cast_bboxes(bbox_coords: FloatArray) -> FloatArray:
+    bbox_coords = np.ascontiguousarray(bbox_coords, dtype=FloatDType)
+    if bbox_coords.ndim != 2 or bbox_coords.shape[1] != 4:
+        raise ValueError("bbox_coords must have shape (n_box, 4)")
+    return bbox_coords
+
+
+def cast_edges(edges: FloatArray) -> FloatArray:
+    edges = np.ascontiguousarray(edges, dtype=FloatDType)
+    if edges.ndim != 3 or edges.shape[1] != 2 or edges.shape[2] != 2:
+        raise ValueError("edges must have shape (n_edge, 2, 2)")
+    return edges
+
+
+def bbox_tree(bb_coords: FloatArray) -> FloatArray:
+    xmin = bb_coords[:, 0].min()
+    xmax = bb_coords[:, 1].max()
+    ymin = bb_coords[:, 2].min()
+    ymax = bb_coords[:, 3].max()
+    return np.array([xmin, xmax, ymin, ymax], dtype=FloatDType)
 
 
 class CellTree2d(CellTree2dBase):
@@ -99,13 +153,7 @@ class CellTree2d(CellTree2dBase):
             faces = np.ascontiguousarray(faces, dtype=IntDType)
         if faces.ndim != 2:
             raise ValueError("faces must have shape (n_face, n_max_vert)")
-        n_face, n_max_vert = faces.shape
-        if n_face > MAX_N_FACE:
-            raise ValueError(
-                f"faces contains {n_face} faces. "
-                f"numba_celltree supports a maximum of {MAX_N_FACE} faces. "
-                f"Increase MAX_N_FACE in the source code, or supply a smaller mesh."
-            )
+        _, n_max_vert = faces.shape
         if n_max_vert > MAX_N_VERTEX:
             raise ValueError(
                 f"faces contains up to {n_max_vert} vertices for a single face. "
@@ -119,6 +167,9 @@ class CellTree2d(CellTree2dBase):
     def locate_points(self, points: FloatArray) -> IntArray:
         """
         Find the index of a face that contains a point.
+
+        Points that are very close near an edge of a face will also be
+        identified as falling within that face.
 
         Parameters
         ----------
@@ -149,8 +200,9 @@ class CellTree2d(CellTree2dBase):
         tree_face_indices: ndarray of integers with shape ``(n_found,)``
             Indices of the face.
         """
-        bbox_coords = self.cast_bboxes(bbox_coords)
-        return locate_boxes(bbox_coords, self.celltree_data)
+        bbox_coords = cast_bboxes(bbox_coords)
+        n_chunks = nb.get_num_threads()
+        return locate_boxes(bbox_coords, self.celltree_data, n_chunks)
 
     def intersect_boxes(
         self, bbox_coords: FloatArray
@@ -173,8 +225,9 @@ class CellTree2d(CellTree2dBase):
         area: ndarray of floats with shape ``(n_found,)``
             Area of intersection between the two intersecting faces.
         """
-        bbox_coords = self.cast_bboxes(bbox_coords)
-        i, j = locate_boxes(bbox_coords, self.celltree_data)
+        bbox_coords = cast_bboxes(bbox_coords)
+        n_chunks = nb.get_num_threads()
+        i, j = locate_boxes(bbox_coords, self.celltree_data, n_chunks)
         area = box_area_of_intersection(
             bbox_coords=bbox_coords,
             vertices=self.vertices,
@@ -187,7 +240,7 @@ class CellTree2d(CellTree2dBase):
         actual = area > 0
         return i[actual], j[actual], area[actual]
 
-    def _locate_faces(
+    def locate_faces(
         self, vertices: FloatArray, faces: IntArray
     ) -> Tuple[IntArray, IntArray]:
         """
@@ -214,8 +267,11 @@ class CellTree2d(CellTree2dBase):
             Indices of the tree faces.
         """
         counter_clockwise(vertices, faces)
-        bbox_coords = build_face_bboxes(faces, vertices)
-        shortlist_i, shortlist_j = locate_boxes(bbox_coords, self.celltree_data)
+        bbox_coords = build_bboxes(faces, vertices)
+        n_chunks = nb.get_num_threads()
+        shortlist_i, shortlist_j = locate_boxes(
+            bbox_coords, self.celltree_data, n_chunks
+        )
         intersects = polygons_intersect(
             vertices_a=vertices,
             vertices_b=self.vertices,
@@ -253,9 +309,9 @@ class CellTree2d(CellTree2dBase):
         area: ndarray of floats with shape ``(n_found,)``
             Area of intersection between the two intersecting faces.
         """
-        vertices = self.cast_vertices(vertices)
-        faces = self.cast_faces(faces, fill_value)
-        i, j = self._locate_faces(vertices, faces)
+        vertices = cast_vertices(vertices)
+        faces = cast_faces(faces, fill_value)
+        i, j = self.locate_faces(vertices, faces)
         area = area_of_intersection(
             vertices_a=vertices,
             vertices_b=self.vertices,
@@ -286,11 +342,15 @@ class CellTree2d(CellTree2dBase):
             Indices of the bounding box.
         tree_face_indices: ndarray of integers with shape ``(n_found,)``
             Indices of the face.
-        length: ndarray of floats with shape ``(n_found,)``
-            Length of intersection of the edge inside of the face.
+        intersection_edges: ndarray of floats with shape ``(n_found, 2, 2)``
+            The resulting intersected edges, every row containing:
+            ``((x0, y0), (x1, y1))``.
+            The length of each intersected edge can be computed with:
+            ``np.linalg.norm(intersections[:, 1] - intersections[:, 0], axis=1)``.
         """
-        edge_coords = self.cast_edges(edge_coords)
-        return locate_edges(edge_coords, self.celltree_data)
+        edge_coords = cast_edges(edge_coords)
+        n_chunks = nb.get_num_threads()
+        return locate_edges(edge_coords, self.celltree_data, n_chunks)
 
     def compute_barycentric_weights(
         self,

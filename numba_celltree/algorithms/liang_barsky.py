@@ -3,8 +3,8 @@ from typing import Tuple
 import numba as nb
 import numpy as np
 
-from ..constants import Box, Point
-from ..geometry_utils import point_inside_box
+from numba_celltree.constants import Box, Point
+from numba_celltree.geometry_utils import point_inside_box
 
 
 @nb.njit
@@ -53,6 +53,11 @@ def liang_barsky_line_box_clip(
                     return NO_INTERSECTION
                 elif t < t1:
                     t1 = t
+
+    # TODO: Can this check be set as the first thing in the for loop for early
+    # exits?
+    if t0 == t1:
+        return NO_INTERSECTION
 
     c = Point(a.x + t0 * dx, a.y + t0 * dy)
     d = Point(a.x + t1 * dx, a.y + t1 * dy)

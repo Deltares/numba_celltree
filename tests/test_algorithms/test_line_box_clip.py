@@ -23,6 +23,7 @@ POLY = np.array(
         [0.0, 2.0],
     ]
 )
+POLY_REVERSED = POLY[::-1, :]
 
 
 @pytest.mark.parametrize(
@@ -114,102 +115,180 @@ def test_line_box_clip(line_clip, box):
         (cohen_sutherland_line_box_clip, BOX),
         (liang_barsky_line_box_clip, BOX),
         (cyrus_beck_line_polygon_clip, POLY),
+        (cyrus_beck_line_polygon_clip, POLY_REVERSED),
     ],
 )
 def test_line_box_clip_degeneracy(line_clip, box):
+    def assert_expected(
+        a: tuple,
+        b: tuple,
+        intersects: bool,
+        c: tuple = (np.nan, np.nan),
+        d: tuple = (np.nan, np.nan),
+    ) -> None:
+        a = Point(*a)
+        b = Point(*b)
+        # c, d are the clipped points
+        actual, actual_c, actual_d = line_clip(a, b, box)
+        print(actual_c, c)
+        print(actual_d, d)
+        assert intersects is actual
+        assert np.allclose(actual_c, c, equal_nan=True)
+        assert np.allclose(actual_d, d, equal_nan=True)
+
+        # Direction of the point doesn't change, so neither should the answer.
+        actual, actual_c, actual_d = line_clip(a, b, box)
+        assert intersects is actual
+        assert np.allclose(actual_c, c, equal_nan=True)
+        assert np.allclose(actual_d, d, equal_nan=True)
+
     # Line through vertices
-    a = Point(-1.0, -1.0)
-    b = Point(3.0, 3.0)
-    intersects, c, d = line_clip(a, b, box)
-    assert intersects
-    assert np.allclose(c, [0.0, 0.0])
-    assert np.allclose(d, [2.0, 2.0])
-    assert line_clip(a, b, box)[0] == line_clip(b, a, box)[0]
+    assert_expected(
+        (-1.0, -1.0),
+        (3.0, 3.0),
+        True,
+        (0.0, 0.0),
+        (2.0, 2.0),
+    )
 
     # Identity
-    intersects, c, d = line_clip(a, a, box)
-    assert not intersects
+    assert_expected(
+        (-1.0, -1.0),
+        (-1.0, -1.0),
+        False,
+    )
 
     # Line through lower edge
-    a = Point(-1.0, 0.0)
-    b = Point(3.0, 0.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (-1.0, 0.0),
+        (3.0, 0.0),
+        True,
+        (0.0, 0.0),
+        (2.0, 0.0),
+    )
 
     # Line through upper edge
-    a = Point(-1.0, 2.0)
-    b = Point(3.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (-1.0, 2.0),
+        (3.0, 2.0),
+        True,
+        (0.0, 2.0),
+        (2.0, 2.0),
+    )
 
     # Partial line lower edge
-    a = Point(-1.0, 0.0)
-    b = Point(1.0, 0.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (-1.0, 0.0),
+        (1.0, 0.0),
+        True,
+        (0.0, 0.0),
+        (1.0, 0.0),
+    )
 
     # Partial line upper edge
-    a = Point(-1.0, 2.0)
-    b = Point(1.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (-1.0, 2.0),
+        (1.0, 2.0),
+        True,
+        (0.0, 2.0),
+        (1.0, 2.0),
+    )
 
     # Within lower edge
-    a = Point(0.5, 0.0)
-    b = Point(1.5, 0.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.5, 0.0),
+        (1.5, 0.0),
+        True,
+        (0.5, 0.0),
+        (1.5, 0.0),
+    )
 
     # Within upper edge
-    a = Point(0.5, 2.0)
-    b = Point(1.5, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.5, 2.0),
+        (1.5, 2.0),
+        True,
+        (0.5, 2.0),
+        (1.5, 2.0),
+    )
 
     # Identical to lower edge
-    a = Point(0.0, 0.0)
-    b = Point(2.0, 0.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.0, 0.0),
+        (2.0, 0.0),
+        True,
+        (0.0, 0.0),
+        (2.0, 0.0),
+    )
 
     # Identical to upper edge
-    a = Point(0.0, 2.0)
-    b = Point(2.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.0, 2.0),
+        (2.0, 2.0),
+        True,
+        (0.0, 2.0),
+        (2.0, 2.0),
+    )
 
     # Identical to left edge
-    a = Point(0.0, 0.0)
-    b = Point(0.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.0, 0.0),
+        (0.0, 2.0),
+        True,
+        (0.0, 0.0),
+        (0.0, 2.0),
+    )
 
     # Identical to right edge
-    a = Point(2.0, 0.0)
-    b = Point(2.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (2.0, 0.0),
+        (2.0, 2.0),
+        True,
+        (2.0, 0.0),
+        (2.0, 2.0),
+    )
 
     # Within left edge
-    a = Point(0.0, 0.5)
-    b = Point(0.0, 1.5)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.0, 0.5),
+        (0.0, 1.5),
+        True,
+        (0.0, 0.5),
+        (0.0, 1.5),
+    )
 
     # Within right edge
-    a = Point(2.0, 0.5)
-    b = Point(2.0, 1.5)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (2.0, 0.5),
+        (2.0, 1.5),
+        True,
+        (2.0, 0.5),
+        (2.0, 1.5),
+    )
 
     # Identical to left edge
-    a = Point(0.0, 0.0)
-    b = Point(0.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (0.0, 0.0),
+        (0.0, 2.0),
+        True,
+        (0.0, 0.0),
+        (0.0, 2.0),
+    )
 
     # Identical to right edge
-    a = Point(2.0, 0.0)
-    b = Point(2.0, 2.0)
-    assert line_clip(a, b, box)[0]
-    assert line_clip(b, a, box)[0]
+    assert_expected(
+        (2.0, 0.0),
+        (2.0, 2.0),
+        True,
+        (2.0, 0.0),
+        (2.0, 2.0),
+    )
+
+    # Diagonal line of length (1, 1), touching upper left corner.
+    assert_expected(
+        (-1.0, 1.0),
+        (0.0, 2.0),
+        False,
+        (np.nan, np.nan),
+        (np.nan, np.nan),
+    )

@@ -17,7 +17,11 @@ from numba_celltree.constants import (
     NodeArray,
     NodeDType,
 )
-from numba_celltree.utils import allocate_stack, pop, push
+from numba_celltree.utils import (
+    allocate_double_stack,
+    pop_both,
+    push_both,
+)
 
 
 @nb.njit(inline="always")
@@ -226,20 +230,6 @@ def pessimistic_n_nodes(n_elements: int):
     return n_nodes + 1
 
 
-@nb.njit(inline="always")
-def push_both(root_stack, dim_stack, root, dim, size):
-    size_root = push(root_stack, root, size)
-    _ = push(dim_stack, dim, size)
-    return size_root
-
-
-@nb.njit(inline="always")
-def pop_both(root_stack, dim_stack, size):
-    root, size_root = pop(root_stack, size)
-    dim, _ = pop(dim_stack, size)
-    return root, dim, size_root
-
-
 @nb.njit(cache=True)
 def build(
     nodes: NodeArray,
@@ -250,15 +240,14 @@ def build(
     cells_per_leaf: int,
 ):
     # Cannot compile ahead of time with Numba and recursion
-    # Just use a stack based approach instead
-    root_stack = allocate_stack()
-    dim_stack = allocate_stack()
-    root_stack[0] = 0
-    dim_stack[0] = 0
+    # Just use a stack based approach instead; store root and dim values.
+    stack = allocate_double_stack()
+    stack[0, 0] = 0
+    stack[0, 1] = 0
     size = 1
 
     while size > 0:
-        root_index, dim, size = pop_both(root_stack, dim_stack, size)
+        root_index, dim, size = pop_both(stack, size)
 
         dim_flag = dim
         if dim < 0:
@@ -302,7 +291,7 @@ def build(
                     0,  # size
                 )
             )
-        # NOTA BENE: do not change the default size (0) given to the bucket here
+        # NOTE: do not change the default size (0) given to the bucket here
         # it is used to detect empty buckets later on.
 
         # Now that the buckets are setup, sort them
@@ -360,7 +349,7 @@ def build(
                 if dim_flag >= 0:
                     dim_flag = (not dim) - 2
                     nodes[root_index]["dim"] = not root.dim
-                    size = push_both(root_stack, dim_stack, root_index, dim_flag, size)
+                    stack, size = push_both(stack, root_index, dim_flag, size)
                 else:  # Already split once, convert to leaf.
                     nodes[root_index]["Lmax"] = -1
                     nodes[root_index]["Rmin"] = -1
@@ -386,8 +375,8 @@ def build(
         node_index = push_node(nodes, left_child, node_index)
         node_index = push_node(nodes, right_child, node_index)
 
-        size = push_both(root_stack, dim_stack, child_ind + 1, right_child.dim, size)
-        size = push_both(root_stack, dim_stack, child_ind, left_child.dim, size)
+        stack, size = push_both(stack, child_ind + 1, right_child.dim, size)
+        stack, size = push_both(stack, child_ind, left_child.dim, size)
 
     return node_index
 

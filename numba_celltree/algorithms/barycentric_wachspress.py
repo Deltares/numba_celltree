@@ -2,11 +2,18 @@
 Compute the Wachspress Barycentric ccoordinate for a convex polygon. These can
 be directly used for barycentric interpolation.
 """
+
 import numba as nb
 import numpy as np
 
-from ..constants import PARALLEL, TOLERANCE_ON_EDGE, FloatArray, FloatDType, IntArray
-from ..geometry_utils import (
+from numba_celltree.constants import (
+    PARALLEL,
+    TOLERANCE_ON_EDGE,
+    FloatArray,
+    FloatDType,
+    IntArray,
+)
+from numba_celltree.geometry_utils import (
     Point,
     as_point,
     copy_vertices,

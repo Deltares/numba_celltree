@@ -13,13 +13,14 @@ Thesis.
 Available at:
 http://graphics.zcu.cz/files/DIS_1999_Bui_Duc_Huy.pdf
 """
+
 from typing import Sequence, Tuple
 
 import numba as nb
 import numpy as np
 
-from ..constants import Point, Vector
-from ..geometry_utils import (
+from numba_celltree.constants import Point, Vector
+from numba_celltree.geometry_utils import (
     as_point,
     cross_product,
     dot_product,
@@ -82,13 +83,45 @@ def overlap(ta: Point, tb: Point, t0: Point, t1: Point) -> bool:
 
 
 @nb.njit(inline="always")
+def aligned(U: Vector, V: Vector) -> bool:
+    # Any zero vector: always aligned.
+    if (U.x == 0 and U.y == 0) or (V.x == 0 and V.y == 0):
+        return True
+
+    # Both x-components non-zero:
+    if U.x != 0 and V.x != 0:
+        return (U.x > 0) == (V.x > 0)
+
+    # Both y-components non-zero:
+    if U.y != 0 and V.y != 0:
+        return (U.y > 0) == (V.y > 0)
+
+    # One vertical, one horizontal: not aligned.
+    return False
+
+
+@nb.njit(inline="always")
 def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Point]:
+    # Redefine everything relative to point a to avoid precision loss in cross
+    # products.
+    # _a is implicit (0.0, 0.0)
+    _b = Point(b.x - a.x, b.y - a.y)
+    _v0 = Point(v0.x - a.x, v0.y - a.y)
+    _v1 = Point(v1.x - a.x, v1.y - a.y)
+
+    # Check orientation
+    U = Vector(_b.x, _b.y)
+    V = to_vector(_v0, _v1)
+    if not aligned(U, V):
+        v0, v1 = v1, v0
+        _v0, _v1 = _v1, _v0
+
     # Project on the same axis (t), take inner values
-    n = Vector(-(b.y - a.y), (b.x - a.x))
-    ta = cross_product(n, a)
-    tb = cross_product(n, b)
-    t0 = cross_product(n, v0)
-    t1 = cross_product(n, v1)
+    n = Vector(-_b.y, _b.x)  # a implicit
+    ta = 0.0  # a implicit
+    tb = cross_product(n, _b)
+    t0 = cross_product(n, _v0)
+    t1 = cross_product(n, _v1)
 
     if not overlap(ta, tb, t0, t1):
         return NO_INTERSECTION

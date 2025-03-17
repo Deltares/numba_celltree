@@ -4,12 +4,13 @@ https://github.com/scivision/lineclipping-python-fortran
 
 (MIT License)
 """
+
 from typing import Tuple
 
 import numba as nb
 import numpy as np
 
-from ..constants import Box, Point
+from numba_celltree.constants import Box, Point
 
 INSIDE, LEFT, RIGHT, LOWER, UPPER = 0, 1, 2, 4, 8
 
@@ -42,9 +43,8 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
     defined by a.x, a.y (start point) and b.x, b.y (end point) will be
     clipped.
 
-    If the line does not intersect with the rectangular clipping area,
-    four None values will be returned as tuple. Otherwise a tuple of the
-    clipped line points will be returned in the form (cx1, ca.y, cb.x, cb.y).
+    If the line does not intersect with the rectangular clipping area, a
+    boolean False and NaN-valued points will be returned.
     """
     NO_INTERSECTION = False, Point(np.nan, np.nan), Point(np.nan, np.nan)
     dx = b.x - a.x
@@ -58,6 +58,7 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
 
     # examine non-trivially outside points
     # bitwise OR |
+    # TODO: Figure out maximum number of iterations and replace by a for loop.
     while (k1 | k2) != INSIDE:
         # if both points are inside box (0000),
         # ACCEPT trivial whole line in box, exit.
@@ -90,5 +91,11 @@ def cohen_sutherland_line_box_clip(a: Point, b: Point, box: Box) -> Tuple[Point,
         elif opt == k2:
             b = Point(x, y)
             k2 = get_clip(b, box)
+
+        # Recompute (dx, dy) with new points.
+        dx = b.x - a.x
+        dy = b.y - a.y
+        if dx == 0.0 and dy == 0.0:
+            return NO_INTERSECTION
 
     return True, a, b

@@ -1,8 +1,13 @@
+from typing import Tuple
+
 import numba as nb
 import numpy as np
 
-from .algorithms import cohen_sutherland_line_box_clip, cyrus_beck_line_polygon_clip
-from .constants import (
+from numba_celltree.algorithms import (
+    cohen_sutherland_line_box_clip,
+    cyrus_beck_line_polygon_clip,
+)
+from numba_celltree.constants import (
     PARALLEL,
     BoolArray,
     CellTreeData,
@@ -11,7 +16,7 @@ from .constants import (
     IntArray,
     IntDType,
 )
-from .geometry_utils import (
+from numba_celltree.geometry_utils import (
     Box,
     Point,
     as_box,
@@ -19,11 +24,36 @@ from .geometry_utils import (
     box_contained,
     boxes_intersect,
     copy_vertices_into,
-    point_in_polygon,
+    point_in_polygon_or_on_edge,
     point_on_edge,
     to_vector,
 )
-from .utils import allocate_polygon, allocate_stack, pop, push
+from numba_celltree.utils import (
+    allocate_polygon,
+    allocate_stack,
+    allocate_triple_stack,
+    grow,
+    pop,
+    pop_triple,
+    push,
+    push_triple,
+)
+
+
+@nb.njit(inline="always")
+def concatenate_indices(
+    indices: IntArray, counts: IntArray
+) -> Tuple[IntArray, IntArray]:
+    total_size = sum(counts)
+    ii = np.empty(total_size, dtype=IntDType)
+    jj = np.empty(total_size, dtype=IntDType)
+    start = 0
+    for i, size in enumerate(counts):
+        end = start + size
+        ii[start:end] = indices[i][:size, 0]
+        jj[start:end] = indices[i][:size, 1]
+        start = end
+    return ii, jj
 
 
 # Inlining saves about 15% runtime
@@ -47,7 +77,7 @@ def locate_point(point: Point, tree: CellTreeData):
                 # Make sure polygons to test is contiguous (stack allocated) array
                 # This saves about 40-50% runtime
                 poly = copy_vertices_into(tree.vertices, face, polygon_work_array)
-                if point_in_polygon(point, poly):
+                if point_in_polygon_or_on_edge(point, poly):
                     return bbox_index
             continue
 
@@ -61,15 +91,15 @@ def locate_point(point: Point, tree: CellTreeData):
             # This heuristic is worthwhile because a point will fall into a
             # single face -- if found, we can stop.
             if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
-                size = push(stack, left_child, size)
-                size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
             else:
-                size = push(stack, right_child, size)
-                size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
         elif left:
-            size = push(stack, left_child, size)
+            stack, size = push(stack, left_child, size)
         elif right:
-            size = push(stack, right_child, size)
+            stack, size = push(stack, right_child, size)
 
     return return_value
 
@@ -146,14 +176,33 @@ def locate_points_on_edge(
 
 
 @nb.njit(inline="always")
-def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: bool):
+def locate_box(
+    box: Box, tree: CellTreeData, indices: IntArray, indices_size: int, index: int
+) -> Tuple[int, int]:
+    """
+    Search the tree for a single axis-aligned box.
+
+    Parameters
+    ----------
+    box: Box named tuple
+    tree: CellTreeData
+    indices: IntArray
+        Array for results. Contains ``index`` of the box we're searching for
+        the first column, and the index of the box in the celltree (if any) in
+        the second.
+    indices_size: int
+        Current number of filled in values in ``indices``.
+    index: int
+        Current index of the box we're searching.
+    """
     tree_bbox = as_box(tree.bbox)
     if not boxes_intersect(box, tree_bbox):
-        return 0
+        return 0, indices_size
     stack = allocate_stack()
     stack[0] = 0
     size = 1
     count = 0
+    capacity = len(indices)
 
     while size > 0:
         node_index, size = pop(stack, size)
@@ -166,8 +215,15 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
                 # As a named tuple: saves about 15% runtime
                 leaf_box = as_box(tree.bb_coords[bbox_index])
                 if boxes_intersect(box, leaf_box):
-                    if store_indices:
-                        indices[count] = bbox_index
+                    # Exit if we need to re-allocate the array. Exiting instead
+                    # of drawing the re-allocation logic in here makes a
+                    # significant runtime difference; seems like numba can
+                    # optimize this form better.
+                    if indices_size >= capacity:
+                        return -1, indices_size
+                    indices[indices_size, 0] = index
+                    indices[indices_size, 1] = bbox_index
+                    indices_size += 1
                     count += 1
         else:
             dim = 1 if node["dim"] else 0
@@ -179,58 +235,59 @@ def locate_box(box: Box, tree: CellTreeData, indices: IntArray, store_indices: b
             right_child = left_child + 1
 
             if left and right:
-                size = push(stack, left_child, size)
-                size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
             elif left:
-                size = push(stack, left_child, size)
+                stack, size = push(stack, left_child, size)
             elif right:
-                size = push(stack, right_child, size)
+                stack, size = push(stack, right_child, size)
 
-    return count
+    return count, indices_size
 
 
-@nb.njit(parallel=PARALLEL, cache=True)
-def locate_boxes(
+@nb.njit(cache=True)
+def locate_boxes_helper(
     box_coords: FloatArray,
     tree: CellTreeData,
-):
-    # Numba does not support a concurrent list or bag like stucture:
-    # https://github.com/numba/numba/issues/5878
-    # (Standard lists are not thread safe.)
-    # To support parallel execution, we're stuck with numpy arrays therefore.
-    # Since we don't know the number of contained bounding boxes, we traverse
-    # the tree twice: first to count, then allocate, then another time to
-    # actually store the indices.
-    # The cost of traversing twice is roughly a factor two. Since many
-    # computers can parallellize over more than two threads, counting first --
-    # which enables parallelization -- should still result in a net speed up.
-    n_box = box_coords.shape[0]
-    counts = np.empty(n_box + 1, dtype=IntDType)
-    dummy = np.empty((0,), dtype=IntDType)
-    counts[0] = 0
-    # First run a count so we can allocate afterwards
-    for i in nb.prange(n_box):  # pylint: disable=not-an-iterable
-        box = as_box(box_coords[i])
-        counts[i + 1] = locate_box(box, tree, dummy, False)
+    offset: int,
+) -> IntArray:
+    n_box = len(box_coords)
+    # Ensure the initial indices array isn't too small.
+    indices = np.empty((max(n_box, 256), 2), dtype=IntDType)
+    total_count = 0
+    indices_size = 0
+    for box_index in range(n_box):
+        box = as_box(box_coords[box_index])
+        # Re-allocating here is significantly faster than re-allocating inside
+        # of ``locate_box``; presumably because that function is kept simpler and
+        # numba can optimize better. Unfortunately, that means we have to keep
+        # trying until we succeed here; in most cases, success is immediate as
+        # the indices array will have enough capacity.
+        while True:
+            count, indices_size = locate_box(
+                box, tree, indices, indices_size, box_index + offset
+            )
+            if count != -1:
+                break
+            # Not enough capacity: grow capacity, discard partial work, retry.
+            indices_size = total_count
+            indices = grow(indices)
+        total_count += count
+    return indices, total_count
 
-    # Run a cumulative sum
-    total = 0
-    for i in range(1, n_box + 1):
-        total += counts[i]
-        counts[i] = total
 
-    # Now allocate appropriately
-    ii = np.empty(total, dtype=IntDType)
-    jj = np.empty(total, dtype=IntDType)
-    for i in nb.prange(n_box):  # pylint: disable=not-an-iterable
-        start = counts[i]
-        end = counts[i + 1]
-        ii[start:end] = i
-        indices = jj[start:end]
-        box = as_box(box_coords[i])
-        locate_box(box, tree, indices, True)
-
-    return ii, jj
+@nb.njit(cache=True, parallel=PARALLEL)
+def locate_boxes(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
+    chunks = np.array_split(box_coords, n_chunks)
+    offsets = np.zeros(n_chunks, dtype=IntDType)
+    for i, chunk in enumerate(chunks[:-1]):
+        offsets[i + 1] = offsets[i] + len(chunk)
+    # Setup (dummy) typed list for numba to store parallel results.
+    indices = [np.empty((0, 2), dtype=IntDType) for _ in range(n_chunks)]
+    counts = np.empty(n_chunks, dtype=IntDType)
+    for i in nb.prange(n_chunks):
+        indices[i], counts[i] = locate_boxes_helper(chunks[i], tree, offsets[i])
+    return concatenate_indices(indices, counts)
 
 
 # Inlining this function drives compilation time through the roof. It's
@@ -244,13 +301,14 @@ def locate_edge(
     tree: CellTreeData,
     indices: IntArray,
     intersections: FloatArray,
-    store_intersection: bool,
+    indices_size: int,
+    index: int,
 ):
     # Check if the entire mesh intersects with the line segment at all
     tree_bbox = as_box(tree.bbox)
     tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree_bbox)
     if not tree_intersects:
-        return 0
+        return 0, indices_size
 
     V = to_vector(a, b)
     stack = allocate_stack()
@@ -258,6 +316,7 @@ def locate_edge(
     stack[0] = 0
     size = 1
     count = 0
+    capacity = len(indices)
 
     while size > 0:
         node_index, size = pop(stack, size)
@@ -275,12 +334,16 @@ def locate_edge(
                     )
                     face_intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
                     if face_intersects:
-                        if store_intersection:
-                            indices[count] = bbox_index
-                            intersections[count, 0, 0] = c.x
-                            intersections[count, 0, 1] = c.y
-                            intersections[count, 1, 0] = d.x
-                            intersections[count, 1, 1] = d.y
+                        # If insufficient capacity, exit.
+                        if indices_size >= capacity:
+                            return -1, indices_size
+                        indices[indices_size, 0] = index
+                        indices[indices_size, 1] = bbox_index
+                        intersections[indices_size, 0, 0] = c.x
+                        intersections[indices_size, 0, 1] = c.y
+                        intersections[indices_size, 1, 0] = d.x
+                        intersections[indices_size, 1, 1] = d.y
+                        indices_size += 1
                         count += 1
             continue
 
@@ -326,62 +389,75 @@ def locate_edge(
         right_child = left_child + 1
 
         if left and right:
-            size = push(stack, left_child, size)
-            size = push(stack, right_child, size)
+            stack, size = push(stack, left_child, size)
+            stack, size = push(stack, right_child, size)
         elif left:
-            size = push(stack, left_child, size)
+            stack, size = push(stack, left_child, size)
         elif right:
-            size = push(stack, right_child, size)
+            stack, size = push(stack, right_child, size)
 
-    return count
+    return count, indices_size
 
 
-@nb.njit(parallel=PARALLEL, cache=True)
-def locate_edges(
+@nb.njit(cache=True)
+def locate_edges_helper(
     edge_coords: FloatArray,
     tree: CellTreeData,
-):
-    # Numba does not support a concurrent list or bag like stucture:
-    # https://github.com/numba/numba/issues/5878
-    # (Standard lists are not thread safe.)
-    # To support parallel execution, we're stuck with numpy arrays therefore.
-    # Since we don't know the number of contained bounding boxes, we traverse
-    # the tree twice: first to count, then allocate, then another time to
-    # actually store the indices.
-    # The cost of traversing twice is roughly a factor two. Since many
-    # computers can parallellize over more than two threads, counting first --
-    # which enables parallelization -- should still result in a net speed up.
-    n_edge = edge_coords.shape[0]
-    counts = np.empty(n_edge + 1, dtype=IntDType)
-    int_dummy = np.empty((0,), dtype=IntDType)
-    float_dummy = np.empty((0, 0, 0), dtype=FloatDType)
-    counts[0] = 0
-    # First run a count so we can allocate afterwards
-    for i in nb.prange(n_edge):  # pylint: disable=not-an-iterable
-        a = as_point(edge_coords[i, 0])
-        b = as_point(edge_coords[i, 1])
-        counts[i + 1] = locate_edge(a, b, tree, int_dummy, float_dummy, False)
+    offset: int,
+) -> IntArray:
+    n_edge = len(edge_coords)
+    # Ensure the initial indices array isn't too small.
+    n = max(n_edge, 256)
+    indices = np.empty((n, 2), dtype=IntDType)
+    xy = np.empty((n, 2, 2), dtype=FloatDType)
 
-    # Run a cumulative sum
-    total = 0
-    for i in range(1, n_edge + 1):
-        total += counts[i]
-        counts[i] = total
+    total_count = 0
+    indices_size = 0
+    for edge_index in range(n_edge):
+        a = as_point(edge_coords[edge_index, 0])
+        b = as_point(edge_coords[edge_index, 1])
 
-    # Now allocate appropriately
-    ii = np.empty(total, dtype=IntDType)
-    jj = np.empty(total, dtype=IntDType)
-    xy = np.empty((total, 2, 2), dtype=FloatDType)
-    for i in nb.prange(n_edge):  # pylint: disable=not-an-iterable
-        start = counts[i]
-        end = counts[i + 1]
-        ii[start:end] = i
-        indices = jj[start:end]
-        intersections = xy[start:end]
-        a = as_point(edge_coords[i, 0])
-        b = as_point(edge_coords[i, 1])
-        locate_edge(a, b, tree, indices, intersections, True)
+        while True:
+            count, indices_size = locate_edge(
+                a, b, tree, indices, xy, indices_size, edge_index + offset
+            )
+            if count != -1:
+                break
+            # Not enough capacity: grow capacity, discard partial work, retry.
+            indices_size = total_count
+            indices = grow(indices)
+            xy = grow(xy)
 
+        total_count += count
+
+    return indices, xy, total_count
+
+
+@nb.njit(cache=True, parallel=PARALLEL)
+def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
+    chunks = np.array_split(box_coords, n_chunks)
+    offsets = np.zeros(n_chunks, dtype=IntDType)
+    for i, chunk in enumerate(chunks[:-1]):
+        offsets[i + 1] = offsets[i] + len(chunk)
+
+    # Setup (dummy) typed lists for numba to store parallel results.
+    indices = [np.empty((0, 2), dtype=IntDType) for _ in range(n_chunks)]
+    intersections = [np.empty((0, 2, 2), dtype=FloatDType) for _ in range(n_chunks)]
+    counts = np.empty(n_chunks, dtype=IntDType)
+    for i in nb.prange(n_chunks):
+        indices[i], intersections[i], counts[i] = locate_edges_helper(
+            chunks[i], tree, offsets[i]
+        )
+
+    total_size = sum(counts)
+    xy = np.empty((total_size, 2, 2), dtype=FloatDType)
+    start = 0
+    for i, size in enumerate(counts):
+        end = start + size
+        xy[start:end] = intersections[i][:size]
+        start = end
+
+    ii, jj = concatenate_indices(indices, counts)
     return ii, jj, xy
 
 
@@ -396,27 +472,18 @@ def collect_node_bounds(tree: CellTreeData) -> FloatArray:
     node_bounds[0, 2] = tree.bbox[2]
     node_bounds[0, 3] = tree.bbox[3]
 
-    stack = allocate_stack()
-    parent_stack = allocate_stack()
-    side_stack = allocate_stack()
-
-    # Right child
-    stack[0] = 2
-    parent_stack[0] = 0
-    side_stack[0] = 0
-    # Left child
-    stack[1] = 1
-    parent_stack[1] = 0
-    side_stack[1] = 1
-    # Stack size starts at two.
+    # Stack contains: node_index, parent_index, side (right/left)
+    ROOT = 0
+    RIGHT = 0
+    LEFT = 1
+    stack = allocate_triple_stack()
+    stack[0, :] = (2, ROOT, RIGHT)  # Right child
+    stack[1, :] = (1, ROOT, LEFT)  # Left child
     size = 2
 
     while size > 0:
         # Collect from stacks
-        # Sizes are synchronized.
-        parent_index, _ = pop(parent_stack, size)
-        side, _ = pop(side_stack, size)
-        node_index, size = pop(stack, size)
+        node_index, parent_index, side, size = pop_triple(stack, size)
 
         parent = tree.nodes[parent_index]
         bbox = node_bounds[parent_index]
@@ -444,14 +511,9 @@ def collect_node_bounds(tree: CellTreeData) -> FloatArray:
         right_child = left_child + 1
 
         # Right child
-        push(parent_stack, node_index, size)
-        push(side_stack, 0, size)
-        size = push(stack, right_child, size)
-
+        stack, size = push_triple(stack, right_child, node_index, RIGHT, size)
         # Left child
-        push(parent_stack, node_index, size)
-        push(side_stack, 1, size)
-        size = push(stack, left_child, size)
+        stack, size = push_triple(stack, left_child, node_index, LEFT, size)
 
     return node_bounds
 
@@ -466,6 +528,7 @@ def validate_node_bounds(tree: CellTreeData, node_bounds: FloatArray) -> BoolArr
     """
     node_validity = np.full(len(tree.nodes), False, dtype=np.bool_)
     stack = allocate_stack()
+    stack[0] = 0
     size = 1
 
     while size > 0:
@@ -491,7 +554,7 @@ def validate_node_bounds(tree: CellTreeData, node_bounds: FloatArray) -> BoolArr
             right_box, bbox
         )
 
-        size = push(stack, right_child, size)
-        size = push(stack, left_child, size)
+        stack, size = push(stack, right_child, size)
+        stack, size = push(stack, left_child, size)
 
     return node_validity

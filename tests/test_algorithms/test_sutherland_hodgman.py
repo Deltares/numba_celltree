@@ -1,4 +1,4 @@
-""""
+"""
 Test data generated with:
 
 ```python
@@ -32,6 +32,7 @@ expected = area_of_intersection(a, b)
 ```
 
 """
+
 import numpy as np
 
 from numba_celltree.algorithms.sutherland_hodgman import (
