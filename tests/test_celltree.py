@@ -127,8 +127,8 @@ def test_types():
 def test_fill_value_conversion():
     faces = np.array([[0, 1, 2, -999], [1, 3, 2, -999]])
     tree = CellTree2d(nodes, faces, -999)
-    assert tree.elements[0, -1] == -1
-    assert tree.elements[1, -1] == -1
+    assert tree.faces[0, -1] == -1
+    assert tree.faces[1, -1] == -1
 
 
 def test_shape_errors():
