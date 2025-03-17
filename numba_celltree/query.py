@@ -124,6 +124,8 @@ def locate_point_on_edge(point: Point, tree: CellTreeData):
     stack[0] = 0
     return_value = -1
     size = 1
+    # TODO: Rename allocate_polygon or assess if we can allocate a smaller array.
+    edge_work_array = allocate_polygon()
 
     while size > 0:
         node_index, size = pop(stack, size)
@@ -134,7 +136,8 @@ def locate_point_on_edge(point: Point, tree: CellTreeData):
             for i in range(node["ptr"], node["ptr"] + node["size"]):
                 bbox_index = tree.bb_indices[i]
                 edge = tree.elements[bbox_index]
-                if point_on_edge(point, edge):
+                segment = copy_vertices_into(tree.vertices, edge, edge_work_array)
+                if point_on_edge(point, segment):
                     return bbox_index
             continue
 
@@ -148,15 +151,15 @@ def locate_point_on_edge(point: Point, tree: CellTreeData):
             # This heuristic is worthwhile because a point will fall into a
             # single face -- if found, we can stop.
             if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
-                size = push(stack, left_child, size)
-                size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
             else:
-                size = push(stack, right_child, size)
-                size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
+                stack, size = push(stack, left_child, size)
         elif left:
-            size = push(stack, left_child, size)
+            stack, size = push(stack, left_child, size)
         elif right:
-            size = push(stack, right_child, size)
+            stack, size = push(stack, right_child, size)
 
     return return_value
 
@@ -168,11 +171,10 @@ def locate_points_on_edge(
 ):
     n_points = len(points)
     result = np.empty(n_points, dtype=IntDType)
-    distance = np.empty(n_points, dtype=FloatDType)
     for i in nb.prange(n_points):  # pylint: disable=not-an-iterable
         point = as_point(points[i])
-        result[i], distance[i] = locate_point_on_edge(point, tree)
-    return result, distance
+        result[i] = locate_point_on_edge(point, tree)
+    return result
 
 
 @nb.njit(inline="always")
