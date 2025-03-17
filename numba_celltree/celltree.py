@@ -119,8 +119,8 @@ class CellTree2d(CellTree2dBase):
         if cells_per_leaf < 1:
             raise ValueError("cells_per_leaf must be >= 1")
 
-        vertices = self.cast_vertices(vertices, copy=True)
-        faces = self.cast_faces(faces, fill_value)
+        vertices = cast_vertices(vertices, copy=True)
+        faces = cast_faces(faces, fill_value)
         counter_clockwise(vertices, faces)
 
         bb_coords = build_face_bboxes(faces, vertices)
@@ -134,7 +134,7 @@ class CellTree2d(CellTree2dBase):
         self.nodes = nodes
         self.bb_indices = bb_indices
         self.bb_coords = bb_coords
-        self.bbox = self.bbox_tree(bb_coords)
+        self.bbox = bbox_tree(bb_coords)
         self.celltree_data = CellTreeData(
             self.faces,
             self.vertices,
@@ -144,25 +144,6 @@ class CellTree2d(CellTree2dBase):
             self.bbox,
             self.cells_per_leaf,
         )
-
-    @staticmethod
-    def cast_faces(faces: IntArray, fill_value: int) -> IntArray:
-        if isinstance(faces, np.ndarray):
-            faces = faces.astype(IntDType, copy=True)
-        else:
-            faces = np.ascontiguousarray(faces, dtype=IntDType)
-        if faces.ndim != 2:
-            raise ValueError("faces must have shape (n_face, n_max_vert)")
-        _, n_max_vert = faces.shape
-        if n_max_vert > MAX_N_VERTEX:
-            raise ValueError(
-                f"faces contains up to {n_max_vert} vertices for a single face. "
-                f"numba_celltree supports a maximum of {MAX_N_VERTEX} vertices. "
-                f"Increase MAX_N_VERTEX in the source code, or alter the mesh."
-            )
-        if fill_value != FILL_VALUE:
-            faces[faces == fill_value] = FILL_VALUE
-        return faces
 
     def locate_points(self, points: FloatArray) -> IntArray:
         """
@@ -181,7 +162,7 @@ class CellTree2d(CellTree2dBase):
             For every point, the index of the face it falls in. Points not
             falling in any faces are marked with a value of ``-1``.
         """
-        points = self.cast_vertices(points)
+        points = cast_vertices(points)
         return locate_points(points, self.celltree_data)
 
     def locate_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
@@ -267,7 +248,7 @@ class CellTree2d(CellTree2dBase):
             Indices of the tree faces.
         """
         counter_clockwise(vertices, faces)
-        bbox_coords = build_bboxes(faces, vertices)
+        bbox_coords = build_face_bboxes(faces, vertices)
         n_chunks = nb.get_num_threads()
         shortlist_i, shortlist_j = locate_boxes(
             bbox_coords, self.celltree_data, n_chunks
