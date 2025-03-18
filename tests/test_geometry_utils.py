@@ -4,7 +4,7 @@ import numba as nb
 import numpy as np
 
 from numba_celltree import geometry_utils as gu
-from numba_celltree.constants import Box, Point, Triangle, Vector
+from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point, Triangle, Vector
 
 
 def test_to_vector():
@@ -327,3 +327,54 @@ def test_counter_clockwise():
     # clockwise should be mutated
     gu.counter_clockwise(vertices, cw_faces)
     assert np.array_equal(expected, cw_faces)
+
+
+def test_lines_intersect():
+    offset = 2 * TOLERANCE_ON_EDGE
+    a = Point(0.0, 0.0)
+    b = Point(4.0, 4.0)
+    # Edges not intersecting
+    p = Point(3.0, 2.0)
+    q = Point(3.0, 1.0)
+    assert not gu.lines_intersect(a, b, p, q)
+    assert not gu.lines_intersect(p, q, a, b)
+    # Vertex nearly touching edge
+    p = Point(3.0, 3.0 - offset)
+    q = Point(3.0, 1.0)
+    assert not gu.lines_intersect(a, b, p, q)
+    assert not gu.lines_intersect(p, q, a, b)
+    # Vertex on edge
+    p = Point(3.0, 3.0)
+    q = Point(3.0, 1.0)
+    assert gu.lines_intersect(a, b, p, q)
+    assert gu.lines_intersect(p, q, a, b)
+    # Edge on edge, collinear (fully overlapping)
+    p = Point(1.0, 1.0)
+    q = Point(3.0, 3.0)
+    assert gu.lines_intersect(a, b, p, q)
+    assert gu.lines_intersect(p, q, a, b)
+    # Edge on edge, orthogonal
+    p = Point(1.0, 3.0)
+    q = Point(3.0, 1.0)
+    assert gu.lines_intersect(a, b, p, q)
+    assert gu.lines_intersect(p, q, a, b)
+    # Vertex on edge
+    p = Point(-1.0, 1.0)
+    q = Point(1.0, -1.0)
+    assert gu.lines_intersect(a, b, p, q)
+    assert gu.lines_intersect(p, q, a, b)
+    # Vertex on vertex
+    p = Point(0.0, 0.0)
+    q = Point(1.0, -1.0)
+    assert gu.lines_intersect(a, b, p, q)
+    assert gu.lines_intersect(p, q, a, b)
+    # Vertex on vertex, collinear
+    p = Point(0.0, 0.0)
+    q = Point(-1.0, -1.0)
+    assert gu.lines_intersect(a, b, p, q)
+    assert gu.lines_intersect(p, q, a, b)
+    # Vertex nearly on vertex, collinear, no overlap
+    p = Point(-offset, -offset)
+    q = Point(-1.0, -1.0)
+    assert not gu.lines_intersect(a, b, p, q)
+    assert not gu.lines_intersect(p, q, a, b)
