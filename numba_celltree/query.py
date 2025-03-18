@@ -24,6 +24,7 @@ from numba_celltree.geometry_utils import (
     box_contained,
     boxes_intersect,
     copy_vertices_into,
+    lines_intersect,
     point_in_polygon_or_on_edge,
     point_on_edge,
     to_vector,
@@ -461,6 +462,39 @@ def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
 
     ii, jj = concatenate_indices(indices, counts)
     return ii, jj, xy
+
+
+@nb.njit(parallel=PARALLEL, cache=True)
+def locate_edges_on_edges(
+    edge_coords: FloatArray,
+    tree: CellTreeData,
+):
+    """
+    Locate edges on the edge tree. Only the first edge in the tree that
+    intersects with an edge coord pair is returned.
+    """
+    n_edge = len(edge_coords)
+    result = np.empty(n_edge, dtype=IntDType)
+    for edge_index in nb.prange(n_edge):  # pylint: disable=not-an-iterable
+        a = as_point(edge_coords[edge_index, 0])
+        b = as_point(edge_coords[edge_index, 1])
+        result[edge_index] = locate_edge_on_edges(a, b, tree)
+    return result
+
+
+@nb.njit(cache=True)
+def locate_edge_on_edges(
+    a: Point,
+    b: Point,
+    tree: CellTreeData,
+):
+
+    edge_work_array = allocate_polygon()
+    for tree_edge in tree.elements:
+        segment = copy_vertices_into(tree.vertices, tree_edge, edge_work_array)
+        if lines_intersect(a, b, segment[0], segment[1]):
+            return tree_edge
+    return -1
 
 
 @nb.njit(cache=True)
