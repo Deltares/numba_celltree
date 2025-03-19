@@ -20,7 +20,7 @@ from numba_celltree.creation import initialize
 from numba_celltree.geometry_utils import build_face_bboxes, counter_clockwise
 from numba_celltree.query import (
     locate_boxes,
-    locate_edges,
+    locate_edge_faces,
     locate_points,
 )
 
@@ -272,7 +272,7 @@ class CellTree2d(CellTree2dBase):
         """
         edge_coords = cast_edges(edge_coords)
         n_chunks = nb.get_num_threads()
-        return locate_edges(edge_coords, self.celltree_data, n_chunks)
+        return locate_edge_faces(edge_coords, self.celltree_data, n_chunks)
 
     def compute_barycentric_weights(
         self,

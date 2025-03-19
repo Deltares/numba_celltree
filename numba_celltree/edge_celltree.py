@@ -1,6 +1,9 @@
 from typing import Tuple
 
-from numba_celltree.cast import cast_vertices, cast_edges
+import numba as nb
+import numpy as np
+
+from numba_celltree.cast import cast_edges, cast_vertices
 from numba_celltree.celltree_base import CellTree2dBase, bbox_tree
 from numba_celltree.constants import (
     CellTreeData,
@@ -9,7 +12,7 @@ from numba_celltree.constants import (
 )
 from numba_celltree.creation import initialize
 from numba_celltree.geometry_utils import build_edge_bboxes
-from numba_celltree.query import locate_points_on_edge, locate_edges_on_edges
+from numba_celltree.query import locate_edge_edges, locate_points_on_edge
 
 
 class EdgeCellTree2d(CellTree2dBase):
@@ -104,4 +107,6 @@ class EdgeCellTree2d(CellTree2dBase):
             Coordinate pair of the intersection.
         """
         edge_coords = cast_edges(edge_coords)
-        return locate_edges_on_edges(edge_coords, self.celltree_data)
+        n_chunks = nb.get_num_threads()
+        xy, indices = locate_edge_edges(edge_coords, self.celltree_data, n_chunks)
+        return np.ascontiguousarray(xy[:, 0]), indices

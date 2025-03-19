@@ -27,6 +27,7 @@ from numba_celltree.geometry_utils import (
     lines_intersect,
     point_in_polygon_or_on_edge,
     point_on_edge,
+    to_point,
     to_vector,
 )
 from numba_celltree.utils import (
@@ -293,50 +294,74 @@ def locate_boxes(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
     return concatenate_indices(indices, counts)
 
 
-# Inlining this function drives compilation time through the roof. It's
-# probably also a rather bad idea, given its complexity: compared to looking
-# for either boxes or points, checking is more much complicated by involving
-# two intersection algorithms.
-@nb.njit(inline="never")
-def locate_edge(
-    a: Point,
-    b: Point,
-    tree: CellTreeData,
-    indices: IntArray,
-    intersections: FloatArray,
-    indices_size: int,
-    index: int,
-):
-    # Check if the entire mesh intersects with the line segment at all
-    tree_bbox = as_box(tree.bbox)
-    tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree_bbox)
-    if not tree_intersects:
-        return 0, indices_size
+@nb.njit(inline="always")
+def compute_edge_edge_intersect(
+    tree: CellTreeData, bbox_index: int, a: Point, b: Point, work_array: np.ndarray
+) -> Tuple[bool, Point, Point]:
+    tree_edge = tree.elements[bbox_index]
+    p = to_point(tree_edge[0])
+    q = to_point(tree_edge[1])
+    intersects, c = lines_intersect(
+        a, b, p, q
+    )  # MODIFY LINES_INTERSECT TO RETURN COMPUTED INTERSECTION
+    return intersects, c, c
 
-    V = to_vector(a, b)
-    stack = allocate_stack()
-    polygon_work_array = allocate_polygon()
-    stack[0] = 0
-    size = 1
-    count = 0
-    capacity = len(indices)
 
-    while size > 0:
-        node_index, size = pop(stack, size)
-        node = tree.nodes[node_index]
+@nb.njit(inline="always")
+def compute_edge_face_intersect(
+    tree: CellTreeData, bbox_index: int, a: Point, b: Point, work_array: np.ndarray
+) -> Tuple[bool, Point, Point]:
+    box = as_box(tree.bb_coords[bbox_index])
+    intersects, c, d = cohen_sutherland_line_box_clip(a, b, box)
+    if intersects:
+        polygon = copy_vertices_into(
+            tree.vertices, tree.elements[bbox_index], work_array
+        )
+        intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
+    return intersects, c, d
 
-        # Check if it's a leaf
-        if node["child"] == -1:
-            for i in range(node["ptr"], node["ptr"] + node["size"]):
-                bbox_index = tree.bb_indices[i]
-                box = as_box(tree.bb_coords[bbox_index])
-                box_intersect, _, _ = cohen_sutherland_line_box_clip(a, b, box)
-                if box_intersect:
-                    polygon = copy_vertices_into(
-                        tree.vertices, tree.elements[bbox_index], polygon_work_array
+
+def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Callable:
+    # Inlining this function drives compilation time through the roof. It's
+    # probably also a rather bad idea, given its complexity: compared to looking
+    # for either boxes or points, checking is more much complicated by involving
+    # two intersection algorithms.
+    @nb.njit(inline="never")
+    def locate_edge(
+        a: Point,
+        b: Point,
+        tree: CellTreeData,
+        indices: IntArray,
+        intersections: FloatArray,
+        indices_size: int,
+        index: int,
+    ):
+        # Check if the entire mesh intersects with the line segment at all
+        tree_bbox = as_box(tree.bbox)
+        tree_intersects, _, _ = cohen_sutherland_line_box_clip(a, b, tree_bbox)
+        if not tree_intersects:
+            return 0, indices_size
+
+        V = to_vector(a, b)
+        stack = allocate_stack()
+        polygon_work_array = allocate_polygon()
+        stack[0] = 0
+        size = 1
+        count = 0
+        capacity = len(indices)
+
+        while size > 0:
+            node_index, size = pop(stack, size)
+            node = tree.nodes[node_index]
+
+            # Check if it's a leaf
+            if node["child"] == -1:
+                for i in range(node["ptr"], node["ptr"] + node["size"]):
+                    bbox_index = tree.bb_indices[i]
+                    intersects, c, d = intersection_function(
+                        tree, bbox_index, a, b, polygon_work_array
                     )
-                    face_intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
-                    if face_intersects:
+                    if intersects:
                         # If insufficient capacity, exit.
                         if indices_size >= capacity:
                             return -1, indices_size
@@ -348,153 +373,143 @@ def locate_edge(
                         intersections[indices_size, 1, 1] = d.y
                         indices_size += 1
                         count += 1
-            continue
+                continue
 
-        # Note, "x" is a placeholder for x, y here
-        # Contrast with t, which is along vector
-        node_dim = 1 if node["dim"] else 0
-        dx = V[node_dim]
-        if dx > 0.0:
-            dx_left = node["Lmax"] - a[node_dim]
-            dx_right = node["Rmin"] - b[node_dim]
-        else:
-            dx_left = node["Lmax"] - b[node_dim]
-            dx_right = node["Rmin"] - a[node_dim]
+            # Note, "x" is a placeholder for x, y here
+            # Contrast with t, which is along vector
+            node_dim = 1 if node["dim"] else 0
+            dx = V[node_dim]
+            if dx > 0.0:
+                dx_left = node["Lmax"] - a[node_dim]
+                dx_right = node["Rmin"] - b[node_dim]
+            else:
+                dx_left = node["Lmax"] - b[node_dim]
+                dx_right = node["Rmin"] - a[node_dim]
 
-        # Check how origin (a) and end (b) are located compared to box edges
-        # (Lmax, Rmin). The box should be investigated if:
-        # * the origin is left of Lmax (dx_left >= 0)
-        # * the end is right of Rmin (dx_right <= 0)
-        left = dx_left >= 0.0
-        right = dx_right <= 0.0
+            # Check how origin (a) and end (b) are located compared to box edges
+            # (Lmax, Rmin). The box should be investigated if:
+            # * the origin is left of Lmax (dx_left >= 0)
+            # * the end is right of Rmin (dx_right <= 0)
+            left = dx_left >= 0.0
+            right = dx_right <= 0.0
 
-        # Now find the intersection coordinates. These have to occur within in
-        # the bounds of the vector. Note that if the line has no slope in this
-        # dim (dx == 0), we cannot compute the intersection, and we have to
-        # defer to the child nodes.
-        if dx > 0.0:  # TODO: abs(dx) > EPISLON?
-            if left:
-                t_left = dx_left / dx
-                left = t_left >= 0.0
-            if right:
-                t_right = dx_right / dx
-                right = t_right <= 1.0
-        elif dx < 0.0:
-            if left:
-                t_left = 1.0 - (dx_left / dx)
-                left = t_left >= 0.0
-            if right:
-                t_right = 1.0 - (dx_right / dx)
-                right = t_right <= 1.0
-        # else dx == 0.0. In this case there's no info to extract from this
-        # node. We'll fully defer to the children.
-        left_child = node["child"]
-        right_child = left_child + 1
+            # Now find the intersection coordinates. These have to occur within in
+            # the bounds of the vector. Note that if the line has no slope in this
+            # dim (dx == 0), we cannot compute the intersection, and we have to
+            # defer to the child nodes.
+            if dx > 0.0:  # TODO: abs(dx) > EPISLON?
+                if left:
+                    t_left = dx_left / dx
+                    left = t_left >= 0.0
+                if right:
+                    t_right = dx_right / dx
+                    right = t_right <= 1.0
+            elif dx < 0.0:
+                if left:
+                    t_left = 1.0 - (dx_left / dx)
+                    left = t_left >= 0.0
+                if right:
+                    t_right = 1.0 - (dx_right / dx)
+                    right = t_right <= 1.0
+            # else dx == 0.0. In this case there's no info to extract from this
+            # node. We'll fully defer to the children.
+            left_child = node["child"]
+            right_child = left_child + 1
 
-        if left and right:
-            stack, size = push(stack, left_child, size)
-            stack, size = push(stack, right_child, size)
-        elif left:
-            stack, size = push(stack, left_child, size)
-        elif right:
-            stack, size = push(stack, right_child, size)
+            if left and right:
+                stack, size = push(stack, left_child, size)
+                stack, size = push(stack, right_child, size)
+            elif left:
+                stack, size = push(stack, left_child, size)
+            elif right:
+                stack, size = push(stack, right_child, size)
 
-    return count, indices_size
+        return count, indices_size
 
+    @nb.njit(cache=True)
+    def locate_edges_helper(
+        edge_coords: FloatArray,
+        tree: CellTreeData,
+        offset: int,
+    ) -> IntArray:
+        n_edge = len(edge_coords)
+        # Ensure the initial indices array isn't too small.
+        n = max(n_edge, 256)
+        indices = np.empty((n, 2), dtype=IntDType)
+        xy = np.empty((n, 2, 2), dtype=FloatDType)
 
-@nb.njit(cache=True)
-def locate_edges_helper(
-    edge_coords: FloatArray,
-    tree: CellTreeData,
-    offset: int,
-) -> IntArray:
-    n_edge = len(edge_coords)
-    # Ensure the initial indices array isn't too small.
-    n = max(n_edge, 256)
-    indices = np.empty((n, 2), dtype=IntDType)
-    xy = np.empty((n, 2, 2), dtype=FloatDType)
+        total_count = 0
+        indices_size = 0
+        for edge_index in range(n_edge):
+            a = as_point(edge_coords[edge_index, 0])
+            b = as_point(edge_coords[edge_index, 1])
 
-    total_count = 0
-    indices_size = 0
-    for edge_index in range(n_edge):
-        a = as_point(edge_coords[edge_index, 0])
-        b = as_point(edge_coords[edge_index, 1])
+            while True:
+                count, indices_size = locate_edge(
+                    a, b, tree, indices, xy, indices_size, edge_index + offset
+                )
+                if count != -1:
+                    break
+                # Not enough capacity: grow capacity, discard partial work, retry.
+                indices_size = total_count
+                indices = grow(indices)
+                xy = grow(xy)
 
-        while True:
-            count, indices_size = locate_edge(
-                a, b, tree, indices, xy, indices_size, edge_index + offset
+            total_count += count
+
+        return indices, xy, total_count
+
+    @nb.njit(cache=True, parallel=PARALLEL)
+    def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
+        chunks = np.array_split(box_coords, n_chunks)
+        offsets = np.zeros(n_chunks, dtype=IntDType)
+        for i, chunk in enumerate(chunks[:-1]):
+            offsets[i + 1] = offsets[i] + len(chunk)
+
+        # Setup (dummy) typed lists for numba to store parallel results.
+        indices = [np.empty((0, 2), dtype=IntDType) for _ in range(n_chunks)]
+        intersections = [np.empty((0, 2, 2), dtype=FloatDType) for _ in range(n_chunks)]
+        counts = np.empty(n_chunks, dtype=IntDType)
+        for i in nb.prange(n_chunks):
+            indices[i], intersections[i], counts[i] = locate_edges_helper(
+                chunks[i], tree, offsets[i]
             )
-            if count != -1:
-                break
-            # Not enough capacity: grow capacity, discard partial work, retry.
-            indices_size = total_count
-            indices = grow(indices)
-            xy = grow(xy)
 
-        total_count += count
+        total_size = sum(counts)
+        xy = np.empty((total_size, 2, 2), dtype=FloatDType)
+        start = 0
+        for i, size in enumerate(counts):
+            end = start + size
+            xy[start:end] = intersections[i][:size]
+            start = end
 
-    return indices, xy, total_count
+        ii, jj = concatenate_indices(indices, counts)
+        return ii, jj, xy
 
-
-@nb.njit(cache=True, parallel=PARALLEL)
-def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
-    chunks = np.array_split(box_coords, n_chunks)
-    offsets = np.zeros(n_chunks, dtype=IntDType)
-    for i, chunk in enumerate(chunks[:-1]):
-        offsets[i + 1] = offsets[i] + len(chunk)
-
-    # Setup (dummy) typed lists for numba to store parallel results.
-    indices = [np.empty((0, 2), dtype=IntDType) for _ in range(n_chunks)]
-    intersections = [np.empty((0, 2, 2), dtype=FloatDType) for _ in range(n_chunks)]
-    counts = np.empty(n_chunks, dtype=IntDType)
-    for i in nb.prange(n_chunks):
-        indices[i], intersections[i], counts[i] = locate_edges_helper(
-            chunks[i], tree, offsets[i]
-        )
-
-    total_size = sum(counts)
-    xy = np.empty((total_size, 2, 2), dtype=FloatDType)
-    start = 0
-    for i, size in enumerate(counts):
-        end = start + size
-        xy[start:end] = intersections[i][:size]
-        start = end
-
-    ii, jj = concatenate_indices(indices, counts)
-    return ii, jj, xy
+    return {
+        "locate_edges": locate_edges,
+        "locate_edges_helper": locate_edges_helper,
+        "locate_edge": locate_edge,
+    }
 
 
-@nb.njit(parallel=PARALLEL, cache=True)
-def locate_edges_on_edges(
-    edge_coords: FloatArray,
-    tree: CellTreeData,
-):
-    """
-    Locate edges on the edge tree. Only the first edge in the tree that
-    intersects with an edge coord pair is returned.
-    """
-    n_edge = len(edge_coords)
-    result = np.empty(n_edge, dtype=IntDType)
-    for edge_index in nb.prange(n_edge):  # pylint: disable=not-an-iterable
-        a = as_point(edge_coords[edge_index, 0])
-        b = as_point(edge_coords[edge_index, 1])
-        result[edge_index] = locate_edge_on_edges(a, b, tree)
-    return result
+# Use the closure to capture the specific intersection function
+edge_edge_functions = make_locate_edges(
+    intersection_function=compute_edge_edge_intersect
+)
+edge_face_functions = make_locate_edges(
+    intersection_function=compute_edge_face_intersect
+)
 
+# Extract the main functions for normal use
+locate_edge_edges = edge_edge_functions["locate_edges"]
+locate_edge_faces = edge_face_functions["locate_edges"]
 
-@nb.njit(cache=True)
-def locate_edge_on_edges(
-    a: Point,
-    b: Point,
-    tree: CellTreeData,
-):
-
-    edge_work_array = allocate_polygon()
-    for tree_edge in tree.elements:
-        segment = copy_vertices_into(tree.vertices, tree_edge, edge_work_array)
-        if lines_intersect(a, b, segment[0], segment[1]):
-            return tree_edge
-    return -1
+# Expose helper functions for testing
+locate_edge_edge = edge_edge_functions["locate_edge"]
+locate_edge_face = edge_face_functions["locate_edge"]
+locate_edge_edge_helper = edge_edge_functions["locate_edges_helper"]
+locate_edge_face_helper = edge_face_functions["locate_edges_helper"]
 
 
 @nb.njit(cache=True)
