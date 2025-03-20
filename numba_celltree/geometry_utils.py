@@ -245,30 +245,73 @@ def has_overlap(a: float, b: float, p: float, q: float):
 
 
 @nb.njit(inline="always")
-def lines_intersect(a: Point, b: Point, p: Point, q: Point) -> bool:
+def intersection_location_point(V: Vector, U: Vector, a: Point, p: Point) -> Point:
+    # Calculate intersection point
+    denom = cross_product(V, U)
+    if abs(denom) < TOLERANCE_ON_EDGE:
+        return False, None  # Parallel lines
+
+    R = to_vector(a, p)
+    t = cross_product(R, U) / denom
+    x = a.x + t * V.x
+    y = a.y + t * V.y
+    return Point(x, y)
+
+
+@nb.njit(inline="always")
+def midpoint_collinear_lines(a: Point, b: Point, p: Point, q: Point) -> Point:
+    """
+    Calculate the midpoint of the overlapping portion of two collinear line segments.
+    If the segments do not overlap, return a Point with NaN coordinates.
+    """
+    # Ensure the points are ordered (smallest to largest) along the x-axis or y-axis
+    if a.x > b.x or (a.x == b.x and a.y > b.y):
+        a, b = b, a
+    if p.x > q.x or (p.x == q.x and p.y > q.y):
+        p, q = q, p
+
+    # Find the overlapping segment
+    overlap_start_x = max(a.x, p.x)
+    overlap_start_y = max(a.y, p.y)
+    overlap_end_x = min(b.x, q.x)
+    overlap_end_y = min(b.y, q.y)
+
+    # Check if there is an overlap
+    if overlap_start_x > overlap_end_x or overlap_start_y > overlap_end_y:
+        # No overlap
+        return Point(np.nan, np.nan)
+
+    # Compute the midpoint of the overlapping segment
+    midpoint_x = 0.5 * (overlap_start_x + overlap_end_x)
+    midpoint_y = 0.5 * (overlap_start_y + overlap_end_y)
+    return Point(midpoint_x, midpoint_y)
+
+
+@nb.njit(inline="always")
+def lines_intersect(a: Point, b: Point, p: Point, q: Point) -> tuple[bool, Point]:
     """Test whether line segment a -> b intersects p -> q."""
     V = to_vector(a, b)
     U = to_vector(p, q)
 
     # No intersection if no length.
     if (U.x == 0 and U.y == 0) or (V.x == 0 and V.y == 0):
-        return False
+        return False, Point(np.nan, np.nan)
     # If x- or y-components are zero, they can only intersect if x or y is identical.
     if (U.x == 0) and (V.x == 0) and a.x != p.x:
-        return False
+        return False, Point(np.nan, np.nan)
     if (U.y == 0) and (V.y == 0) and a.y != p.y:
-        return False
+        return False, Point(np.nan, np.nan)
 
     # bounds check
     if (not has_overlap(a.x, b.x, p.x, q.x)) or (not has_overlap(a.y, b.y, p.y, q.y)):
-        return False
+        return False, Point(np.nan, np.nan)
 
     # Check a and b for separation by U (p -> q)
     # and p and q for separation by V (a -> b)
     if (left_of(a, p, U) != left_of(b, p, U)) and (
         left_of(p, a, V) != left_of(q, a, V)
     ):
-        return True
+        return True, intersection_location_point(V, U, a, p)
 
     # Detect collinear case, where segments lie on the same infite line.
     R = to_vector(a, p)
@@ -276,9 +319,9 @@ def lines_intersect(a: Point, b: Point, p: Point, q: Point) -> bool:
     if (abs(cross_product(V, R)) < TOLERANCE_ON_EDGE) and (
         abs(cross_product(V, S) < TOLERANCE_ON_EDGE)
     ):
-        return True
+        return True, midpoint_collinear_lines(a, b, p, q)
 
-    return False
+    return False, Point(np.nan, np.nan)
 
 
 @nb.njit(inline="always")
