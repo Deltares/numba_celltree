@@ -399,12 +399,12 @@ class IntersectCases:
 def test_lines_intersect(p, q, expected_intersects, expected_intersection_point):
     a = Point(0.0, 0.0)
     b = Point(4.0, 4.0)
-    actual_intersects, actual_intersection_point = gu.lines_intersect(a, b, p, q)
+    actual_intersects, x, y = gu.lines_intersect(a, b, p, q)
     assert actual_intersects == expected_intersects
-    np.testing.assert_allclose(actual_intersection_point.x, expected_intersection_point.x)
-    np.testing.assert_allclose(actual_intersection_point.y, expected_intersection_point.y)
+    np.testing.assert_allclose(x, expected_intersection_point.x)
+    np.testing.assert_allclose(y, expected_intersection_point.y)
     # Reverse order edges
-    actual_intersects, actual_intersection_point = gu.lines_intersect(p, q, a, b)
+    actual_intersects, x, y = gu.lines_intersect(p, q, a, b)
     assert actual_intersects == expected_intersects
-    np.testing.assert_allclose(actual_intersection_point.x, expected_intersection_point.x)
-    np.testing.assert_allclose(actual_intersection_point.y, expected_intersection_point.y)
+    np.testing.assert_allclose(x, expected_intersection_point.x)
+    np.testing.assert_allclose(y, expected_intersection_point.y)
