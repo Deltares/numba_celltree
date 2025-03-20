@@ -288,7 +288,9 @@ def midpoint_collinear_lines(a: Point, b: Point, p: Point, q: Point) -> Point:
 
 
 @nb.njit(inline="always")
-def lines_intersect(a: Point, b: Point, p: Point, q: Point) -> tuple[bool, float, float]:
+def lines_intersect(
+    a: Point, b: Point, p: Point, q: Point
+) -> tuple[bool, float, float]:
     """Test whether line segment a -> b intersects p -> q."""
     V = to_vector(a, b)
     U = to_vector(p, q)
