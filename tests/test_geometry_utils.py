@@ -329,7 +329,9 @@ def test_counter_clockwise():
     gu.counter_clockwise(vertices, cw_faces)
     assert np.array_equal(expected, cw_faces)
 
+
 offset = 2 * TOLERANCE_ON_EDGE
+
 
 class IntersectCases:
     def case_no_intersection(self):
@@ -338,7 +340,7 @@ class IntersectCases:
         expected_intersects = False
         expected_intersection_point = Point(np.nan, np.nan)
         return p, q, expected_intersects, expected_intersection_point
-    
+
     def case_vertex_nearly_touching_edge(self):
         p = Point(3.0, 3.0 - offset)
         q = Point(3.0, 1.0)
@@ -353,6 +355,13 @@ class IntersectCases:
         expected_intersection_point = Point(3.0, 3.0)
         return p, q, expected_intersects, expected_intersection_point
 
+    def case_vertex_on_edge2(self):
+        p = Point(-1.0, 1.0)
+        q = Point(1.0, -1.0)
+        expected_intersects = True
+        expected_intersection_point = Point(0.0, 0.0)
+        return p, q, expected_intersects, expected_intersection_point
+
     def case_edge_on_edge_collinear(self):
         p = Point(1.0, 1.0)
         q = Point(3.0, 3.0)
@@ -365,13 +374,6 @@ class IntersectCases:
         q = Point(3.0, 1.0)
         expected_intersects = True
         expected_intersection_point = Point(2.0, 2.0)
-        return p, q, expected_intersects, expected_intersection_point
-    
-    def case_vertex_on_edge(self):
-        p = Point(-1.0, 1.0)
-        q = Point(1.0, -1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(0.0, 0.0)
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_vertex(self):
@@ -395,7 +397,10 @@ class IntersectCases:
         expected_intersection_point = Point(np.nan, np.nan)
         return p, q, expected_intersects, expected_intersection_point
 
-@parametrize_with_cases("p, q, expected_intersects, expected_intersection_point", cases=IntersectCases)
+
+@parametrize_with_cases(
+    "p, q, expected_intersects, expected_intersection_point", cases=IntersectCases
+)
 def test_lines_intersect(p, q, expected_intersects, expected_intersection_point):
     a = Point(0.0, 0.0)
     b = Point(4.0, 4.0)
