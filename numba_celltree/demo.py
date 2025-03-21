@@ -123,7 +123,7 @@ def generate_disk(partitions: int, depth: int):
     return np.column_stack((x, y)), triang.triangles
 
 
-def example_1d_grid():
+def example_1d_network():
     vertices = np.array(
         [
             [0.0, 0.0],
