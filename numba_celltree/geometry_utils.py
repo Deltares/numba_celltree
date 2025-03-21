@@ -249,7 +249,7 @@ def intersection_location_point(V: Vector, U: Vector, a: Point, p: Point) -> Poi
     # Calculate intersection point
     denom = cross_product(V, U)
     if abs(denom) < TOLERANCE_ON_EDGE:
-        return False, None  # Parallel lines
+        return np.nan, np.nan  # Parallel lines
 
     R = to_vector(a, p)
     t = cross_product(R, U) / denom
