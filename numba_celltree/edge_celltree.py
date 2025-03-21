@@ -108,5 +108,8 @@ class EdgeCellTree2d(CellTree2dBase):
         """
         edge_coords = cast_edges(edge_coords)
         n_chunks = nb.get_num_threads()
-        xy, indices = locate_edge_edges(edge_coords, self.celltree_data, n_chunks)
-        return np.ascontiguousarray(xy[:, 0]), indices
+        edge_indices, tree_edge_indices, xy = locate_edge_edges(
+            edge_coords, self.celltree_data, n_chunks
+        )
+        intersection_xy = np.ascontiguousarray(xy[:, 0])
+        return edge_indices, tree_edge_indices, intersection_xy
