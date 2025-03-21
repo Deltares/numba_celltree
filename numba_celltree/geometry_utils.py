@@ -149,9 +149,6 @@ def in_bounds(p: Point, a: Point, b: Point) -> bool:
 
     However, we must take into account that a line may be either vertical
     (dx=0) or horizontal (dy=0) and only evaluate the non-zero value.
-
-    If the area created by p, a, b is tiny AND p is within the bounds of a and
-    b, the point lies very close to the edge.
     """
     dx = b.x - a.x
     dy = b.y - a.y
@@ -195,6 +192,19 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
 
 
 @nb.njit(inline="always")
+def point_on_edge(p: Point, edge: FloatArray) -> bool:
+    v0 = as_point(edge[0])
+    v1 = as_point(edge[1])
+    if v1 == v0:
+        return False
+    U = to_vector(p, v0)
+    V = to_vector(p, v1)
+    if in_bounds(p, v0, v1) and (abs(cross_product(U, V)) < TOLERANCE_ON_EDGE):
+        return True
+    return False
+
+
+@nb.njit(inline="always")
 def boxes_intersect(a: Box, b: Box) -> bool:
     """
     Parameters
@@ -221,6 +231,104 @@ def box_contained(a: Box, b: Box) -> bool:
 
 
 @nb.njit(inline="always")
+def left_of(a: Point, p: Point, U: Vector) -> bool:
+    # Whether point a is left of vector U
+    # U: p -> q direction vector
+    return U.x * (a.y - p.y + TOLERANCE_ON_EDGE) > U.y * (a.x - p.x - TOLERANCE_ON_EDGE)
+
+
+@nb.njit(inline="always")
+def has_overlap(a: float, b: float, p: float, q: float):
+    return ((min(a, b) - max(p, q)) < TOLERANCE_ON_EDGE) and (
+        (min(p, q) - max(a, b)) < TOLERANCE_ON_EDGE
+    )
+
+
+@nb.njit(inline="always")
+def intersection_location_point(V: Vector, U: Vector, a: Point, p: Point) -> Point:
+    # Calculate intersection point
+    denom = cross_product(V, U)
+    if abs(denom) < TOLERANCE_ON_EDGE:
+        return np.nan, np.nan  # Parallel lines
+
+    R = to_vector(a, p)
+    t = cross_product(R, U) / denom
+    x = a.x + t * V.x
+    y = a.y + t * V.y
+    return x, y
+
+
+@nb.njit(inline="always")
+def midpoint_collinear_lines(a: Point, b: Point, p: Point, q: Point) -> Point:
+    """
+    Calculate the midpoint of the overlapping portion of two collinear line segments.
+    If the segments do not overlap, return a Point with NaN coordinates.
+    """
+    # Ensure the points are ordered (smallest to largest) along the x-axis or y-axis
+    if a.x > b.x or (a.x == b.x and a.y > b.y):
+        a, b = b, a
+    if p.x > q.x or (p.x == q.x and p.y > q.y):
+        p, q = q, p
+
+    # Find the overlapping segment
+    overlap_start_x = max(a.x, p.x)
+    overlap_start_y = max(a.y, p.y)
+    overlap_end_x = min(b.x, q.x)
+    overlap_end_y = min(b.y, q.y)
+
+    # Check if there is an overlap
+    if overlap_start_x > overlap_end_x or overlap_start_y > overlap_end_y:
+        # No overlap
+        return np.nan, np.nan
+
+    # Compute the midpoint of the overlapping segment
+    midpoint_x = 0.5 * (overlap_start_x + overlap_end_x)
+    midpoint_y = 0.5 * (overlap_start_y + overlap_end_y)
+    return midpoint_x, midpoint_y
+
+
+@nb.njit(inline="always")
+def lines_intersect(
+    a: Point, b: Point, p: Point, q: Point
+) -> tuple[bool, float, float]:
+    """Test whether line segment a -> b intersects p -> q."""
+    V = to_vector(a, b)
+    U = to_vector(p, q)
+
+    # No intersection if no length.
+    if (U.x == 0 and U.y == 0) or (V.x == 0 and V.y == 0):
+        return False, np.nan, np.nan
+    # If x- or y-components are zero, they can only intersect if x or y is identical.
+    if (U.x == 0) and (V.x == 0) and a.x != p.x:
+        return False, np.nan, np.nan
+    if (U.y == 0) and (V.y == 0) and a.y != p.y:
+        return False, np.nan, np.nan
+
+    # bounds check
+    if (not has_overlap(a.x, b.x, p.x, q.x)) or (not has_overlap(a.y, b.y, p.y, q.y)):
+        return False, np.nan, np.nan
+
+    # Check a and b for separation by U (p -> q)
+    # and p and q for separation by V (a -> b)
+    if (left_of(a, p, U) != left_of(b, p, U)) and (
+        left_of(p, a, V) != left_of(q, a, V)
+    ):
+        x, y = intersection_location_point(V, U, a, p)
+        return True, x, y
+
+    # Detect collinear case, where segments lie on the same infite line.
+    R = to_vector(a, p)
+    S = to_vector(a, q)
+    if (abs(cross_product(V, R)) < TOLERANCE_ON_EDGE) and (
+        abs(cross_product(V, S) < TOLERANCE_ON_EDGE)
+    ):
+        x, y = midpoint_collinear_lines(a, b, p, q)
+        return True, x, y
+
+    return False, np.nan, np.nan
+
+
+@nb.njit(inline="always")
 def bounding_box(
     polygon: IntArray, vertices: FloatArray
 ) -> Tuple[float, float, float, float]:
@@ -243,7 +351,7 @@ def bounding_box(
 
 
 @nb.njit(cache=True)
-def build_bboxes(
+def build_face_bboxes(
     faces: IntArray,
     vertices: FloatArray,
 ) -> FloatArray:
@@ -254,6 +362,37 @@ def build_bboxes(
     for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
         polygon = faces[i]
         bbox_coords[i] = bounding_box(polygon, vertices)
+
+    return bbox_coords
+
+
+@nb.njit(inline="always")
+def edge_bounding_box(
+    edge: IntArray, vertices: FloatArray
+) -> Tuple[float, float, float, float]:
+    x0, y0 = vertices[edge[0]]
+    x1, y1 = vertices[edge[1]]
+    # Edges may be axis-aligned. Create a fictitious width in this case.
+    tol = TOLERANCE_ON_EDGE
+    xmin = min(x0 - tol, x1 - tol)
+    xmax = max(x0 + tol, x1 + tol)
+    ymin = min(y0 - tol, y1 - tol)
+    ymax = max(y0 + tol, y1 + tol)
+    return (xmin, xmax, ymin, ymax)
+
+
+@nb.njit(cache=True)
+def build_edge_bboxes(
+    edges: IntArray,
+    vertices: FloatArray,
+) -> FloatArray:
+    # Make room for the bounding box of every polygon.
+    n_polys = len(edges)
+    bbox_coords = np.empty((n_polys, NDIM * 2), FloatDType)
+
+    for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
+        edge = edges[i]
+        bbox_coords[i] = edge_bounding_box(edge, vertices)
 
     return bbox_coords
 

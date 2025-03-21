@@ -10,6 +10,16 @@ CellTree2d
 Changelog
 =========
 
+[Unreleased]
+------------
+
+Added
+~~~~~
+
+- Add :class:`EdgeCellTree2d` class to support 2D queries on 1D networks and
+  linear features.
+
+
 [0.2.2 2024-10-15]
 ------------------
 

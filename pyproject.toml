@@ -80,6 +80,7 @@ ruff = "*"
 sphinx = "*"
 sphinx-gallery = "*"
 twine = "*"
+pytest-cases = ">=3.8.6,<4"
 
 [tool.pixi.tasks]
 pre-commit = "pre-commit run --all-files"

@@ -121,3 +121,26 @@ def generate_disk(partitions: int, depth: int):
     y = np.sin(angles) * radii
     triang = matplotlib.tri.Triangulation(x, y)
     return np.column_stack((x, y)), triang.triangles
+
+
+def example_1d_network():
+    vertices = np.array(
+        [
+            [0.0, 0.0],
+            [0.25, 1.0],
+            [1.25, 2.0],
+            [1.5, 2.5],
+            [2.5, 3.25],
+            [2.5, 2.5],
+            [2.75, 3.75],
+            [3.0, 2.0],
+            [0.25, 1.75],
+            [0.5, 2.25],
+        ],
+        dtype=float,
+    )
+    edges = np.array(
+        [[0, 1], [1, 2], [2, 3], [3, 4], [3, 5], [4, 6], [5, 7], [1, 8], [8, 9]],
+        dtype=np.int32,
+    )
+    return vertices, edges

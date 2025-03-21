@@ -2,9 +2,10 @@ import os
 
 import numba as nb
 import numpy as np
+from pytest_cases import parametrize_with_cases
 
 from numba_celltree import geometry_utils as gu
-from numba_celltree.constants import Box, Point, Triangle, Vector
+from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point, Triangle, Vector
 
 
 def test_to_vector():
@@ -190,7 +191,7 @@ def test_bounding_box():
     assert gu.bounding_box(face, vertices) == (0.0, 1.0, 0.0, 1.0)
 
 
-def test_build_bboxes():
+def test_build_face_bboxes():
     faces = np.array(
         [
             [0, 1, 2, -1],
@@ -211,7 +212,7 @@ def test_build_bboxes():
             [0.0, 5.0, 0.0, 5.0],
         ]
     )
-    actual = gu.build_bboxes(faces, vertices)
+    actual = gu.build_face_bboxes(faces, vertices)
     assert np.array_equal(actual, expected)
 
 
@@ -327,3 +328,88 @@ def test_counter_clockwise():
     # clockwise should be mutated
     gu.counter_clockwise(vertices, cw_faces)
     assert np.array_equal(expected, cw_faces)
+
+
+offset = 2 * TOLERANCE_ON_EDGE
+
+
+class IntersectCases:
+    def case_no_intersection(self):
+        p = Point(3.0, 2.0)
+        q = Point(3.0, 1.0)
+        expected_intersects = False
+        expected_intersection_point = Point(np.nan, np.nan)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_vertex_nearly_touching_edge(self):
+        p = Point(3.0, 3.0 - offset)
+        q = Point(3.0, 1.0)
+        expected_intersects = False
+        expected_intersection_point = Point(np.nan, np.nan)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_vertex_on_edge(self):
+        p = Point(3.0, 3.0)
+        q = Point(3.0, 1.0)
+        expected_intersects = True
+        expected_intersection_point = Point(3.0, 3.0)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_vertex_on_edge2(self):
+        p = Point(-1.0, 1.0)
+        q = Point(1.0, -1.0)
+        expected_intersects = True
+        expected_intersection_point = Point(0.0, 0.0)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_edge_on_edge_collinear(self):
+        p = Point(1.0, 1.0)
+        q = Point(3.0, 3.0)
+        expected_intersects = True
+        expected_intersection_point = Point(2.0, 2.0)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_edge_on_edge_orthogonal(self):
+        p = Point(1.0, 3.0)
+        q = Point(3.0, 1.0)
+        expected_intersects = True
+        expected_intersection_point = Point(2.0, 2.0)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_vertex_on_vertex(self):
+        p = Point(0.0, 0.0)
+        q = Point(1.0, -1.0)
+        expected_intersects = True
+        expected_intersection_point = Point(0.0, 0.0)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_vertex_on_vertex_collinear(self):
+        p = Point(0.0, 0.0)
+        q = Point(-1.0, -1.0)
+        expected_intersects = True
+        expected_intersection_point = Point(0.0, 0.0)
+        return p, q, expected_intersects, expected_intersection_point
+
+    def case_vertex_nearly_on_vertex_collinear_no_overlap(self):
+        p = Point(-offset, -offset)
+        q = Point(-1.0, -1.0)
+        expected_intersects = False
+        expected_intersection_point = Point(np.nan, np.nan)
+        return p, q, expected_intersects, expected_intersection_point
+
+
+@parametrize_with_cases(
+    "p, q, expected_intersects, expected_intersection_point", cases=IntersectCases
+)
+def test_lines_intersect(p, q, expected_intersects, expected_intersection_point):
+    a = Point(0.0, 0.0)
+    b = Point(4.0, 4.0)
+    actual_intersects, x, y = gu.lines_intersect(a, b, p, q)
+    assert actual_intersects == expected_intersects
+    np.testing.assert_allclose(x, expected_intersection_point.x)
+    np.testing.assert_allclose(y, expected_intersection_point.y)
+    # Reverse order edges
+    actual_intersects, x, y = gu.lines_intersect(p, q, a, b)
+    assert actual_intersects == expected_intersects
+    np.testing.assert_allclose(x, expected_intersection_point.x)
+    np.testing.assert_allclose(y, expected_intersection_point.y)
