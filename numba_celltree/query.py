@@ -27,7 +27,6 @@ from numba_celltree.geometry_utils import (
     lines_intersect,
     point_in_polygon_or_on_edge,
     point_on_edge,
-    to_point,
     to_vector,
 )
 from numba_celltree.utils import (
@@ -299,11 +298,11 @@ def compute_edge_edge_intersect(
     tree: CellTreeData, bbox_index: int, a: Point, b: Point, work_array: np.ndarray
 ) -> Tuple[bool, Point, Point]:
     tree_edge = tree.elements[bbox_index]
-    p = to_point(tree_edge[0])
-    q = to_point(tree_edge[1])
-    intersects, c = lines_intersect(
-        a, b, p, q
-    )  # MODIFY LINES_INTERSECT TO RETURN COMPUTED INTERSECTION
+    vertices = tree.vertices[tree_edge]
+    p = as_point(vertices[0])
+    q = as_point(vertices[1])
+    intersects, x, y = lines_intersect(a, b, p, q)
+    c = Point(x, y)
     return intersects, c, c
 
 
