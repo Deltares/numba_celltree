@@ -1,6 +1,6 @@
 """
-Spatial indexing
-================
+Spatial indexing of 2D grids
+============================
 
 The goal of a cell tree is to quickly locate cells of an unstructured mesh.
 Unstructured meshes are challenging in this regard: for a given point, we
@@ -24,6 +24,7 @@ these.
 
 We'll start by importing the required packages with matplotlib for plotting.
 """
+
 import os
 
 import matplotlib.pyplot as plt

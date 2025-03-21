@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Spatial indexing" href="spatial_indexing.html" />
+    <link rel="next" title="Spatial indexing of 1D grids" href="spatial_indexing_1d_grids.html" />
     <link rel="prev" title="Numba Celltree" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -314,7 +314,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="spatial_indexing.html">Spatial indexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spatial_indexing_1d_grids.html">Spatial indexing of 1D grids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spatial_indexing_2d_grids.html">Spatial indexing of 2D grids</a></li>
 </ul>
 </div>
 </nav></div>
@@ -377,9 +378,12 @@
 <p>The examples in this gallery demonstrate  the functionality of the
 <code class="docutils literal notranslate"><span class="pre">numba_celltree</span></code> package. Every example can be downloaded as either a Python
 script or a Jupyter notebook for interactive exploration.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="The goal of a cell tree is to quickly locate cells of an unstructured mesh. Unstructured meshes are challenging in this regard: for a given point, we cannot simply compute a row and column number as we would for structured data such as rasters. The most straightforward procedure is checking every single cell, until we find the cell which contains the point we&#x27;re looking for. This is clearly not efficient."><img alt="" src="../_images/sphx_glr_spatial_indexing_thumb.png" />
-<p><a class="reference internal" href="spatial_indexing.html#sphx-glr-examples-spatial-indexing-py"><span class="std std-ref">Spatial indexing</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Spatial indexing</div>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the numba_celltree package to index 1D grids. The package provides a EdgeCellTree class that constructs a cell tree for 1D grids. The package currently supports the following operations:"><img alt="" src="../_images/sphx_glr_spatial_indexing_1d_grids_thumb.png" />
+<p><a class="reference internal" href="spatial_indexing_1d_grids.html#sphx-glr-examples-spatial-indexing-1d-grids-py"><span class="std std-ref">Spatial indexing of 1D grids</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Spatial indexing of 1D grids</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="The goal of a cell tree is to quickly locate cells of an unstructured mesh. Unstructured meshes are challenging in this regard: for a given point, we cannot simply compute a row and column number as we would for structured data such as rasters. The most straightforward procedure is checking every single cell, until we find the cell which contains the point we&#x27;re looking for. This is clearly not efficient."><img alt="" src="../_images/sphx_glr_spatial_indexing_2d_grids_thumb.png" />
+<p><a class="reference internal" href="spatial_indexing_2d_grids.html#sphx-glr-examples-spatial-indexing-2d-grids-py"><span class="std std-ref">Spatial indexing of 2D grids</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Spatial indexing of 2D grids</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
@@ -413,11 +417,11 @@ script or a Jupyter notebook for interactive exploration.</p>
       </div>
     </a>
     <a class="right-next"
-       href="spatial_indexing.html"
+       href="spatial_indexing_1d_grids.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Spatial indexing</p>
+        <p class="prev-next-title">Spatial indexing of 1D grids</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

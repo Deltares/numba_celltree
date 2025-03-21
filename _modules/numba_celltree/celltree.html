@@ -362,7 +362,6 @@
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">area_of_intersection</span><span class="p">,</span>
@@ -371,82 +370,25 @@
     <span class="n">box_area_of_intersection</span><span class="p">,</span>
     <span class="n">polygons_intersect</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.cast</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast_bboxes</span><span class="p">,</span> <span class="n">cast_edges</span><span class="p">,</span> <span class="n">cast_faces</span><span class="p">,</span> <span class="n">cast_vertices</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.celltree_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">CellTree2dBase</span><span class="p">,</span> <span class="n">bbox_tree</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">FILL_VALUE</span><span class="p">,</span>
-    <span class="n">MAX_N_VERTEX</span><span class="p">,</span>
-    <span class="n">BoolArray</span><span class="p">,</span>
     <span class="n">CellTreeData</span><span class="p">,</span>
     <span class="n">FloatArray</span><span class="p">,</span>
-    <span class="n">FloatDType</span><span class="p">,</span>
     <span class="n">IntArray</span><span class="p">,</span>
-    <span class="n">IntDType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.creation</span><span class="w"> </span><span class="kn">import</span> <span class="n">initialize</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.geometry_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.geometry_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_face_bboxes</span><span class="p">,</span> <span class="n">counter_clockwise</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.query</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">collect_node_bounds</span><span class="p">,</span>
     <span class="n">locate_boxes</span><span class="p">,</span>
-    <span class="n">locate_edges</span><span class="p">,</span>
+    <span class="n">locate_edge_faces</span><span class="p">,</span>
     <span class="n">locate_points</span><span class="p">,</span>
-    <span class="n">validate_node_bounds</span><span class="p">,</span>
 <span class="p">)</span>
-
-
-<span class="c1"># Ensure all types are as as statically expected.</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-        <span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">FloatDType</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FloatDType</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">vertices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;vertices must have shape (n_points, 2)&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">vertices</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-        <span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">IntDType</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">IntDType</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">faces</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;faces must have shape (n_face, n_max_vert)&quot;</span><span class="p">)</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">n_max_vert</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">shape</span>
-    <span class="k">if</span> <span class="n">n_max_vert</span> <span class="o">&gt;</span> <span class="n">MAX_N_VERTEX</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;faces contains up to </span><span class="si">{</span><span class="n">n_max_vert</span><span class="si">}</span><span class="s2"> vertices for a single face. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;numba_celltree supports a maximum of </span><span class="si">{</span><span class="n">MAX_N_VERTEX</span><span class="si">}</span><span class="s2"> vertices. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Increase MAX_N_VERTEX in the source code, or alter the mesh.&quot;</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">fill_value</span> <span class="o">!=</span> <span class="n">FILL_VALUE</span><span class="p">:</span>
-        <span class="n">faces</span><span class="p">[</span><span class="n">faces</span> <span class="o">==</span> <span class="n">fill_value</span><span class="p">]</span> <span class="o">=</span> <span class="n">FILL_VALUE</span>
-    <span class="k">return</span> <span class="n">faces</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">cast_bboxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
-    <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FloatDType</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">bbox_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">bbox_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;bbox_coords must have shape (n_box, 4)&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">bbox_coords</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">cast_edges</span><span class="p">(</span><span class="n">edges</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
-    <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FloatDType</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">edges</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edges must have shape (n_edge, 2, 2)&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">edges</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">bbox_tree</span><span class="p">(</span><span class="n">bb_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatArray</span><span class="p">:</span>
-    <span class="n">xmin</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">xmax</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">bb_coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">FloatDType</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="CellTree2d">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">CellTree2d</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CellTree2d</span><span class="p">(</span><span class="n">CellTree2dBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct a cell tree from 2D vertices and a faces indexing array.</span>
 
@@ -487,9 +429,8 @@
         <span class="n">faces</span> <span class="o">=</span> <span class="n">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
         <span class="n">counter_clockwise</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
 
-        <span class="n">nodes</span><span class="p">,</span> <span class="n">bb_indices</span><span class="p">,</span> <span class="n">bb_coords</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span>
-            <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">n_buckets</span><span class="p">,</span> <span class="n">cells_per_leaf</span>
-        <span class="p">)</span>
+        <span class="n">bb_coords</span> <span class="o">=</span> <span class="n">build_face_bboxes</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="p">,</span> <span class="n">bb_indices</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">bb_coords</span><span class="p">,</span> <span class="n">n_buckets</span><span class="p">,</span> <span class="n">cells_per_leaf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_buckets</span> <span class="o">=</span> <span class="n">n_buckets</span>
@@ -622,7 +563,7 @@
 <span class="sd">            Indices of the tree faces.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">counter_clockwise</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
-        <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">build_bboxes</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
+        <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">build_face_bboxes</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
         <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
         <span class="n">shortlist_i</span><span class="p">,</span> <span class="n">shortlist_j</span> <span class="o">=</span> <span class="n">locate_boxes</span><span class="p">(</span>
             <span class="n">bbox_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span>
@@ -711,7 +652,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">edge_coords</span> <span class="o">=</span> <span class="n">cast_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">)</span>
         <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">locate_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">locate_edge_faces</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CellTree2d.compute_barycentric_weights">
@@ -751,66 +692,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">face_indices</span><span class="p">,</span> <span class="n">weights</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">collect_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">)</span>
-
-<div class="viewcode-block" id="CellTree2d.validate_node_bounds">
-<a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.validate_node_bounds">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">validate_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoolArray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Traverse the tree. Check whether all children are contained in the bounding</span>
-<span class="sd">        box.</span>
-
-<span class="sd">        For the leaf nodes, check whether the bounding boxes are contained.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        node_validity: np.array of bool</span>
-<span class="sd">            For each node, whether all children are fully contained by its</span>
-<span class="sd">            bounds.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">validate_node_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_bounds</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="CellTree2d.to_dict_of_lists">
-<a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.to_dict_of_lists">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict_of_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert the tree structure to a dict of lists.</span>
-
-<span class="sd">        Such a dict can be ingested by e.g. NetworkX to produce visualize the</span>
-<span class="sd">        tree structure.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict_of_lists: Dict[Int, List[Int]]</span>
-<span class="sd">            Contains for every node a list with its children.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; import networkx</span>
-<span class="sd">        &gt;&gt;&gt; from networkx.drawing.nx_pydot import graphviz_layout</span>
-<span class="sd">        &gt;&gt;&gt; d = celltree.to_dict_of_lists()</span>
-<span class="sd">        &gt;&gt;&gt; G = networkx.DiGraph(d)</span>
-<span class="sd">        &gt;&gt;&gt; positions = graphviz_layout(G, prog=&quot;dot&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; networkx.draw(G, positions, with_labels=True)</span>
-
-<span class="sd">        Note that computing the graphviz layout may be quite slow!</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dict_of_lists</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">parent_index</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
-            <span class="n">left_child</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;child&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">left_child</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">dict_of_lists</span><span class="p">[</span><span class="n">parent_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">right_child</span> <span class="o">=</span> <span class="n">left_child</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="n">dict_of_lists</span><span class="p">[</span><span class="n">parent_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_child</span><span class="p">,</span> <span class="n">right_child</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">dict_of_lists</span></div>
 </div>
 
 </pre></div>

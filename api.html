@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Spatial indexing" href="examples/spatial_indexing.html" />
+    <link rel="prev" title="Spatial indexing of 2D grids" href="examples/spatial_indexing_2d_grids.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.2.2" />
@@ -373,7 +373,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">numba_celltree.</span></span><span class="sig-name descname"><span class="pre">CellTree2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_buckets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_per_leaf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CellTree2dBase</span></code></p>
 <p>Construct a cell tree from 2D vertices and a faces indexing array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -545,51 +545,60 @@ falling in any faces are marked with a value of <code class="docutils literal no
 </dl>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="numba_celltree.CellTree2d.node_bounds">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_bounds</span></span><a class="headerlink" href="#numba_celltree.CellTree2d.node_bounds" title="Link to this definition">#</a></dt>
-<dd><p>Return the bounds (xmin, xmax, ymin, ymax) for every node of the tree.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="numba_celltree.CellTree2d.to_dict_of_lists">
-<span class="sig-name descname"><span class="pre">to_dict_of_lists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.to_dict_of_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.to_dict_of_lists" title="Link to this definition">#</a></dt>
-<dd><p>Convert the tree structure to a dict of lists.</p>
-<p>Such a dict can be ingested by e.g. NetworkX to produce visualize the
-tree structure.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="numba_celltree.EdgeCellTree2d">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">numba_celltree.</span></span><span class="sig-name descname"><span class="pre">EdgeCellTree2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_buckets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_per_leaf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/numba_celltree/edge_celltree.html#EdgeCellTree2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.EdgeCellTree2d" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CellTree2dBase</span></code></p>
+<p>Construct a cell tree from 2D vertices and an edges indexing array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dict_of_lists</strong> – Contains for every node a list with its children.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[Int, List[Int]]</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Corner coordinates (x, y) of the cells.</p></li>
+<li><p><strong>edges</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_edge,</span> <span class="pre">2)</span></code>) – Index identifying for every edge the indices of its two nodes.</p></li>
+<li><p><strong>n_buckets</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default: 4</em>) – The number of “buckets” used in tree construction. Must be higher
+or equal to 2. Values over 8 provide diminishing returns.</p></li>
+<li><p><strong>cells_per_leaf</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default: 2</em>) – The number of cells in the leaf nodes of the cell tree. Can be set
+to only 1, but this doubles memory footprint for slightly faster
+lookup. Increase this to reduce memory usage at the cost of lookup
+performance.</p></li>
+</ul>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">networkx.drawing.nx_pydot</span><span class="w"> </span><span class="kn">import</span> <span class="n">graphviz_layout</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">celltree</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">positions</span> <span class="o">=</span> <span class="n">graphviz_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;dot&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">networkx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Note that computing the graphviz layout may be quite slow!</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="numba_celltree.EdgeCellTree2d.intersect_edges">
+<span class="sig-name descname"><span class="pre">intersect_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/edge_celltree.html#EdgeCellTree2d.intersect_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.EdgeCellTree2d.intersect_edges" title="Link to this definition">#</a></dt>
+<dd><p>Find the index of an edge intersecting with an edge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>edge_coords</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_edge,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>) – Every row containing <code class="docutils literal notranslate"><span class="pre">((x0,</span> <span class="pre">y0),</span> <span class="pre">(x1,</span> <span class="pre">y1))</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>edge_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the bounding box.</p></li>
+<li><p><strong>tree_edge_indices</strong> (ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_found,)</span></code>) – Indices of the edge.</p></li>
+<li><p><strong>intersection</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_found,</span> <span class="pre">2)</span></code>) – Coordinate pair of the intersection.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="numba_celltree.CellTree2d.validate_node_bounds">
-<span class="sig-name descname"><span class="pre">validate_node_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.validate_node_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.validate_node_bounds" title="Link to this definition">#</a></dt>
-<dd><p>Traverse the tree. Check whether all children are contained in the bounding
-box.</p>
-<p>For the leaf nodes, check whether the bounding boxes are contained.</p>
+<dt class="sig sig-object py" id="numba_celltree.EdgeCellTree2d.locate_points">
+<span class="sig-name descname"><span class="pre">locate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/edge_celltree.html#EdgeCellTree2d.locate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.EdgeCellTree2d.locate_points" title="Link to this definition">#</a></dt>
+<dd><p>Find the index of a face that contains a point.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>node_validity</strong> – For each node, whether all children are fully contained by its
-bounds.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>)</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.array of bool</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>tree_edge_indices</strong> – For every point, the index of the edge it falls on. Points not
+falling on any edge are marked with a value of <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of integers with shape <code class="docutils literal notranslate"><span class="pre">(n_point,)</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -638,12 +647,12 @@ should result in a net ~30% performance gain in most cases.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="examples/spatial_indexing.html"
+       href="examples/spatial_indexing_2d_grids.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Spatial indexing</p>
+        <p class="prev-next-title">Spatial indexing of 2D grids</p>
       </div>
     </a>
 </div>
@@ -674,9 +683,11 @@ should result in a net ~30% performance gain in most cases.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.locate_boxes"><code class="docutils literal notranslate"><span class="pre">CellTree2d.locate_boxes()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.locate_faces"><code class="docutils literal notranslate"><span class="pre">CellTree2d.locate_faces()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.locate_points"><code class="docutils literal notranslate"><span class="pre">CellTree2d.locate_points()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.node_bounds"><code class="docutils literal notranslate"><span class="pre">CellTree2d.node_bounds</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.to_dict_of_lists"><code class="docutils literal notranslate"><span class="pre">CellTree2d.to_dict_of_lists()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.CellTree2d.validate_node_bounds"><code class="docutils literal notranslate"><span class="pre">CellTree2d.validate_node_bounds()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.EdgeCellTree2d"><code class="docutils literal notranslate"><span class="pre">EdgeCellTree2d</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.EdgeCellTree2d.intersect_edges"><code class="docutils literal notranslate"><span class="pre">EdgeCellTree2d.intersect_edges()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numba_celltree.EdgeCellTree2d.locate_points"><code class="docutils literal notranslate"><span class="pre">EdgeCellTree2d.locate_points()</span></code></a></li>
 </ul>
 </li>
 </ul>

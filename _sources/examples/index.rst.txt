@@ -19,18 +19,35 @@ script or a Jupyter notebook for interactive exploration.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the numba_celltree package to index 1D grids. The package provides a EdgeCellTree class that constructs a cell tree for 1D grids. The package currently supports the following operations:">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_1d_grids_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_spatial_indexing_1d_grids.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Spatial indexing of 1D grids</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="The goal of a cell tree is to quickly locate cells of an unstructured mesh. Unstructured meshes are challenging in this regard: for a given point, we cannot simply compute a row and column number as we would for structured data such as rasters. The most straightforward procedure is checking every single cell, until we find the cell which contains the point we&#x27;re looking for. This is clearly not efficient.">
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_thumb.png
+  .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_2d_grids_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_spatial_indexing.py`
+  :ref:`sphx_glr_examples_spatial_indexing_2d_grids.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Spatial indexing</div>
+      <div class="sphx-glr-thumbnail-title">Spatial indexing of 2D grids</div>
     </div>
 
 
@@ -44,7 +61,8 @@ script or a Jupyter notebook for interactive exploration.
 .. toctree::
    :hidden:
 
-   /examples/spatial_indexing
+   /examples/spatial_indexing_1d_grids
+   /examples/spatial_indexing_2d_grids
 
 
 .. only:: html
