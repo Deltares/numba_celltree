@@ -1,10 +1,11 @@
 """
-Spatial indexing of 1D grids
-============================
+Spatial indexing of 1D networks and linear geometry"
+====================================================
 
 This example demonstrates how to use the `numba_celltree` package to index 1D
-grids. The package provides a `EdgeCellTree` class that constructs a cell tree
-for 1D grids. The package currently supports the following operations:
+grids. The package provides a :class:`EdgeCellTree` class that constructs a cell
+tree for 1D networks and linear geometries. The package currently supports the
+following operations:
 
 * Location points
 * Locating line segments
@@ -25,9 +26,9 @@ os.environ["NUMBA_DISABLE_JIT"] = "1"  # small examples, avoid JIT overhead
 from numba_celltree import EdgeCellTree2d, demo  # noqa E402
 
 # %%
-# Let's start with creating a simple 1D grid with 4 vertices and 3 edges.
+# Let's start with a simple 1D network.
 
-vertices, edges = demo.example_1d_grid()
+vertices, edges = demo.example_1d_network()
 
 node_x = vertices.T[0]
 node_y = vertices.T[1]

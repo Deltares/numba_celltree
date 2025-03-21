@@ -19,18 +19,18 @@ script or a Jupyter notebook for interactive exploration.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the numba_celltree package to index 1D grids. The package provides a EdgeCellTree class that constructs a cell tree for 1D grids. The package currently supports the following operations:">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the numba_celltree package to index 1D grids. The package provides a EdgeCellTree class that constructs a cell tree for 1D networks and linear geometries. The package currently supports the following operations:">
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_1d_grids_thumb.png
+  .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_1d_network_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_spatial_indexing_1d_grids.py`
+  :ref:`sphx_glr_examples_spatial_indexing_1d_network.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Spatial indexing of 1D grids</div>
+      <div class="sphx-glr-thumbnail-title">Spatial indexing of 1D networks and linear geometry"</div>
     </div>
 
 
@@ -61,7 +61,7 @@ script or a Jupyter notebook for interactive exploration.
 .. toctree::
    :hidden:
 
-   /examples/spatial_indexing_1d_grids
+   /examples/spatial_indexing_1d_network
    /examples/spatial_indexing_2d_grids
 
 
