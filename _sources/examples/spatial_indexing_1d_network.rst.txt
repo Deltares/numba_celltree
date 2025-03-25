@@ -188,7 +188,7 @@ some line segments.
  .. code-block:: none
 
 
-    <matplotlib.collections.LineCollection object at 0x7fe8d4897b60>
+    <matplotlib.collections.LineCollection object at 0x7f7078a79a00>
 
 
 
@@ -252,14 +252,14 @@ of the intersection points. Let's plot the results:
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7fe8cc3d4ad0>
+    <matplotlib.collections.PathCollection object at 0x7f7078aff830>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.233 seconds)
+   **Total running time of the script:** (0 minutes 0.239 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing_1d_network.py:
