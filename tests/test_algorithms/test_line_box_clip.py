@@ -6,7 +6,7 @@ from numba_celltree.algorithms import (
     cyrus_beck_line_polygon_clip,
     liang_barsky_line_box_clip,
 )
-from numba_celltree.constants import Box, Point
+from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point
 
 
 def ab(a, b, c):
@@ -27,63 +27,63 @@ POLY_REVERSED = POLY[::-1, :]
 
 
 @pytest.mark.parametrize(
-    "line_clip, box",
+    "line_clip, args",
     [
-        (cohen_sutherland_line_box_clip, BOX),
-        (liang_barsky_line_box_clip, BOX),
-        (cyrus_beck_line_polygon_clip, POLY),
+        (cohen_sutherland_line_box_clip, (BOX,)),
+        (liang_barsky_line_box_clip, (BOX,)),
+        (cyrus_beck_line_polygon_clip, (POLY, TOLERANCE_ON_EDGE)),
     ],
 )
-def test_line_box_clip(line_clip, box):
+def test_line_box_clip(line_clip, args):
     a = Point(-1.0, 0.0)
     b = Point(2.0, 3.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, [0.0, 1.0])
     assert np.allclose(d, [1.0, 2.0])
 
     a = Point(0.0, -0.1)
     b = Point(0.0, -0.1)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert not intersects
     assert np.isnan(c).all()
     assert np.isnan(d).all()
 
     a = Point(-1.0, 1.0)
     b = Point(3.0, 1.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, [0.0, 1.0])
     assert np.allclose(d, [2.0, 1.0])
 
     a = Point(1.0, -3.0)
     b = Point(1.0, 3.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, [1.0, 0.0])
     assert np.allclose(d, [1.0, 2.0])
 
     b = Point(1.0, 1.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, [1.0, 0.0])
     assert np.allclose(d, [1.0, 1.0])
 
     a = Point(1.0, 1.0)
     b = Point(1.0, 3.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, [1.0, 1.0])
     assert np.allclose(d, [1.0, 2.0])
 
     a = Point(-1.0, 3.0)
     b = Point(3.0, 3.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert not intersects
 
     a = Point(-1.0, 1.0)
     b = Point(1.0, 1.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, [0.0, 1.0])
     assert np.allclose(d, [1.0, 1.0])
@@ -91,7 +91,7 @@ def test_line_box_clip(line_clip, box):
     # both inside
     a = Point(0.5, 0.5)
     b = Point(1.5, 1.5)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert intersects
     assert np.allclose(c, a)
     assert np.allclose(d, b)
@@ -99,26 +99,26 @@ def test_line_box_clip(line_clip, box):
     # No intersection, left
     a = Point(-1.5, 0.0)
     b = Point(-0.5, 1.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert not intersects
 
     # No intersection, right
     a = Point(2.5, 0.0)
     b = Point(3.5, 1.0)
-    intersects, c, d = line_clip(a, b, box)
+    intersects, c, d = line_clip(a, b, *args)
     assert not intersects
 
 
 @pytest.mark.parametrize(
-    "line_clip, box",
+    "line_clip, args",
     [
-        (cohen_sutherland_line_box_clip, BOX),
-        (liang_barsky_line_box_clip, BOX),
-        (cyrus_beck_line_polygon_clip, POLY),
-        (cyrus_beck_line_polygon_clip, POLY_REVERSED),
+        (cohen_sutherland_line_box_clip, (BOX,)),
+        (liang_barsky_line_box_clip, (BOX,)),
+        (cyrus_beck_line_polygon_clip, (POLY, TOLERANCE_ON_EDGE)),
+        (cyrus_beck_line_polygon_clip, (POLY_REVERSED, TOLERANCE_ON_EDGE)),
     ],
 )
-def test_line_box_clip_degeneracy(line_clip, box):
+def test_line_box_clip_degeneracy(line_clip, args):
     def assert_expected(
         a: tuple,
         b: tuple,
@@ -129,7 +129,7 @@ def test_line_box_clip_degeneracy(line_clip, box):
         a = Point(*a)
         b = Point(*b)
         # c, d are the clipped points
-        actual, actual_c, actual_d = line_clip(a, b, box)
+        actual, actual_c, actual_d = line_clip(a, b, *args)
         print(actual_c, c)
         print(actual_d, d)
         assert intersects is actual
@@ -137,7 +137,7 @@ def test_line_box_clip_degeneracy(line_clip, box):
         assert np.allclose(actual_d, d, equal_nan=True)
 
         # Direction of the point doesn't change, so neither should the answer.
-        actual, actual_c, actual_d = line_clip(a, b, box)
+        actual, actual_c, actual_d = line_clip(a, b, *args)
         assert intersects is actual
         assert np.allclose(actual_c, c, equal_nan=True)
         assert np.allclose(actual_d, d, equal_nan=True)

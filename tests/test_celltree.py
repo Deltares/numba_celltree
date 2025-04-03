@@ -182,7 +182,7 @@ def test_triangle_lookup__tolerance():
     tree = CellTree2d(nodes, faces, fill_value)
     point = np.array(
         [
-            [-0.1, 0.0],
+            [-0.09, 0.0],
             [2.0, 1.0],
             [-1.0, 1.0],
         ]

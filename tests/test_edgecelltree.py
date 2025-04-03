@@ -53,6 +53,7 @@ def test_locate_points():
 
 
 def test_locate_points_big_coords__tolerance():
+    """Small test case extracted from LHM"""
     vertices = np.array(
         [[171805.657000002, 563516.366], [171889.594000001, 563437.333000001]]
     )
@@ -86,3 +87,34 @@ def test_intersect_edges():
     np.testing.assert_array_equal(actual_edge, expected_edge)
     np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)
     np.testing.assert_allclose(actual_xy, expected_xy, atol=TOLERANCE_ON_EDGE)
+
+
+def test_intersect_edges__tolerance():
+    tree = EdgeCellTree2d(vertices, edges)
+    edge_coords = np.array(
+        [
+            [[-0.009, -1.0], [-0.009, 1.0]],  # 0 just left of start vertex tree
+            [[-2.0, -1.0], [-3.0, -1.0]],  # no interesect
+        ]
+    )
+    actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(edge_coords)
+    assert actual_edge.size == 0
+    assert actual_tree_edge.size == 0
+    assert actual_xy.size == 0
+
+    big_tol = 1e-2
+    tree = EdgeCellTree2d(vertices, edges, tolerance=big_tol)
+    actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(
+        edge_coords, big_tol
+    )
+    expected_edge = np.array([0], dtype=np.int32)
+    expected_tree_edge = np.array([0], dtype=np.int32)
+    expected_xy = np.array(
+        [
+            [0.0, 0.0],
+        ],
+        dtype=float,
+    )
+    np.testing.assert_array_equal(actual_edge, expected_edge)
+    np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)
+    np.testing.assert_allclose(actual_xy, expected_xy, atol=big_tol)
