@@ -300,7 +300,7 @@ def compute_edge_edge_intersect(
     vertices = tree.vertices[tree_edge]
     p = as_point(vertices[0])
     q = as_point(vertices[1])
-    intersects, x, y = lines_intersect(a, b, p, q)
+    intersects, x, y = lines_intersect(a, b, p, q, tolerance)
     c = Point(x, y)
     return intersects, c, c
 
