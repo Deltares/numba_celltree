@@ -142,7 +142,7 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
 # Too big to inline. Drives compilation time through the roof for no benefit.
 @nb.njit(inline="never")
 def cyrus_beck_line_polygon_clip(
-    a: Point, b: Point, poly: Sequence[Point]
+    a: Point, b: Point, poly: Sequence[Point], tolerance: float
 ) -> Tuple[bool, Point, Point]:
     """
     In short, the basic idea:
@@ -171,8 +171,8 @@ def cyrus_beck_line_polygon_clip(
     if s.x == 0 and s.y == 0:
         return NO_INTERSECTION
     # Test whether line is fully enclosed in polygon
-    a_inside = point_in_polygon_or_on_edge(a, poly)
-    b_inside = point_in_polygon_or_on_edge(b, poly)
+    a_inside = point_in_polygon_or_on_edge(a, poly, tolerance)
+    b_inside = point_in_polygon_or_on_edge(b, poly, tolerance)
     if a_inside and b_inside:
         return True, a, b
 

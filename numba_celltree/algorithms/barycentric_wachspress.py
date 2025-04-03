@@ -8,7 +8,6 @@ import numpy as np
 
 from numba_celltree.constants import (
     PARALLEL,
-    TOLERANCE_ON_EDGE,
     FloatArray,
     FloatDType,
     IntArray,
@@ -36,7 +35,9 @@ def interp_edge_case(a, U, p, weights, i, j):
 
 
 @nb.njit
-def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray) -> None:
+def compute_weights(
+    polygon: FloatArray, p: Point, weights: FloatArray, tolerance: float
+) -> None:
     n = len(polygon)
     w_sum = 0.0
 
@@ -46,7 +47,7 @@ def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray) -> None:
     U = to_vector(a, b)
     V = to_vector(a, p)
     Ai = abs(cross_product(U, V))
-    if Ai < TOLERANCE_ON_EDGE:
+    if Ai < tolerance:
         # Note: weights may be differently sized than polygon! Hence n-1
         # instead of -1.
         interp_edge_case(a, U, p, weights, n - 1, 0)
@@ -63,7 +64,7 @@ def compute_weights(polygon: FloatArray, p: Point, weights: FloatArray) -> None:
         V = to_vector(b, c)
         Aj = abs(cross_product(U, V))
 
-        if Aj < TOLERANCE_ON_EDGE:
+        if Aj < tolerance:
             interp_edge_case(b, V, p, weights, i, i_next)
             return
 
@@ -90,6 +91,7 @@ def barycentric_wachspress_weights(
     face_indices: IntArray,
     faces: IntArray,
     vertices: FloatArray,
+    tolerance: float,
 ) -> FloatArray:
     n_points = len(points)
     n_max_vert = faces.shape[1]
@@ -101,5 +103,5 @@ def barycentric_wachspress_weights(
         face = faces[face_index]
         polygon = copy_vertices(vertices, face)
         point = as_point(points[i])
-        compute_weights(polygon, point, weights[i])
+        compute_weights(polygon, point, weights[i], tolerance)
     return weights

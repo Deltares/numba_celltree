@@ -52,6 +52,20 @@ def test_locate_points():
     )
 
 
+def test_locate_points_big_coords__tolerance():
+    vertices = np.array(
+        [[171805.657000002, 563516.366], [171889.594000001, 563437.333000001]]
+    )
+    edges = np.array([[0, 1]])
+    tree = EdgeCellTree2d(vertices, edges)
+    points = np.array([[171882.49385095935, 563444.0183244612]])
+    tree_edge_indices = tree.locate_points(points, tolerance=1e-8)
+    np.testing.assert_array_equal(tree_edge_indices, np.array([0], dtype=np.int32))
+    # test with a tolerance that is too small
+    tree_edge_indices = tree.locate_points(points, tolerance=1e-9)
+    np.testing.assert_array_equal(tree_edge_indices, np.array([-1], dtype=np.int32))
+
+
 def test_intersect_edges():
     tree = EdgeCellTree2d(vertices, edges)
     edge_coords = np.array(
