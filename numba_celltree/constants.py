@@ -143,7 +143,7 @@ FILL_VALUE = -1
 # results in required stack of 32.
 INITIAL_STACK_LENGTH = 32
 # Floating point slack
-TOLERANCE_ON_EDGE = 1e-2
+TOLERANCE_ON_EDGE = 1e-9
 
 FLOAT_MIN = np.finfo(FloatDType).min
 FLOAT_MAX = np.finfo(FloatDType).max
