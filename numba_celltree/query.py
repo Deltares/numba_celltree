@@ -287,20 +287,19 @@ def locate_boxes(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
     return concatenate_indices(indices, counts)
 
 
-@nb.njit(inline="always")
+# @nb.njit(inline="always")
 def compute_edge_edge_intersect(
     tree: CellTreeData,
     bbox_index: int,
     a: Point,
     b: Point,
     work_array: np.ndarray,
-    tolerance: float,
 ) -> Tuple[bool, Point, Point]:
     tree_edge = tree.elements[bbox_index]
     vertices = tree.vertices[tree_edge]
     p = as_point(vertices[0])
     q = as_point(vertices[1])
-    intersects, x, y = lines_intersect(a, b, p, q, tolerance)
+    intersects, x, y = lines_intersect(a, b, p, q)
     c = Point(x, y)
     return intersects, c, c
 
@@ -312,7 +311,6 @@ def compute_edge_face_intersect(
     a: Point,
     b: Point,
     work_array: np.ndarray,
-    tolerance: float,
 ) -> Tuple[bool, Point, Point]:
     box = as_box(tree.bb_coords[bbox_index])
     intersects, c, d = cohen_sutherland_line_box_clip(a, b, box)
@@ -320,7 +318,7 @@ def compute_edge_face_intersect(
         polygon = copy_vertices_into(
             tree.vertices, tree.elements[bbox_index], work_array
         )
-        intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon, tolerance)
+        intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
     return intersects, c, d
 
 
@@ -329,7 +327,7 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
     # probably also a rather bad idea, given its complexity: compared to looking
     # for either boxes or points, checking is more much complicated by involving
     # two intersection algorithms.
-    @nb.njit(inline="never")
+#    @nb.njit(inline="never")
     def locate_edge(
         a: Point,
         b: Point,
@@ -338,7 +336,6 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
         intersections: FloatArray,
         indices_size: int,
         index: int,
-        tolerance: float,
     ):
         # Check if the entire mesh intersects with the line segment at all
         tree_bbox = as_box(tree.bbox)
@@ -363,7 +360,7 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
                 for i in range(node["ptr"], node["ptr"] + node["size"]):
                     bbox_index = tree.bb_indices[i]
                     intersects, c, d = intersection_function(
-                        tree, bbox_index, a, b, polygon_work_array, tolerance
+                        tree, bbox_index, a, b, polygon_work_array
                     )
                     if intersects:
                         # If insufficient capacity, exit.
@@ -384,19 +381,18 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
             node_dim = 1 if node["dim"] else 0
             dx = V[node_dim]
             if dx > 0.0:
-                dx_left = node["Lmax"] - a[node_dim] + tolerance
-                dx_right = node["Rmin"] - b[node_dim] + tolerance
+                dx_left = node["Lmax"] - a[node_dim]
+                dx_right = node["Rmin"] - b[node_dim]
             else:
-                dx_left = node["Lmax"] - b[node_dim] - tolerance
-                dx_right = node["Rmin"] - a[node_dim] - tolerance
+                dx_left = node["Lmax"] - b[node_dim]
+                dx_right = node["Rmin"] - a[node_dim]
 
             # Check how origin (a) and end (b) are located compared to box edges
             # (Lmax, Rmin). The box should be investigated if:
             # * the origin is left of Lmax (dx_left >= 0)
             # * the end is right of Rmin (dx_right <= 0)
-            left = dx_left >= -tolerance
-            right = dx_right <= tolerance
-
+            left = dx_left >= 0.0
+            right = dx_right <= 0.0
             # Now find the intersection coordinates. These have to occur within in
             # the bounds of the vector. Note that if the line has no slope in this
             # dim (dx == 0), we cannot compute the intersection, and we have to
@@ -404,17 +400,17 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
             if dx > 0.0:  # TODO: abs(dx) > EPISLON?
                 if left:
                     t_left = dx_left / dx
-                    left = t_left >= -tolerance
+                    left = t_left >= 0.0
                 if right:
                     t_right = dx_right / dx
-                    right = t_right <= (1.0 + tolerance)
+                    right = t_right <= (1.0)
             elif dx < 0.0:
                 if left:
                     t_left = 1.0 - (dx_left / dx)
-                    left = t_left >= -tolerance
+                    left = t_left >= 0.0
                 if right:
                     t_right = 1.0 - (dx_right / dx)
-                    right = t_right <= (1.0 + tolerance)
+                    right = t_right <= (1.0)
             # else dx == 0.0. In this case there's no info to extract from this
             # node. We'll fully defer to the children.
             left_child = node["child"]
@@ -430,12 +426,11 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
 
         return count, indices_size
 
-    @nb.njit(cache=True)
+#    @nb.njit(cache=True)
     def locate_edges_helper(
         edge_coords: FloatArray,
         tree: CellTreeData,
         offset: int,
-        tolerance: float,
     ) -> IntArray:
         n_edge = len(edge_coords)
         # Ensure the initial indices array isn't too small.
@@ -458,7 +453,6 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
                     xy,
                     indices_size,
                     edge_index + offset,
-                    tolerance,
                 )
                 if count != -1:
                     break
@@ -471,9 +465,9 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
 
         return indices, xy, total_count
 
-    @nb.njit(cache=True, parallel=PARALLEL)
+#    @nb.njit(cache=True, parallel=PARALLEL)
     def locate_edges(
-        box_coords: FloatArray, tree: CellTreeData, n_chunks: int, tolerance: float
+        box_coords: FloatArray, tree: CellTreeData, n_chunks: int
     ):
         chunks = np.array_split(box_coords, n_chunks)
         offsets = np.zeros(n_chunks, dtype=IntDType)
@@ -486,7 +480,7 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
         counts = np.empty(n_chunks, dtype=IntDType)
         for i in nb.prange(n_chunks):
             indices[i], intersections[i], counts[i] = locate_edges_helper(
-                chunks[i], tree, offsets[i], tolerance
+                chunks[i], tree, offsets[i],
             )
 
         total_size = sum(counts)

@@ -99,7 +99,7 @@ class EdgeCellTree2d(CellTree2dBase):
         return locate_points_on_edge(points, self.celltree_data, tolerance)
 
     def intersect_edges(
-        self, edge_coords: FloatArray, tolerance: float = TOLERANCE_ON_EDGE
+        self, edge_coords: FloatArray,
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
         Find the index of an edge intersecting with an edge.
@@ -108,10 +108,6 @@ class EdgeCellTree2d(CellTree2dBase):
         ----------
         edge_coords: ndarray of floats with shape ``(n_edge, 2, 2)``
             Every row containing ``((x0, y0), (x1, y1))``.
-        tolerance: float, optional, default: 1e-9
-            The tolerance used to determine whether a point is on an edge.
-            If the distance from the point to the edge is smaller than this
-            value, the point is considered to be on the edge.
 
         Returns
         -------
@@ -125,7 +121,7 @@ class EdgeCellTree2d(CellTree2dBase):
         edge_coords = cast_edges(edge_coords)
         n_chunks = nb.get_num_threads()
         edge_indices, tree_edge_indices, xy = locate_edge_edges(
-            edge_coords, self.celltree_data, n_chunks, tolerance
+            edge_coords, self.celltree_data, n_chunks
         )
         intersection_xy = np.ascontiguousarray(xy[:, 0])
         return edge_indices, tree_edge_indices, intersection_xy

@@ -31,7 +31,7 @@ POLY_REVERSED = POLY[::-1, :]
     [
         (cohen_sutherland_line_box_clip, (BOX,)),
         (liang_barsky_line_box_clip, (BOX,)),
-        (cyrus_beck_line_polygon_clip, (POLY, TOLERANCE_ON_EDGE)),
+        (cyrus_beck_line_polygon_clip, (POLY,)),
     ],
 )
 def test_line_box_clip(line_clip, args):
@@ -114,8 +114,8 @@ def test_line_box_clip(line_clip, args):
     [
         (cohen_sutherland_line_box_clip, (BOX,)),
         (liang_barsky_line_box_clip, (BOX,)),
-        (cyrus_beck_line_polygon_clip, (POLY, TOLERANCE_ON_EDGE)),
-        (cyrus_beck_line_polygon_clip, (POLY_REVERSED, TOLERANCE_ON_EDGE)),
+        (cyrus_beck_line_polygon_clip, (POLY,)),
+        (cyrus_beck_line_polygon_clip, (POLY_REVERSED,)),
     ],
 )
 def test_line_box_clip_degeneracy(line_clip, args):

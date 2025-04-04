@@ -95,80 +95,20 @@ def test_intersect_edges():
     tree = EdgeCellTree2d(vertices, edges)
     edge_coords = np.array(
         [
-            [[1.0, -1.0], [1.0, 1.0]],  # 0 orthogonal
+            [[1.0, -1.0], [1.0, 1.0]],  # 0 orthogonal, on vertex
             [[3.0, 1.0], [-1.0, -1.0]],  # 1 two intersctions
             [[0.0, -1.0], [0.0, 1.0]],  # 2 on start vertex tree
             [[-2.0, -1.0], [-3.0, -1.0]],  # no interesect
         ]
     )
     actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(edge_coords)
-    expected_edge = np.array([0, 1, 1, 2], dtype=np.int32)
-    expected_tree_edge = np.array([1, 1, 2, 0], dtype=np.int32)
+    expected_edge = np.array([0, 0, 1, 1, 2], dtype=np.int32)
+    expected_tree_edge = np.array([1, 0, 1, 2, 0], dtype=np.int32)
     expected_xy = np.array(
-        [[1.0, 0.0], [1.0, 0.0], [2.0, 0.5], [0.0, 0.0]], dtype=float
+        [[1.0, 0.0], [1.0, 0.0], [1.0, 0.0], [2.0, 0.5], [0.0, 0.0]], dtype=float
     )
 
     np.testing.assert_array_equal(actual_edge, expected_edge)
     np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)
     np.testing.assert_allclose(actual_xy, expected_xy, atol=TOLERANCE_ON_EDGE)
 
-
-def test_intersect_edges__tolerance():
-    tree = EdgeCellTree2d(vertices, edges)
-    edge_coords = np.array(
-        [
-            [[-0.009, -1.0], [-0.009, 1.0]],  # 0 just left of start vertex tree
-            [[-2.0, -1.0], [-3.0, -1.0]],  # no interesect
-        ]
-    )
-    actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(edge_coords)
-    assert actual_edge.size == 0
-    assert actual_tree_edge.size == 0
-    assert actual_xy.size == 0
-
-    big_tol = 1e-2
-    tree = EdgeCellTree2d(vertices, edges, tolerance=big_tol)
-    actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(
-        edge_coords, big_tol
-    )
-    expected_edge = np.array([0], dtype=np.int32)
-    expected_tree_edge = np.array([0], dtype=np.int32)
-    expected_xy = np.array(
-        [
-            [0.0, 0.0],
-        ],
-        dtype=float,
-    )
-    np.testing.assert_array_equal(actual_edge, expected_edge)
-    np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)
-    np.testing.assert_allclose(actual_xy, expected_xy, atol=big_tol)
-
-
-def test_intersect_edges__tolerance2():
-    """Test case with two separate parallel edges, of length 1.0"""
-    vertices = np.array(
-        [[0.0, 100.0], [0.0, 101.0], [10.0, 100.0], [10.0, 101.0]], dtype=float
-    )
-    edges = np.array([[0, 1], [2, 3]], dtype=np.int32)
-    big_tol = 0.5
-
-    tree = EdgeCellTree2d(vertices, edges, tolerance=big_tol, cells_per_leaf=1)
-    edge_coords = np.array(
-        [
-            [[8.0, 100.5], [10.0 - (big_tol / 2), 100.5]],  # 0 intersects both edges
-        ]
-    )
-    actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(
-        edge_coords, big_tol
-    )
-    expected_edge = np.array([0], dtype=np.int32)
-    expected_tree_edge = np.array([1], dtype=np.int32)
-    expected_xy = np.array(
-        [
-            [10.0, 100.5],
-        ],
-        dtype=float,
-    )
-    np.testing.assert_array_equal(actual_edge, expected_edge)
-    np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)
-    np.testing.assert_allclose(actual_xy, expected_xy, atol=big_tol)

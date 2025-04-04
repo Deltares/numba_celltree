@@ -14,6 +14,7 @@ from numba_celltree.constants import (
     Point,
     Triangle,
     Vector,
+    TOLERANCE_ON_EDGE,
 )
 from numba_celltree.utils import allocate_box_polygon, allocate_polygon
 
@@ -22,6 +23,9 @@ from numba_celltree.utils import allocate_box_polygon, allocate_polygon
 def to_vector(a: Point, b: Point) -> Vector:
     return Vector(b.x - a.x, b.y - a.y)
 
+@nb.njit(inline="always")
+def vector_length(v: Vector) -> float:
+    return np.sqrt(v.x * v.x + v.y * v.y)
 
 @nb.njit(inline="always")
 def as_point(a: FloatArray) -> Point:
@@ -230,10 +234,10 @@ def box_contained(a: Box, b: Box) -> bool:
 
 
 @nb.njit(inline="always")
-def left_of(a: Point, p: Point, U: Vector, tolerance: float) -> bool:
+def left_of(a: Point, p: Point, U: Vector) -> bool:
     # Whether point a is left of vector U
     # U: p -> q direction vector
-    return U.x * (a.y - p.y + tolerance) > U.y * (a.x - p.x - tolerance)
+    return U.x * (a.y - p.y) > U.y * (a.x - p.x)
 
 
 @nb.njit(inline="always")
@@ -288,11 +292,12 @@ def midpoint_collinear_lines(a: Point, b: Point, p: Point, q: Point) -> Point:
     return midpoint_x, midpoint_y
 
 
-@nb.njit(inline="always")
+# @nb.njit(inline="always")
 def lines_intersect(
-    a: Point, b: Point, p: Point, q: Point, tolerance: float
+    a: Point, b: Point, p: Point, q: Point
 ) -> tuple[bool, float, float]:
     """Test whether line segment a -> b intersects p -> q."""
+    tolerance = TOLERANCE_ON_EDGE
     V = to_vector(a, b)
     U = to_vector(p, q)
 
@@ -313,8 +318,8 @@ def lines_intersect(
 
     # Check a and b for separation by U (p -> q)
     # and p and q for separation by V (a -> b)
-    if (left_of(a, p, U, tolerance) != left_of(b, p, U, tolerance)) and (
-        left_of(p, a, V, tolerance) != left_of(q, a, V, tolerance)
+    if (left_of(a, p, U) != left_of(b, p, U)) and (
+        left_of(p, a, V) != left_of(q, a, V)
     ):
         x, y = intersection_location_point(V, U, a, p, tolerance)
         return True, x, y

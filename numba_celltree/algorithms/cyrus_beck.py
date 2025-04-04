@@ -19,7 +19,7 @@ from typing import Sequence, Tuple
 import numba as nb
 import numpy as np
 
-from numba_celltree.constants import Point, Vector
+from numba_celltree.constants import Point, Vector, TOLERANCE_ON_EDGE
 from numba_celltree.geometry_utils import (
     as_point,
     cross_product,
@@ -142,7 +142,7 @@ def collinear_case(a: Point, b: Point, v0: Point, v1: Point) -> Tuple[Point, Poi
 # Too big to inline. Drives compilation time through the roof for no benefit.
 @nb.njit(inline="never")
 def cyrus_beck_line_polygon_clip(
-    a: Point, b: Point, poly: Sequence[Point], tolerance: float
+    a: Point, b: Point, poly: Sequence[Point]
 ) -> Tuple[bool, Point, Point]:
     """
     In short, the basic idea:
@@ -164,6 +164,7 @@ def cyrus_beck_line_polygon_clip(
     A valid intersection falls on the domain of the parametrized segment:
     0 <= t <= 1.0
     """
+    tolerance = TOLERANCE_ON_EDGE
     length = len(poly)
     s = to_vector(a, b)
 

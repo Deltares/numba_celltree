@@ -258,7 +258,6 @@ class CellTree2d(CellTree2dBase):
     def intersect_edges(
         self,
         edge_coords: FloatArray,
-        tolerance: float = TOLERANCE_ON_EDGE,
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
         Find the index of a face intersecting with an edge.
@@ -267,10 +266,6 @@ class CellTree2d(CellTree2dBase):
         ----------
         edge_coords: ndarray of floats with shape ``(n_edge, 2, 2)``
             Every row containing ``((x0, y0), (x1, y1))``.
-        tolerance: float, optional, default: 1e-9
-            The tolerance used to determine whether a point is on an edge.
-            If the distance from the point to the edge is smaller than this
-            value, the point is considered to be on the edge.
 
         Returns
         -------
@@ -286,7 +281,7 @@ class CellTree2d(CellTree2dBase):
         """
         edge_coords = cast_edges(edge_coords)
         n_chunks = nb.get_num_threads()
-        return locate_edge_faces(edge_coords, self.celltree_data, n_chunks, tolerance)
+        return locate_edge_faces(edge_coords, self.celltree_data, n_chunks)
 
     def compute_barycentric_weights(
         self,

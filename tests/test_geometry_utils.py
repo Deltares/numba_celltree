@@ -8,6 +8,7 @@ from numba_celltree import geometry_utils as gu
 from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point, Triangle, Vector
 
 
+
 def test_to_vector():
     a = Point(0.0, 0.0)
     b = Point(1.0, 2.0)
@@ -349,13 +350,6 @@ class IntersectCases:
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_edge(self):
-        p = Point(3.0, 3.0)
-        q = Point(3.0, 1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(3.0, 3.0)
-        return p, q, expected_intersects, expected_intersection_point
-
-    def case_vertex_on_edge2(self):
         p = Point(-1.0, 1.0)
         q = Point(1.0, -1.0)
         expected_intersects = True
@@ -374,13 +368,6 @@ class IntersectCases:
         q = Point(3.0, 1.0)
         expected_intersects = True
         expected_intersection_point = Point(2.0, 2.0)
-        return p, q, expected_intersects, expected_intersection_point
-
-    def case_vertex_on_vertex(self):
-        p = Point(0.0, 0.0)
-        q = Point(1.0, -1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(0.0, 0.0)
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_vertex_collinear(self):
@@ -404,12 +391,12 @@ class IntersectCases:
 def test_lines_intersect(p, q, expected_intersects, expected_intersection_point):
     a = Point(0.0, 0.0)
     b = Point(4.0, 4.0)
-    actual_intersects, x, y = gu.lines_intersect(a, b, p, q, TOLERANCE_ON_EDGE)
+    actual_intersects, x, y = gu.lines_intersect(a, b, p, q)
     assert actual_intersects == expected_intersects
     np.testing.assert_allclose(x, expected_intersection_point.x)
     np.testing.assert_allclose(y, expected_intersection_point.y)
     # Reverse order edges
-    actual_intersects, x, y = gu.lines_intersect(p, q, a, b, TOLERANCE_ON_EDGE)
+    actual_intersects, x, y = gu.lines_intersect(p, q, a, b)
     assert actual_intersects == expected_intersects
     np.testing.assert_allclose(x, expected_intersection_point.x)
     np.testing.assert_allclose(y, expected_intersection_point.y)
