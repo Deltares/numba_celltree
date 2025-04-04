@@ -287,7 +287,7 @@ def locate_boxes(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
     return concatenate_indices(indices, counts)
 
 
-# @nb.njit(inline="always")
+@nb.njit(inline="always")
 def compute_edge_edge_intersect(
     tree: CellTreeData,
     bbox_index: int,

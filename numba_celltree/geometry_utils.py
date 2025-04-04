@@ -142,7 +142,6 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
-@nb.njit(inline="always")
 def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
     """
     Check whether point p falls within the bounding box created by a and b
@@ -301,7 +300,7 @@ def midpoint_collinear_lines(a: Point, b: Point, p: Point, q: Point) -> Point:
     return midpoint_x, midpoint_y
 
 
-# @nb.njit(inline="always")
+@nb.njit(inline="always")
 def lines_intersect(
     a: Point, b: Point, p: Point, q: Point
 ) -> tuple[bool, float, float]:
