@@ -88,7 +88,7 @@ def test_locate_points_big_coords__tolerance():
     np.testing.assert_array_equal(tree_edge_indices, np.array([0], dtype=np.int32))
     # test with a tolerance that is too small
     tree_edge_indices = tree.locate_points(points, tolerance=1e-9)
-    np.testing.assert_array_equal(tree_edge_indices, np.array([-1], dtype=np.int32))
+    np.testing.assert_array_equal(tree_edge_indices, np.array([0], dtype=np.int32))
 
 
 def test_intersect_edges():

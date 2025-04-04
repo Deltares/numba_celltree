@@ -23,9 +23,6 @@ from numba_celltree.utils import allocate_box_polygon, allocate_polygon
 def to_vector(a: Point, b: Point) -> Vector:
     return Vector(b.x - a.x, b.y - a.y)
 
-@nb.njit(inline="always")
-def vector_length(v: Vector) -> float:
-    return np.sqrt(v.x * v.x + v.y * v.y)
 
 @nb.njit(inline="always")
 def as_point(a: FloatArray) -> Point:
@@ -145,24 +142,28 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
-def in_bounds(p: Point, a: Point, b: Point) -> bool:
+@nb.njit(inline="always")
+def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
     """
     Check whether point p falls within the bounding box created by a and b
     (after we've checked the size of the cross product).
-
     However, we must take into account that a line may be either vertical
     (dx=0) or horizontal (dy=0) and only evaluate the non-zero value.
+    If the area created by p, a, b is tiny AND p is within the bounds of a and
+    b, the point lies very close to the edge.
+    
+    This is a branchless implementation.
     """
-    dx = b.x - a.x
-    dy = b.y - a.y
-    if abs(dx) >= abs(dy):
-        if dx > 0:
-            return a.x <= p.x and p.x <= b.x
-        return b.x <= p.x and p.x <= a.x
-    else:
-        if dy > 0:
-            return a.y <= p.y and p.y <= b.y
-        return b.y <= p.y and p.y <= a.y
+    xmin = min(a.x, b.x) - tolerance
+    xmax = max(a.x, b.x) + tolerance
+    ymin = min(a.y, b.y) - tolerance
+    ymax = max(a.y, b.y) + tolerance
+    dx = xmax - xmin
+    dy = ymax - ymin
+    # Determine which bound to use based on which dimension is larger
+    use_x_bound = abs(dx) >= abs(dy)
+    # Combine results without branching
+    return (use_x_bound and ((p.x >= xmin) and (p.x <= xmax))) or (not use_x_bound and ((p.y >= ymin) and (p.y <= ymax)))
 
 
 @nb.njit(inline="always")
@@ -181,7 +182,10 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray, tolerance: float) ->
         # the point is (nearly) on the edge, or it is collinear. We can test if
         # if's collinear by checking whether it falls in the bounding box of
         # points v0 and v1.
-        if (abs(cross_product(U, V)) < tolerance) and in_bounds(p, v0, v1):
+        A = cross_product(U, V)
+        L2 = V.x * V.x + V.y * V.y
+        # Compute optimized equivalent of A/length < tolerance (no sqrt, no division)
+        if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
             return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
@@ -202,7 +206,10 @@ def point_on_edge(p: Point, edge: FloatArray, tolerance: float) -> bool:
         return False
     U = to_vector(p, v0)
     V = to_vector(p, v1)
-    if in_bounds(p, v0, v1) and (abs(cross_product(U, V)) < tolerance):
+    A = cross_product(U, V)
+    L2 = V.x * V.x + V.y * V.y
+    # Compute optimized equivalent of A/length < tolerance (no sqrt, no division)
+    if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
         return True
     return False
 

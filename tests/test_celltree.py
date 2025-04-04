@@ -190,8 +190,7 @@ def test_triangle_lookup__tolerance():
     result = tree.locate_points(point, tolerance=1e-9)
     expected = np.array([-1, 1, -1])
     assert np.array_equal(result, expected)
-    # TODO: Set tolerance to 1e-1 when tolerance is actually a distance.
-    result = tree.locate_points(point, tolerance=2e-1)
+    result = tree.locate_points(point, tolerance=1e-1)
     expected = np.array([0, 1, -1])
     assert np.array_equal(result, expected)
 
