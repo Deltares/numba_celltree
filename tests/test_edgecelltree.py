@@ -144,17 +144,18 @@ def test_intersect_edges__tolerance():
     np.testing.assert_allclose(actual_xy, expected_xy, atol=big_tol)
 
 
-
 def test_intersect_edges__tolerance2():
     """Test case with two separate parallel edges, of length 1.0"""
-    vertices = np.array([[0.0, 100.0], [0.0, 101.0], [10.0, 100.0], [10.0, 101.0]], dtype=float)
+    vertices = np.array(
+        [[0.0, 100.0], [0.0, 101.0], [10.0, 100.0], [10.0, 101.0]], dtype=float
+    )
     edges = np.array([[0, 1], [2, 3]], dtype=np.int32)
     big_tol = 0.5
 
     tree = EdgeCellTree2d(vertices, edges, tolerance=big_tol, cells_per_leaf=1)
     edge_coords = np.array(
         [
-            [[8.0, 100.5], [10.0-(big_tol/2), 100.5]],  # 0 intersects both edges
+            [[8.0, 100.5], [10.0 - (big_tol / 2), 100.5]],  # 0 intersects both edges
         ]
     )
     actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(
