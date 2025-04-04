@@ -6,7 +6,7 @@ from numba_celltree.algorithms import (
     cyrus_beck_line_polygon_clip,
     liang_barsky_line_box_clip,
 )
-from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point
+from numba_celltree.constants import Box, Point
 
 
 def ab(a, b, c):

@@ -294,15 +294,14 @@ def test_multi_poly_lookup():
     # Test with a point that is very close to the edge of a cell
     point = np.array(
         [
-            [-1e-8, 1.0],
-            [1.0, -1e-8],
+            [-9e-9, 1.0],
+            [1.0, -9e-9],
         ]
     )
     result = tree.locate_points(point)
     expected = np.array([-1, -1])
     assert np.array_equal(result, expected)
-    # TODO: Set tolerance to 1e-8 when tolerance is actually a distance.
-    result = tree.locate_points(point, tolerance=5e-8)
+    result = tree.locate_points(point, tolerance=1e-8)
     expected = np.array([0, 0])
     assert np.array_equal(result, expected)
 

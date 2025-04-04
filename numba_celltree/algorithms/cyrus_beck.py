@@ -19,7 +19,7 @@ from typing import Sequence, Tuple
 import numba as nb
 import numpy as np
 
-from numba_celltree.constants import Point, Vector, TOLERANCE_ON_EDGE
+from numba_celltree.constants import TOLERANCE_ON_EDGE, Point, Vector
 from numba_celltree.geometry_utils import (
     as_point,
     cross_product,

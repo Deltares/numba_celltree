@@ -99,7 +99,8 @@ class EdgeCellTree2d(CellTree2dBase):
         return locate_points_on_edge(points, self.celltree_data, tolerance)
 
     def intersect_edges(
-        self, edge_coords: FloatArray,
+        self,
+        edge_coords: FloatArray,
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
         Find the index of an edge intersecting with an edge.

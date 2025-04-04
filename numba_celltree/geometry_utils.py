@@ -7,6 +7,7 @@ from numba_celltree.constants import (
     FILL_VALUE,
     NDIM,
     PARALLEL,
+    TOLERANCE_ON_EDGE,
     Box,
     FloatArray,
     FloatDType,
@@ -14,7 +15,6 @@ from numba_celltree.constants import (
     Point,
     Triangle,
     Vector,
-    TOLERANCE_ON_EDGE,
 )
 from numba_celltree.utils import allocate_box_polygon, allocate_polygon
 
@@ -151,7 +151,7 @@ def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
     (dx=0) or horizontal (dy=0) and only evaluate the non-zero value.
     If the area created by p, a, b is tiny AND p is within the bounds of a and
     b, the point lies very close to the edge.
-    
+
     This is a branchless implementation.
     """
     xmin = min(a.x, b.x) - tolerance
@@ -163,7 +163,9 @@ def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
     # Determine which bound to use based on which dimension is larger
     use_x_bound = abs(dx) >= abs(dy)
     # Combine results without branching
-    return (use_x_bound and ((p.x >= xmin) and (p.x <= xmax))) or (not use_x_bound and ((p.y >= ymin) and (p.y <= ymax)))
+    return (use_x_bound and ((p.x >= xmin) and (p.x <= xmax))) or (
+        not use_x_bound and ((p.y >= ymin) and (p.y <= ymax))
+    )
 
 
 @nb.njit(inline="always")

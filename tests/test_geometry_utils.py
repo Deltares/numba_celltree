@@ -8,7 +8,6 @@ from numba_celltree import geometry_utils as gu
 from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point, Triangle, Vector
 
 
-
 def test_to_vector():
     a = Point(0.0, 0.0)
     b = Point(1.0, 2.0)

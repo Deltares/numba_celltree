@@ -111,4 +111,3 @@ def test_intersect_edges():
     np.testing.assert_array_equal(actual_edge, expected_edge)
     np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)
     np.testing.assert_allclose(actual_xy, expected_xy, atol=TOLERANCE_ON_EDGE)
-
