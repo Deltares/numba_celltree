@@ -12,6 +12,7 @@ from numba_celltree.algorithms import (
 from numba_celltree.cast import cast_bboxes, cast_edges, cast_faces, cast_vertices
 from numba_celltree.celltree_base import CellTree2dBase, bbox_tree
 from numba_celltree.constants import (
+    TOLERANCE_ON_EDGE,
     CellTreeData,
     FloatArray,
     IntArray,
@@ -86,7 +87,9 @@ class CellTree2d(CellTree2dBase):
             self.cells_per_leaf,
         )
 
-    def locate_points(self, points: FloatArray) -> IntArray:
+    def locate_points(
+        self, points: FloatArray, tolerance: float = TOLERANCE_ON_EDGE
+    ) -> IntArray:
         """
         Find the index of a face that contains a point.
 
@@ -96,6 +99,11 @@ class CellTree2d(CellTree2dBase):
         Parameters
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
+            Coordinates of the points to be located.
+        tolerance: float, optional, default: 1e-9
+            The tolerance used to determine whether a point is on an edge.
+            If the distance from the point to the edge is smaller than this
+            value, the point is considered to be on the edge.
 
         Returns
         -------
@@ -104,7 +112,7 @@ class CellTree2d(CellTree2dBase):
             falling in any faces are marked with a value of ``-1``.
         """
         points = cast_vertices(points)
-        return locate_points(points, self.celltree_data)
+        return locate_points(points, self.celltree_data, tolerance)
 
     def locate_boxes(self, bbox_coords: FloatArray) -> Tuple[IntArray, IntArray]:
         """
@@ -248,7 +256,8 @@ class CellTree2d(CellTree2dBase):
         return i[actual], j[actual], area[actual]
 
     def intersect_edges(
-        self, edge_coords: FloatArray
+        self,
+        edge_coords: FloatArray,
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
         Find the index of a face intersecting with an edge.
@@ -277,6 +286,7 @@ class CellTree2d(CellTree2dBase):
     def compute_barycentric_weights(
         self,
         points: FloatArray,
+        tolerance: float = TOLERANCE_ON_EDGE,
     ) -> Tuple[IntArray, FloatArray]:
         """
         Compute barycentric weights for points located inside of the grid.
@@ -284,6 +294,11 @@ class CellTree2d(CellTree2dBase):
         Parameters
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
+            Coordinates of the points to be located.
+        tolerance: float, optional, default: 1e-9
+            The tolerance used to determine whether a point is on an edge.
+            If the distance from the point to the edge is smaller than this
+            value, the point is considered to be on the edge.
 
         Returns
         -------
@@ -295,7 +310,7 @@ class CellTree2d(CellTree2dBase):
             face in which the point is located. For points not falling in any
             faces, the weight of all vertices is 0.
         """
-        face_indices = self.locate_points(points)
+        face_indices = self.locate_points(points, tolerance)
         n_max_vert = self.faces.shape[1]
         if n_max_vert > 3:
             f = barycentric_wachspress_weights
@@ -307,5 +322,6 @@ class CellTree2d(CellTree2dBase):
             face_indices,
             self.faces,
             self.vertices,
+            tolerance,
         )
         return face_indices, weights

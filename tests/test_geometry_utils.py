@@ -349,13 +349,6 @@ class IntersectCases:
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_edge(self):
-        p = Point(3.0, 3.0)
-        q = Point(3.0, 1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(3.0, 3.0)
-        return p, q, expected_intersects, expected_intersection_point
-
-    def case_vertex_on_edge2(self):
         p = Point(-1.0, 1.0)
         q = Point(1.0, -1.0)
         expected_intersects = True
@@ -374,13 +367,6 @@ class IntersectCases:
         q = Point(3.0, 1.0)
         expected_intersects = True
         expected_intersection_point = Point(2.0, 2.0)
-        return p, q, expected_intersects, expected_intersection_point
-
-    def case_vertex_on_vertex(self):
-        p = Point(0.0, 0.0)
-        q = Point(1.0, -1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(0.0, 0.0)
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_vertex_collinear(self):

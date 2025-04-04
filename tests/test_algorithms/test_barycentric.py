@@ -3,7 +3,7 @@ import pytest
 
 from numba_celltree.algorithms import barycentric_triangle as bt
 from numba_celltree.algorithms import barycentric_wachspress as bwp
-from numba_celltree.constants import Point, Triangle, Vector
+from numba_celltree.constants import TOLERANCE_ON_EDGE, Point, Triangle, Vector
 
 
 def test_interp_edge_case():
@@ -84,14 +84,16 @@ def test_barycentric_triangle_weights(barycentric_weights):
             [0.0, 0.0, 0.0],
         ]
     )
-    actual = barycentric_weights(points, face_indices, faces, vertices)
+    actual = barycentric_weights(
+        points, face_indices, faces, vertices, TOLERANCE_ON_EDGE
+    )
     assert np.allclose(actual, expected)
 
 
 def test_compute_weights_wachspress():
     def compute(polygon, point):
         weights = np.zeros(4)
-        bwp.compute_weights(polygon, point, weights)
+        bwp.compute_weights(polygon, point, weights, TOLERANCE_ON_EDGE)
         return weights
 
     polygon = np.array(
@@ -150,5 +152,7 @@ def test_barycentric_wachspress_weights():
             [0.0, 0.0, 0.0, 0.0],
         ]
     )
-    actual = bwp.barycentric_wachspress_weights(points, face_indices, faces, vertices)
+    actual = bwp.barycentric_wachspress_weights(
+        points, face_indices, faces, vertices, TOLERANCE_ON_EDGE
+    )
     assert np.allclose(actual, expected)

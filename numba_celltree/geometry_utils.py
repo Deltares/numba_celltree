@@ -142,28 +142,33 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
-def in_bounds(p: Point, a: Point, b: Point) -> bool:
+def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
     """
     Check whether point p falls within the bounding box created by a and b
     (after we've checked the size of the cross product).
-
     However, we must take into account that a line may be either vertical
     (dx=0) or horizontal (dy=0) and only evaluate the non-zero value.
+    If the area created by p, a, b is tiny AND p is within the bounds of a and
+    b, the point lies very close to the edge.
+
+    This is a branchless implementation.
     """
-    dx = b.x - a.x
-    dy = b.y - a.y
-    if abs(dx) >= abs(dy):
-        if dx > 0:
-            return a.x <= p.x and p.x <= b.x
-        return b.x <= p.x and p.x <= a.x
-    else:
-        if dy > 0:
-            return a.y <= p.y and p.y <= b.y
-        return b.y <= p.y and p.y <= a.y
+    xmin = min(a.x, b.x) - tolerance
+    xmax = max(a.x, b.x) + tolerance
+    ymin = min(a.y, b.y) - tolerance
+    ymax = max(a.y, b.y) + tolerance
+    dx = xmax - xmin
+    dy = ymax - ymin
+    # Determine which bound to use based on which dimension is larger
+    use_x_bound = abs(dx) >= abs(dy)
+    # Combine results without branching
+    return (use_x_bound and ((p.x >= xmin) and (p.x <= xmax))) or (
+        not use_x_bound and ((p.y >= ymin) and (p.y <= ymax))
+    )
 
 
 @nb.njit(inline="always")
-def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
+def point_in_polygon_or_on_edge(p: Point, poly: FloatArray, tolerance: float) -> bool:
     length = len(poly)
     v0 = as_point(poly[-1])
     U = to_vector(p, v0)
@@ -178,7 +183,10 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
         # the point is (nearly) on the edge, or it is collinear. We can test if
         # if's collinear by checking whether it falls in the bounding box of
         # points v0 and v1.
-        if (abs(cross_product(U, V)) < TOLERANCE_ON_EDGE) and in_bounds(p, v0, v1):
+        A = cross_product(U, V)
+        L2 = V.x * V.x + V.y * V.y
+        # Compute optimized equivalent of A/length < tolerance (no sqrt, no division)
+        if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
             return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
@@ -192,14 +200,17 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray) -> bool:
 
 
 @nb.njit(inline="always")
-def point_on_edge(p: Point, edge: FloatArray) -> bool:
+def point_on_edge(p: Point, edge: FloatArray, tolerance: float) -> bool:
     v0 = as_point(edge[0])
     v1 = as_point(edge[1])
     if v1 == v0:
         return False
     U = to_vector(p, v0)
     V = to_vector(p, v1)
-    if in_bounds(p, v0, v1) and (abs(cross_product(U, V)) < TOLERANCE_ON_EDGE):
+    A = cross_product(U, V)
+    L2 = V.x * V.x + V.y * V.y
+    # Compute optimized equivalent of A/length < tolerance (no sqrt, no division)
+    if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
         return True
     return False
 
@@ -234,21 +245,23 @@ def box_contained(a: Box, b: Box) -> bool:
 def left_of(a: Point, p: Point, U: Vector) -> bool:
     # Whether point a is left of vector U
     # U: p -> q direction vector
-    return U.x * (a.y - p.y + TOLERANCE_ON_EDGE) > U.y * (a.x - p.x - TOLERANCE_ON_EDGE)
+    return U.x * (a.y - p.y) > U.y * (a.x - p.x)
 
 
 @nb.njit(inline="always")
-def has_overlap(a: float, b: float, p: float, q: float):
-    return ((min(a, b) - max(p, q)) < TOLERANCE_ON_EDGE) and (
-        (min(p, q) - max(a, b)) < TOLERANCE_ON_EDGE
+def has_overlap(a: float, b: float, p: float, q: float, tolerance: float) -> bool:
+    return ((min(a, b) - max(p, q)) < tolerance) and (
+        (min(p, q) - max(a, b)) < tolerance
     )
 
 
 @nb.njit(inline="always")
-def intersection_location_point(V: Vector, U: Vector, a: Point, p: Point) -> Point:
+def intersection_location_point(
+    V: Vector, U: Vector, a: Point, p: Point, tolerance: float
+) -> Point:
     # Calculate intersection point
     denom = cross_product(V, U)
-    if abs(denom) < TOLERANCE_ON_EDGE:
+    if abs(denom) < tolerance:
         return np.nan, np.nan  # Parallel lines
 
     R = to_vector(a, p)
@@ -292,6 +305,7 @@ def lines_intersect(
     a: Point, b: Point, p: Point, q: Point
 ) -> tuple[bool, float, float]:
     """Test whether line segment a -> b intersects p -> q."""
+    tolerance = TOLERANCE_ON_EDGE
     V = to_vector(a, b)
     U = to_vector(p, q)
 
@@ -305,7 +319,9 @@ def lines_intersect(
         return False, np.nan, np.nan
 
     # bounds check
-    if (not has_overlap(a.x, b.x, p.x, q.x)) or (not has_overlap(a.y, b.y, p.y, q.y)):
+    if (not has_overlap(a.x, b.x, p.x, q.x, tolerance)) or (
+        not has_overlap(a.y, b.y, p.y, q.y, tolerance)
+    ):
         return False, np.nan, np.nan
 
     # Check a and b for separation by U (p -> q)
@@ -313,14 +329,14 @@ def lines_intersect(
     if (left_of(a, p, U) != left_of(b, p, U)) and (
         left_of(p, a, V) != left_of(q, a, V)
     ):
-        x, y = intersection_location_point(V, U, a, p)
+        x, y = intersection_location_point(V, U, a, p, tolerance)
         return True, x, y
 
     # Detect collinear case, where segments lie on the same infite line.
     R = to_vector(a, p)
     S = to_vector(a, q)
-    if (abs(cross_product(V, R)) < TOLERANCE_ON_EDGE) and (
-        abs(cross_product(V, S) < TOLERANCE_ON_EDGE)
+    if (abs(cross_product(V, R)) < tolerance) and (
+        abs(cross_product(V, S) < tolerance)
     ):
         x, y = midpoint_collinear_lines(a, b, p, q)
         return True, x, y
@@ -368,16 +384,15 @@ def build_face_bboxes(
 
 @nb.njit(inline="always")
 def edge_bounding_box(
-    edge: IntArray, vertices: FloatArray
+    edge: IntArray, vertices: FloatArray, tolerance: float
 ) -> Tuple[float, float, float, float]:
     x0, y0 = vertices[edge[0]]
     x1, y1 = vertices[edge[1]]
     # Edges may be axis-aligned. Create a fictitious width in this case.
-    tol = TOLERANCE_ON_EDGE
-    xmin = min(x0 - tol, x1 - tol)
-    xmax = max(x0 + tol, x1 + tol)
-    ymin = min(y0 - tol, y1 - tol)
-    ymax = max(y0 + tol, y1 + tol)
+    xmin = min(x0 - tolerance, x1 - tolerance)
+    xmax = max(x0 + tolerance, x1 + tolerance)
+    ymin = min(y0 - tolerance, y1 - tolerance)
+    ymax = max(y0 + tolerance, y1 + tolerance)
     return (xmin, xmax, ymin, ymax)
 
 
@@ -385,6 +400,7 @@ def edge_bounding_box(
 def build_edge_bboxes(
     edges: IntArray,
     vertices: FloatArray,
+    tolerance: float,
 ) -> FloatArray:
     # Make room for the bounding box of every polygon.
     n_polys = len(edges)
@@ -392,7 +408,7 @@ def build_edge_bboxes(
 
     for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
         edge = edges[i]
-        bbox_coords[i] = edge_bounding_box(edge, vertices)
+        bbox_coords[i] = edge_bounding_box(edge, vertices, tolerance)
 
     return bbox_coords
 

@@ -49,6 +49,7 @@ def barycentric_triangle_weights(
     face_indices: IntArray,
     faces: IntArray,
     vertices: FloatArray,
+    tolerance: float,
 ) -> FloatArray:
     n_points = len(points)
     weights = np.zeros((n_points, 3), dtype=FloatDType)

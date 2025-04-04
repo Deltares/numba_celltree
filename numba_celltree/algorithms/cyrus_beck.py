@@ -19,7 +19,7 @@ from typing import Sequence, Tuple
 import numba as nb
 import numpy as np
 
-from numba_celltree.constants import Point, Vector
+from numba_celltree.constants import TOLERANCE_ON_EDGE, Point, Vector
 from numba_celltree.geometry_utils import (
     as_point,
     cross_product,
@@ -164,6 +164,7 @@ def cyrus_beck_line_polygon_clip(
     A valid intersection falls on the domain of the parametrized segment:
     0 <= t <= 1.0
     """
+    tolerance = TOLERANCE_ON_EDGE
     length = len(poly)
     s = to_vector(a, b)
 
@@ -171,8 +172,8 @@ def cyrus_beck_line_polygon_clip(
     if s.x == 0 and s.y == 0:
         return NO_INTERSECTION
     # Test whether line is fully enclosed in polygon
-    a_inside = point_in_polygon_or_on_edge(a, poly)
-    b_inside = point_in_polygon_or_on_edge(b, poly)
+    a_inside = point_in_polygon_or_on_edge(a, poly, tolerance)
+    b_inside = point_in_polygon_or_on_edge(b, poly, tolerance)
     if a_inside and b_inside:
         return True, a, b
 

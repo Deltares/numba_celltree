@@ -178,6 +178,23 @@ def test_triangle_lookup():
     assert np.array_equal(result, expected)
 
 
+def test_triangle_lookup__tolerance():
+    tree = CellTree2d(nodes, faces, fill_value)
+    point = np.array(
+        [
+            [-0.09, 0.0],
+            [2.0, 1.0],
+            [-1.0, 1.0],
+        ]
+    )  # in triangle 1
+    result = tree.locate_points(point, tolerance=1e-9)
+    expected = np.array([-1, 1, -1])
+    assert np.array_equal(result, expected)
+    result = tree.locate_points(point, tolerance=1e-1)
+    expected = np.array([0, 1, -1])
+    assert np.array_equal(result, expected)
+
+
 def test_poly_lookup():
     # A simple quad grid
     nodes = np.array(
@@ -272,6 +289,20 @@ def test_multi_poly_lookup():
     )
     result = tree.locate_points(point)
     expected = np.array([0, 2, 1, -1])
+    assert np.array_equal(result, expected)
+
+    # Test with a point that is very close to the edge of a cell
+    point = np.array(
+        [
+            [-9e-9, 1.0],
+            [1.0, -9e-9],
+        ]
+    )
+    result = tree.locate_points(point)
+    expected = np.array([-1, -1])
+    assert np.array_equal(result, expected)
+    result = tree.locate_points(point, tolerance=1e-8)
+    expected = np.array([0, 0])
     assert np.array_equal(result, expected)
 
 
