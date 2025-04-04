@@ -384,18 +384,18 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
             node_dim = 1 if node["dim"] else 0
             dx = V[node_dim]
             if dx > 0.0:
-                dx_left = node["Lmax"] - a[node_dim]
-                dx_right = node["Rmin"] - b[node_dim]
+                dx_left = node["Lmax"] - a[node_dim] + tolerance
+                dx_right = node["Rmin"] - b[node_dim] + tolerance
             else:
-                dx_left = node["Lmax"] - b[node_dim]
-                dx_right = node["Rmin"] - a[node_dim]
+                dx_left = node["Lmax"] - b[node_dim] - tolerance
+                dx_right = node["Rmin"] - a[node_dim] - tolerance
 
             # Check how origin (a) and end (b) are located compared to box edges
             # (Lmax, Rmin). The box should be investigated if:
             # * the origin is left of Lmax (dx_left >= 0)
             # * the end is right of Rmin (dx_right <= 0)
-            left = dx_left >= 0.0
-            right = dx_right <= 0.0
+            left = dx_left >= -tolerance
+            right = dx_right <= tolerance
 
             # Now find the intersection coordinates. These have to occur within in
             # the bounds of the vector. Note that if the line has no slope in this
@@ -404,17 +404,17 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
             if dx > 0.0:  # TODO: abs(dx) > EPISLON?
                 if left:
                     t_left = dx_left / dx
-                    left = t_left >= 0.0
+                    left = t_left >= -tolerance
                 if right:
                     t_right = dx_right / dx
-                    right = t_right <= 1.0
+                    right = t_right <= (1.0 + tolerance)
             elif dx < 0.0:
                 if left:
                     t_left = 1.0 - (dx_left / dx)
-                    left = t_left >= 0.0
+                    left = t_left >= -tolerance
                 if right:
                     t_right = 1.0 - (dx_right / dx)
-                    right = t_right <= 1.0
+                    right = t_right <= (1.0 + tolerance)
             # else dx == 0.0. In this case there's no info to extract from this
             # node. We'll fully defer to the children.
             left_child = node["child"]
