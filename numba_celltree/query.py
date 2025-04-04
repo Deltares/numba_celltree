@@ -83,15 +83,15 @@ def locate_point(point: Point, tree: CellTreeData, tolerance: float):
             continue
 
         dim = 1 if node["dim"] else 0
-        left = point[dim] <= node["Lmax"]
-        right = point[dim] >= node["Rmin"]
+        left = point[dim] <= (node["Lmax"] + tolerance)
+        right = point[dim] >= (node["Rmin"] - tolerance)
         left_child = node["child"]
         right_child = left_child + 1
 
         if left and right:
             # This heuristic is worthwhile because a point will fall into a
             # single face -- if found, we can stop.
-            if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
+            if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"] + tolerance):
                 stack, size = push(stack, left_child, size)
                 stack, size = push(stack, right_child, size)
             else:
