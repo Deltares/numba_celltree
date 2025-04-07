@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numba as nb
 
@@ -88,7 +88,7 @@ class CellTree2d(CellTree2dBase):
         )
 
     def locate_points(
-        self, points: FloatArray, tolerance: float = TOLERANCE_ON_EDGE
+        self, points: FloatArray, tolerance: Optional[float] = None
     ) -> IntArray:
         """
         Find the index of a face that contains a point.
@@ -111,6 +111,8 @@ class CellTree2d(CellTree2dBase):
             For every point, the index of the face it falls in. Points not
             falling in any faces are marked with a value of ``-1``.
         """
+        if tolerance is None:
+            tolerance = TOLERANCE_ON_EDGE
         points = cast_vertices(points)
         return locate_points(points, self.celltree_data, tolerance)
 
@@ -286,7 +288,7 @@ class CellTree2d(CellTree2dBase):
     def compute_barycentric_weights(
         self,
         points: FloatArray,
-        tolerance: float = TOLERANCE_ON_EDGE,
+        tolerance: Optional[float] = None,
     ) -> Tuple[IntArray, FloatArray]:
         """
         Compute barycentric weights for points located inside of the grid.
@@ -310,6 +312,8 @@ class CellTree2d(CellTree2dBase):
             face in which the point is located. For points not falling in any
             faces, the weight of all vertices is 0.
         """
+        if tolerance is None:
+            tolerance = TOLERANCE_ON_EDGE
         face_indices = self.locate_points(points, tolerance)
         n_max_vert = self.faces.shape[1]
         if n_max_vert > 3:

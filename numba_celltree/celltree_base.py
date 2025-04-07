@@ -1,9 +1,9 @@
 import abc
+from typing import Optional
 
 import numpy as np
 
 from numba_celltree.constants import (
-    TOLERANCE_ON_EDGE,
     BoolArray,
     FloatArray,
     FloatDType,
@@ -26,7 +26,7 @@ def bbox_tree(bb_coords: FloatArray) -> FloatArray:
 class CellTree2dBase(abc.ABC):
     @abc.abstractmethod
     def locate_points(
-        self, points: FloatArray, tolerance: float = TOLERANCE_ON_EDGE
+        self, points: FloatArray, tolerance: Optional[float] = None
     ) -> IntArray:
         pass
 

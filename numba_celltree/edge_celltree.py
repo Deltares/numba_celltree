@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numba as nb
 import numpy as np
@@ -45,8 +45,10 @@ class EdgeCellTree2d(CellTree2dBase):
         edges: IntArray,
         n_buckets: int = 4,
         cells_per_leaf: int = 2,
-        tolerance: float = TOLERANCE_ON_EDGE,
+        tolerance: Optional[float] = None,
     ):
+        if tolerance is None:
+            tolerance = TOLERANCE_ON_EDGE
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
@@ -75,7 +77,7 @@ class EdgeCellTree2d(CellTree2dBase):
         )
 
     def locate_points(
-        self, points: FloatArray, tolerance: float = TOLERANCE_ON_EDGE
+        self, points: FloatArray, tolerance: Optional[float] = None
     ) -> IntArray:
         """
         Find the index of a face that contains a point.
@@ -95,6 +97,8 @@ class EdgeCellTree2d(CellTree2dBase):
             For every point, the index of the edge it falls on. Points not
             falling on any edge are marked with a value of ``-1``.
         """
+        if tolerance is None:
+            tolerance = TOLERANCE_ON_EDGE
         points = cast_vertices(points)
         return locate_points_on_edge(points, self.celltree_data, tolerance)
 
