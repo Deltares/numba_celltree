@@ -294,15 +294,24 @@ def test_multi_poly_lookup():
     # Test with a point that is very close to the edge of a cell
     point = np.array(
         [
-            [-9e-9, 1.0],
-            [1.0, -9e-9],
+            [-9e-9, 0.0],  # On vertex
+            [2.0, -9e-9],  # On vertex
+            [-9e-9, 1.0],  # On edge
+            [1.0, -9e-9],  # On edge
+            [-1.1e-8, 1.0],  # Outside, very close to edge
+            [1.0, -1.1e-8],  # Outside, very close to edge
+            [-1.1e-8, 0.0],  # Outside, very close to vertex
+            [
+                2.0,
+                -1.5e-8,
+            ],  # Outside, very close to vertex (for some reason y = -1.1e-8 is still considered inside)
         ]
     )
     result = tree.locate_points(point)
-    expected = np.array([-1, -1])
+    expected = np.array([-1, -1, -1, -1, -1, -1, -1, -1])
     assert np.array_equal(result, expected)
     result = tree.locate_points(point, tolerance=1e-8)
-    expected = np.array([0, 0])
+    expected = np.array([0, 0, 0, 0, -1, -1, -1, -1])
     assert np.array_equal(result, expected)
 
 

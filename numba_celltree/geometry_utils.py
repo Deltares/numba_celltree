@@ -184,8 +184,10 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray, tolerance: float) ->
         # if's collinear by checking whether it falls in the bounding box of
         # points v0 and v1.
         A = cross_product(U, V)
-        L2 = V.x * V.x + V.y * V.y
-        # Compute optimized equivalent of A/length < tolerance (no sqrt, no division)
+        W = to_vector(v0, v1)
+        L2 = W.x * W.x + W.y * W.y
+        # Compute optimized equivalent of A/length < tolerance (no sqrt, no
+        # division).
         if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
             return True
 
@@ -207,9 +209,11 @@ def point_on_edge(p: Point, edge: FloatArray, tolerance: float) -> bool:
         return False
     U = to_vector(p, v0)
     V = to_vector(p, v1)
+    W = to_vector(v0, v1)
+    L2 = W.x * W.x + W.y * W.y
     A = cross_product(U, V)
-    L2 = V.x * V.x + V.y * V.y
-    # Compute optimized equivalent of A/length < tolerance (no sqrt, no division)
+    # Compute optimized equivalent of A/length < tolerance (no sqrt, no
+    # division).
     if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
         return True
     return False
