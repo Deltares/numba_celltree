@@ -4,9 +4,7 @@ import numpy as np
 
 from numba_celltree.algorithms import cyrus_beck_line_polygon_clip as line_clip
 from numba_celltree.algorithms.cyrus_beck import cyrus_beck_line_polygon_clip
-from numba_celltree.constants import TOLERANCE_ON_EDGE, Point
-
-TOL = TOLERANCE_ON_EDGE
+from numba_celltree.constants import Point
 
 
 def ab(a, b, c):
