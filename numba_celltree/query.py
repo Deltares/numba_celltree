@@ -403,14 +403,14 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
                     left = t_left >= 0.0
                 if right:
                     t_right = dx_right / dx
-                    right = t_right <= (1.0)
+                    right = t_right <= 1.0
             elif dx < 0.0:
                 if left:
                     t_left = 1.0 - (dx_left / dx)
                     left = t_left >= 0.0
                 if right:
                     t_right = 1.0 - (dx_right / dx)
-                    right = t_right <= (1.0)
+                    right = t_right <= 1.0
             # else dx == 0.0. In this case there's no info to extract from this
             # node. We'll fully defer to the children.
             left_child = node["child"]
