@@ -327,7 +327,7 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
     # probably also a rather bad idea, given its complexity: compared to looking
     # for either boxes or points, checking is more much complicated by involving
     # two intersection algorithms.
-    #    @nb.njit(inline="never")
+    @nb.njit(inline="never")
     def locate_edge(
         a: Point,
         b: Point,
@@ -426,7 +426,7 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
 
         return count, indices_size
 
-    #    @nb.njit(cache=True)
+    @nb.njit(cache=True)
     def locate_edges_helper(
         edge_coords: FloatArray,
         tree: CellTreeData,
@@ -465,7 +465,7 @@ def make_locate_edges(intersection_function: nb.types.Callable) -> nb.types.Call
 
         return indices, xy, total_count
 
-    #    @nb.njit(cache=True, parallel=PARALLEL)
+    @nb.njit(cache=True, parallel=PARALLEL)
     def locate_edges(box_coords: FloatArray, tree: CellTreeData, n_chunks: int):
         chunks = np.array_split(box_coords, n_chunks)
         offsets = np.zeros(n_chunks, dtype=IntDType)
