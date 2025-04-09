@@ -300,11 +300,9 @@ def test_multi_poly_lookup():
             [1.0, -9e-9],  # On edge
             [-1.1e-8, 1.0],  # Outside, very close to edge
             [1.0, -1.1e-8],  # Outside, very close to edge
-            [-1.1e-8, 0.0],  # Outside, very close to vertex
-            [
-                2.0,
-                -1.5e-8,
-            ],  # Outside, very close to vertex (for some reason y = -1.1e-8 is still considered inside)
+            [-1.1e-8, 0.0],  # Outside, very close to vertex'
+            # Outside, very close to vertex (for some reason y = -1.1e-8 is still considered inside)
+            [2.0, -1.5e-8],
         ]
     )
     result = tree.locate_points(point)
