@@ -17,11 +17,10 @@ Added
 ~~~~~
 
 - ``tolerance`` argument to make tolerance configurable in
-  :meth:`CellTree2d.locate_points`, :meth:`CellTree2d.intersect_edges`,
-  :meth:`EdgeCellTree2d.intersect_edges`, :meth:`EdgeCellTree2d.locate_points`,
-  and :class:`EdgeCellTree2d` constructor. This allows for more lenient queries
-  when working with datasets with large spatial coordinates. The default value
-  is set to ``1e-9``, which is consistent with previous releases.
+  :meth:`CellTree2d.locate_points`, :meth:`EdgeCellTree2d.locate_points`, and
+  :class:`EdgeCellTree2d` constructor. This allows for more lenient queries when
+  working with datasets with large spatial coordinates. The default value is set
+  to ``1e-9``, which is consistent with previous releases.
 
 [0.3.0 2025-03-25]
 ------------------
