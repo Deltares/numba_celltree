@@ -188,7 +188,7 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray, tolerance: float) ->
         L2 = W.x * W.x + W.y * W.y
         # Compute optimized equivalent of A/length < tolerance (no sqrt, no
         # division).
-        if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
+        if (A * A) < ((tolerance * L2) * tolerance) and in_bounds(p, v0, v1, tolerance):
             return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
@@ -214,7 +214,7 @@ def point_on_edge(p: Point, edge: FloatArray, tolerance: float) -> bool:
     A = cross_product(U, V)
     # Compute optimized equivalent of A/length < tolerance (no sqrt, no
     # division).
-    if (A * A) < (tolerance * tolerance * L2) and in_bounds(p, v0, v1, tolerance):
+    if (A * A) < ((tolerance * L2) * tolerance) and in_bounds(p, v0, v1, tolerance):
         return True
     return False
 
