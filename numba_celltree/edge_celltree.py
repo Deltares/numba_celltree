@@ -35,8 +35,9 @@ class EdgeCellTree2d(CellTree2dBase):
         lookup. Increase this to reduce memory usage at the cost of lookup
         performance.
     tolerance: float, optional, default: 1e-9
-        Tolerance used to build edge bounding boxes. If a point is within
-        this distance from an edge, it is considered to be on the edge.
+        Tolerance used to build edge bounding boxes, which are used to traverse
+        the celltree. Specifying a tolerance is mainly relevant when edges are
+        axis-aligned. 
     """
 
     def __init__(
