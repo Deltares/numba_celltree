@@ -10,8 +10,8 @@ CellTree2d
 Changelog
 =========
 
-[Unreleased]
-------------
+[0.4.0 2025-04-10]
+------------------
 
 Added
 ~~~~~
@@ -24,11 +24,15 @@ Added
 Changed
 ~~~~~~~
 
-- There have been some changes to check edge cases in the algorithms. Instead of
-  comparing areas to a fixed tolerance value (1e-9), we now compare distances to
-  a small tolerance value, which is either estimated or set by the user. This
-  should improve the accuracy of the algorithms and reduce the number of false
-  negatives in edge cases.
+- Edge case handling has been improved. Dynamic tolerances are now
+  automatically estimated or can be optionally provided for queries to handle
+  floating point errors. In previous versions, the size of a cross product was
+  compared with a static tolerance value of 1e-9, which made the tolerance
+  effectively an area measure, or relative depending on the length of the edge
+  rather than the perpendicular distance to the vertex. The current approach
+  computes an actual distance, making the tolerance straightforward to
+  interpret. The new defaults should result in fewer false positives and false
+  negatives.
 
 [0.3.0 2025-03-25]
 ------------------
