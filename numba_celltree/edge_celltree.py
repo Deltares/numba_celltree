@@ -37,7 +37,7 @@ class EdgeCellTree2d(CellTree2dBase):
     tolerance: float, optional, default: 1e-9
         Tolerance used to build edge bounding boxes, which are used to traverse
         the celltree. Specifying a tolerance is mainly relevant when edges are
-        axis-aligned. 
+        axis-aligned.
     """
 
     def __init__(
