@@ -216,6 +216,35 @@ def test_build_face_bboxes():
     assert np.array_equal(actual, expected)
 
 
+def test_build_edge_bboxes():
+    vertices = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [2.0, 1.0]], dtype=float)
+    edges = np.array([[0, 1], [1, 2], [2, 3]], dtype=np.int32)
+
+    bb_coords = gu.build_edge_bboxes(edges, vertices, 0.0)
+    expected_bb_coords = np.array(
+        [
+            [0.0, 1.0, 0.0, 0.0],
+            [1.0, 2.0, 0.0, 0.0],
+            [2.0, 2.0, 0.0, 1.0],
+        ],
+        dtype=float,
+    )
+    np.testing.assert_allclose(bb_coords, expected_bb_coords, atol=TOLERANCE_ON_EDGE)
+    # Test if tolerance is properly accounted for by providing a large
+    # tolerance.
+    big_tol = 0.5
+    bb_coords = gu.build_edge_bboxes(edges, vertices, big_tol)
+    expected_bb_coords = np.array(
+        [
+            [-0.5, 1.5, -0.5, 0.5],
+            [0.5, 2.5, -0.5, 0.5],
+            [1.5, 2.5, -0.5, 1.5],
+        ],
+        dtype=float,
+    )
+    np.testing.assert_allclose(bb_coords, expected_bb_coords, atol=TOLERANCE_ON_EDGE)
+
+
 def test_copy_vertices():
     """
     This has to be tested inside of numba jitted function, because the vertices

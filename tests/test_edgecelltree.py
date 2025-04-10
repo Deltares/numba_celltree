@@ -37,30 +37,6 @@ def test_init():
     )
 
 
-def test_init__tolerance():
-    """
-    Initialize with very large tolerance, test if this creates large bbox
-    coords.
-    """
-    big_tol = 0.5
-    tree = EdgeCellTree2d(vertices, edges, tolerance=big_tol)
-
-    expected_bb_coords = np.array(
-        [
-            [-0.5, 1.5, -0.5, 0.5],
-            [0.5, 2.5, -0.5, 0.5],
-            [1.5, 2.5, -0.5, 1.5],
-        ],
-        dtype=float,
-    )
-    np.testing.assert_allclose(
-        tree.bb_coords, expected_bb_coords, atol=TOLERANCE_ON_EDGE
-    )
-    np.testing.assert_allclose(
-        tree.bbox, np.array([-0.5, 2.5, -0.5, 1.5]), atol=TOLERANCE_ON_EDGE
-    )
-
-
 def test_locate_points():
     tree = EdgeCellTree2d(vertices, edges)
     points = np.array([[0.5, 0.0], [1.5, 0.0], [2.0, 0.5]], dtype=float)
