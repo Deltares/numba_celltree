@@ -5,7 +5,9 @@ import numpy as np
 from pytest_cases import parametrize_with_cases
 
 from numba_celltree import geometry_utils as gu
-from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point, Triangle, Vector
+from numba_celltree.constants import Box, Point, Triangle, Vector
+
+TOLERANCE_ON_EDGE = 1e-9
 
 
 def test_to_vector():
@@ -220,25 +222,12 @@ def test_build_edge_bboxes():
     vertices = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [2.0, 1.0]], dtype=float)
     edges = np.array([[0, 1], [1, 2], [2, 3]], dtype=np.int32)
 
-    bb_coords = gu.build_edge_bboxes(edges, vertices, 0.0)
+    bb_coords = gu.build_edge_bboxes(edges, vertices)
     expected_bb_coords = np.array(
         [
             [0.0, 1.0, 0.0, 0.0],
             [1.0, 2.0, 0.0, 0.0],
             [2.0, 2.0, 0.0, 1.0],
-        ],
-        dtype=float,
-    )
-    np.testing.assert_allclose(bb_coords, expected_bb_coords, atol=TOLERANCE_ON_EDGE)
-    # Test if tolerance is properly accounted for by providing a large
-    # tolerance.
-    big_tol = 0.5
-    bb_coords = gu.build_edge_bboxes(edges, vertices, big_tol)
-    expected_bb_coords = np.array(
-        [
-            [-0.5, 1.5, -0.5, 0.5],
-            [0.5, 2.5, -0.5, 0.5],
-            [1.5, 2.5, -0.5, 1.5],
         ],
         dtype=float,
     )

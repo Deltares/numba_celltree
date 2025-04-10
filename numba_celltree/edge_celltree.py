@@ -11,7 +11,6 @@ from numba_celltree.celltree_base import (
     default_tolerance,
 )
 from numba_celltree.constants import (
-    MIN_TOLERANCE,
     CellTreeData,
     FloatArray,
     IntArray,
@@ -50,9 +49,6 @@ class EdgeCellTree2d(CellTree2dBase):
     ):
         # Determine the tolerance for the bounding boxes. This is mainly
         # relevant when edges are axis-aligned.
-        bb_coords_preliminary = build_edge_bboxes(edges, vertices, MIN_TOLERANCE)
-        distances_preliminary = bbox_distances(bb_coords_preliminary)
-        tolerance = default_tolerance(distances_preliminary[:, 2])
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
@@ -60,7 +56,7 @@ class EdgeCellTree2d(CellTree2dBase):
 
         vertices = cast_vertices(vertices, copy=True)
 
-        bb_coords = build_edge_bboxes(edges, vertices, tolerance)
+        bb_coords = build_edge_bboxes(edges, vertices)
         nodes, bb_indices = initialize(edges, bb_coords, n_buckets, cells_per_leaf)
         self.vertices = vertices
         self.edges = edges

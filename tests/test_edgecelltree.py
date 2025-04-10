@@ -1,7 +1,9 @@
 import numpy as np
 
 from numba_celltree import EdgeCellTree2d
-from numba_celltree.constants import TOLERANCE_ON_EDGE, CellTreeData
+from numba_celltree.constants import CellTreeData
+
+TOLERANCE_ON_EDGE = 1e-9
 
 vertices = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [2.0, 1.0]], dtype=float)
 edges = np.array([[0, 1], [1, 2], [2, 3]], dtype=np.int32)

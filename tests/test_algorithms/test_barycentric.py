@@ -3,7 +3,9 @@ import pytest
 
 from numba_celltree.algorithms import barycentric_triangle as bt
 from numba_celltree.algorithms import barycentric_wachspress as bwp
-from numba_celltree.constants import TOLERANCE_ON_EDGE, Point, Triangle, Vector
+from numba_celltree.constants import Point, Triangle, Vector
+
+TOLERANCE_ON_EDGE = 1e-9
 
 
 def test_interp_edge_case():

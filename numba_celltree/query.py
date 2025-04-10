@@ -8,7 +8,9 @@ from numba_celltree.algorithms import (
     cyrus_beck_line_polygon_clip,
 )
 from numba_celltree.constants import (
+    MIN_TOLERANCE,
     PARALLEL,
+    TOLERANCE_FACTOR,
     BoolArray,
     CellTreeData,
     FloatArray,
@@ -324,7 +326,11 @@ def compute_edge_face_intersect(
         polygon = copy_vertices_into(
             tree.vertices, tree.elements[bbox_index], work_array
         )
-        intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon)
+        tolerance = max(
+            MIN_TOLERANCE,
+            TOLERANCE_FACTOR * max(box.xmax - box.xmin, box.ymax - box.ymin),
+        )
+        intersects, c, d = cyrus_beck_line_polygon_clip(a, b, polygon, tolerance)
     return intersects, c, d
 
 

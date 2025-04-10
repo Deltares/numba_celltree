@@ -5,9 +5,10 @@ import numpy as np
 
 from numba_celltree.constants import (
     FILL_VALUE,
+    MIN_TOLERANCE,
     NDIM,
     PARALLEL,
-    TOLERANCE_ON_EDGE,
+    TOLERANCE_FACTOR,
     Box,
     FloatArray,
     FloatDType,
@@ -309,7 +310,6 @@ def lines_intersect(
     a: Point, b: Point, p: Point, q: Point
 ) -> tuple[bool, float, float]:
     """Test whether line segment a -> b intersects p -> q."""
-    tolerance = TOLERANCE_ON_EDGE
     V = to_vector(a, b)
     U = to_vector(p, q)
 
@@ -322,6 +322,7 @@ def lines_intersect(
     if (U.y == 0) and (V.y == 0) and a.y != p.y:
         return False, np.nan, np.nan
 
+    tolerance = max(MIN_TOLERANCE, TOLERANCE_FACTOR * max(abs(U.x), abs(U.y)))
     # bounds check
     if (not has_overlap(a.x, b.x, p.x, q.x, tolerance)) or (
         not has_overlap(a.y, b.y, p.y, q.y, tolerance)
@@ -388,10 +389,13 @@ def build_face_bboxes(
 
 @nb.njit(inline="always")
 def edge_bounding_box(
-    edge: IntArray, vertices: FloatArray, tolerance: float
+    edge: IntArray, vertices: FloatArray
 ) -> Tuple[float, float, float, float]:
     x0, y0 = vertices[edge[0]]
     x1, y1 = vertices[edge[1]]
+    dx = abs(x1 - x0)
+    dy = abs(y1 - y0)
+    tolerance = max(MIN_TOLERANCE, TOLERANCE_FACTOR * max(dx, dy))
     # Edges may be axis-aligned. Create a fictitious width in this case.
     xmin = min(x0 - tolerance, x1 - tolerance)
     xmax = max(x0 + tolerance, x1 + tolerance)
@@ -404,7 +408,6 @@ def edge_bounding_box(
 def build_edge_bboxes(
     edges: IntArray,
     vertices: FloatArray,
-    tolerance: float,
 ) -> FloatArray:
     # Make room for the bounding box of every polygon.
     n_polys = len(edges)
@@ -412,7 +415,7 @@ def build_edge_bboxes(
 
     for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
         edge = edges[i]
-        bbox_coords[i] = edge_bounding_box(edge, vertices, tolerance)
+        bbox_coords[i] = edge_bounding_box(edge, vertices)
 
     return bbox_coords
 
