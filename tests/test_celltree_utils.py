@@ -1,6 +1,7 @@
-from numba_celltree.constants import TOLERANCE_FACTOR, MIN_TOLERANCE
-from numba_celltree.celltree_base import default_tolerance, bbox_tree, bbox_distances
 import numpy as np
+
+from numba_celltree.celltree_base import bbox_distances, bbox_tree, default_tolerance
+from numba_celltree.constants import MIN_TOLERANCE, TOLERANCE_FACTOR
 
 bbox_coords = np.array(
     [
@@ -14,14 +15,19 @@ bbox_coords = np.array(
     ]
 )
 
+
 def test_default_tolerance():
     bb_diagonal = np.array([2.4, 0.5])
     tolerance = default_tolerance(bb_diagonal)
     expected_value = 2.4 * TOLERANCE_FACTOR
-    np.testing.assert_allclose(tolerance, expected_value, rtol=0, atol=MIN_TOLERANCE/1e5)
+    np.testing.assert_allclose(
+        tolerance, expected_value, rtol=0, atol=MIN_TOLERANCE / 1e5
+    )
 
-    tolerance = default_tolerance(bb_diagonal/1e4)
-    np.testing.assert_allclose(tolerance, MIN_TOLERANCE, rtol=0, atol=MIN_TOLERANCE/1e5)
+    tolerance = default_tolerance(bb_diagonal / 1e4)
+    np.testing.assert_allclose(
+        tolerance, MIN_TOLERANCE, rtol=0, atol=MIN_TOLERANCE / 1e5
+    )
 
 
 def test_bbox_tree():
