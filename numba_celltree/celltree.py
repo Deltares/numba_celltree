@@ -10,9 +10,13 @@ from numba_celltree.algorithms import (
     polygons_intersect,
 )
 from numba_celltree.cast import cast_bboxes, cast_edges, cast_faces, cast_vertices
-from numba_celltree.celltree_base import CellTree2dBase, bbox_tree
+from numba_celltree.celltree_base import (
+    CellTree2dBase,
+    bbox_distances,
+    bbox_tree,
+    default_tolerance,
+)
 from numba_celltree.constants import (
-    TOLERANCE_ON_EDGE,
     CellTreeData,
     FloatArray,
     IntArray,
@@ -77,6 +81,7 @@ class CellTree2d(CellTree2dBase):
         self.bb_indices = bb_indices
         self.bb_coords = bb_coords
         self.bbox = bbox_tree(bb_coords)
+        self.bb_distances = bbox_distances(bb_coords)
         self.celltree_data = CellTreeData(
             self.faces,
             self.vertices,
@@ -112,7 +117,7 @@ class CellTree2d(CellTree2dBase):
             falling in any faces are marked with a value of ``-1``.
         """
         if tolerance is None:
-            tolerance = TOLERANCE_ON_EDGE
+            tolerance = default_tolerance(self.bb_distances[:, 2])
         points = cast_vertices(points)
         return locate_points(points, self.celltree_data, tolerance)
 
@@ -313,7 +318,7 @@ class CellTree2d(CellTree2dBase):
             faces, the weight of all vertices is 0.
         """
         if tolerance is None:
-            tolerance = TOLERANCE_ON_EDGE
+            tolerance = default_tolerance(self.bb_distances[:, 2])
         face_indices = self.locate_points(points, tolerance)
         n_max_vert = self.faces.shape[1]
         if n_max_vert > 3:

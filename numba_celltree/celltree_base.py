@@ -4,6 +4,8 @@ from typing import Optional
 import numpy as np
 
 from numba_celltree.constants import (
+    MIN_TOLERANCE,
+    TOLERANCE_FACTOR,
     BoolArray,
     FloatArray,
     FloatDType,
@@ -21,6 +23,33 @@ def bbox_tree(bb_coords: FloatArray) -> FloatArray:
     ymin = bb_coords[:, 2].min()
     ymax = bb_coords[:, 3].max()
     return np.array([xmin, xmax, ymin, ymax], dtype=FloatDType)
+
+
+def bbox_distances(bb_coords: FloatArray) -> FloatArray:
+    """Compute the dx, dy and dxy distances for the bounding boxes.
+
+    Parameters
+    ----------
+    bb_coords: np.ndarray of shape (n_nodes, 4)
+        The bounding box coordinates of the nodes.
+
+    Returns
+    -------
+    distances: np.ndarray of shape (n_nodes, 3)
+        Respectively the dx, dy and dxy distances for the bounding boxes.
+    """
+    distances = np.empty((bb_coords.shape[0], 3), dtype=FloatDType)
+    # dx
+    distances[:, 0] = bb_coords[:, 1] - bb_coords[:, 0]
+    # dy
+    distances[:, 1] = bb_coords[:, 3] - bb_coords[:, 2]
+    # dxy
+    distances[:, 2] = np.sqrt(distances[:, 0] ** 2 + distances[:, 1] ** 2)
+    return distances
+
+
+def default_tolerance(bb_diagonal: FloatArray) -> float:
+    return max(MIN_TOLERANCE, TOLERANCE_FACTOR * max(bb_diagonal))
 
 
 class CellTree2dBase(abc.ABC):

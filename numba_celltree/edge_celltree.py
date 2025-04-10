@@ -4,9 +4,14 @@ import numba as nb
 import numpy as np
 
 from numba_celltree.cast import cast_edges, cast_vertices
-from numba_celltree.celltree_base import CellTree2dBase, bbox_tree
+from numba_celltree.celltree_base import (
+    CellTree2dBase,
+    bbox_distances,
+    bbox_tree,
+    default_tolerance,
+)
 from numba_celltree.constants import (
-    TOLERANCE_ON_EDGE,
+    MIN_TOLERANCE,
     CellTreeData,
     FloatArray,
     IntArray,
@@ -49,7 +54,9 @@ class EdgeCellTree2d(CellTree2dBase):
         tolerance: Optional[float] = None,
     ):
         if tolerance is None:
-            tolerance = TOLERANCE_ON_EDGE
+            bb_coords_preliminary = build_edge_bboxes(edges, vertices, MIN_TOLERANCE)
+            distances = bbox_distances(bb_coords_preliminary)
+            tolerance = default_tolerance(distances[:, 2])
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
@@ -67,6 +74,7 @@ class EdgeCellTree2d(CellTree2dBase):
         self.bb_indices = bb_indices
         self.bb_coords = bb_coords
         self.bbox = bbox_tree(bb_coords)
+        self.bb_distances = bbox_distances(bb_coords)
         self.celltree_data = CellTreeData(
             self.edges,
             self.vertices,
@@ -99,7 +107,7 @@ class EdgeCellTree2d(CellTree2dBase):
             falling on any edge are marked with a value of ``-1``.
         """
         if tolerance is None:
-            tolerance = TOLERANCE_ON_EDGE
+            tolerance = default_tolerance(self.bb_distances[:, 2])
         points = cast_vertices(points)
         return locate_points_on_edge(points, self.celltree_data, tolerance)
 
