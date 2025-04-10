@@ -1,10 +1,15 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numba as nb
 import numpy as np
 
 from numba_celltree.cast import cast_edges, cast_vertices
-from numba_celltree.celltree_base import CellTree2dBase, bbox_tree
+from numba_celltree.celltree_base import (
+    CellTree2dBase,
+    bbox_distances,
+    bbox_tree,
+    default_tolerance,
+)
 from numba_celltree.constants import (
     CellTreeData,
     FloatArray,
@@ -42,6 +47,8 @@ class EdgeCellTree2d(CellTree2dBase):
         n_buckets: int = 4,
         cells_per_leaf: int = 2,
     ):
+        # Determine the tolerance for the bounding boxes. This is mainly
+        # relevant when edges are axis-aligned.
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
@@ -59,6 +66,7 @@ class EdgeCellTree2d(CellTree2dBase):
         self.bb_indices = bb_indices
         self.bb_coords = bb_coords
         self.bbox = bbox_tree(bb_coords)
+        self.bb_distances = bbox_distances(bb_coords)
         self.celltree_data = CellTreeData(
             self.edges,
             self.vertices,
@@ -69,13 +77,23 @@ class EdgeCellTree2d(CellTree2dBase):
             self.cells_per_leaf,
         )
 
-    def locate_points(self, points: FloatArray) -> IntArray:
+    def locate_points(
+        self, points: FloatArray, tolerance: Optional[float] = None
+    ) -> IntArray:
         """
         Find the index of a face that contains a point.
 
         Parameters
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
+            Coordinates of the points to be located.
+        tolerance: float, optional
+            The tolerance used to determine whether a point is on an edge. If
+            the distance from the point to the edge is smaller than this value,
+            the point is considered to be on the edge. If None, the method tries
+            to estimate an appropriate tolerance by multiplying the maximum
+            diagonal of the bounding boxes with 1e-12.
+
 
         Returns
         -------
@@ -83,11 +101,14 @@ class EdgeCellTree2d(CellTree2dBase):
             For every point, the index of the edge it falls on. Points not
             falling on any edge are marked with a value of ``-1``.
         """
+        if tolerance is None:
+            tolerance = default_tolerance(self.bb_distances[:, 2])
         points = cast_vertices(points)
-        return locate_points_on_edge(points, self.celltree_data)
+        return locate_points_on_edge(points, self.celltree_data, tolerance)
 
     def intersect_edges(
-        self, edge_coords: FloatArray
+        self,
+        edge_coords: FloatArray,
     ) -> Tuple[IntArray, IntArray, FloatArray]:
         """
         Find the index of an edge intersecting with an edge.

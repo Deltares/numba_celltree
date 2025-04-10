@@ -5,7 +5,9 @@ import numpy as np
 from pytest_cases import parametrize_with_cases
 
 from numba_celltree import geometry_utils as gu
-from numba_celltree.constants import TOLERANCE_ON_EDGE, Box, Point, Triangle, Vector
+from numba_celltree.constants import Box, Point, Triangle, Vector
+
+TOLERANCE_ON_EDGE = 1e-9
 
 
 def test_to_vector():
@@ -216,6 +218,22 @@ def test_build_face_bboxes():
     assert np.array_equal(actual, expected)
 
 
+def test_build_edge_bboxes():
+    vertices = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [2.0, 1.0]], dtype=float)
+    edges = np.array([[0, 1], [1, 2], [2, 3]], dtype=np.int32)
+
+    bb_coords = gu.build_edge_bboxes(edges, vertices)
+    expected_bb_coords = np.array(
+        [
+            [0.0, 1.0, 0.0, 0.0],
+            [1.0, 2.0, 0.0, 0.0],
+            [2.0, 2.0, 0.0, 1.0],
+        ],
+        dtype=float,
+    )
+    np.testing.assert_allclose(bb_coords, expected_bb_coords, atol=TOLERANCE_ON_EDGE)
+
+
 def test_copy_vertices():
     """
     This has to be tested inside of numba jitted function, because the vertices
@@ -349,13 +367,6 @@ class IntersectCases:
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_edge(self):
-        p = Point(3.0, 3.0)
-        q = Point(3.0, 1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(3.0, 3.0)
-        return p, q, expected_intersects, expected_intersection_point
-
-    def case_vertex_on_edge2(self):
         p = Point(-1.0, 1.0)
         q = Point(1.0, -1.0)
         expected_intersects = True
@@ -374,13 +385,6 @@ class IntersectCases:
         q = Point(3.0, 1.0)
         expected_intersects = True
         expected_intersection_point = Point(2.0, 2.0)
-        return p, q, expected_intersects, expected_intersection_point
-
-    def case_vertex_on_vertex(self):
-        p = Point(0.0, 0.0)
-        q = Point(1.0, -1.0)
-        expected_intersects = True
-        expected_intersection_point = Point(0.0, 0.0)
         return p, q, expected_intersects, expected_intersection_point
 
     def case_vertex_on_vertex_collinear(self):

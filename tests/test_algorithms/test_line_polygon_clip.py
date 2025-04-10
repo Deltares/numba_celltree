@@ -2,7 +2,6 @@
 
 import numpy as np
 
-from numba_celltree.algorithms import cyrus_beck_line_polygon_clip as line_clip
 from numba_celltree.algorithms.cyrus_beck import cyrus_beck_line_polygon_clip
 from numba_celltree.constants import Point
 
@@ -10,6 +9,13 @@ from numba_celltree.constants import Point
 def ab(a, b, c):
     """Flip the result around to compare (a, b) with (b, a)"""
     return (a, c, b)
+
+
+TOLERANCE = 1e-9
+
+
+def line_clip(a, b, poly):
+    return cyrus_beck_line_polygon_clip(a, b, poly, TOLERANCE)
 
 
 def test_line_box_clip():
@@ -183,7 +189,7 @@ def test_line_box_degeneracies():
     poly = nodes[faces[1]]
     a = Point(1.0, 1.0)
     b = Point(1.5, 1.25)
-    succes, c, d = cyrus_beck_line_polygon_clip(a, b, poly)
+    succes, c, d = line_clip(a, b, poly)
     assert succes
     assert c == Point(1.0, 1.0)
     assert d == Point(1.5, 1.25)
@@ -192,7 +198,7 @@ def test_line_box_degeneracies():
         poly = nodes[faces[i]]
         a = Point(1.0, 1.0)
         b = Point(1.5, 1.25)
-        succes, c, d = cyrus_beck_line_polygon_clip(a, b, poly)
+        succes, c, d = line_clip(a, b, poly)
         assert not succes
 
     # This is a case where a is inside, but b is right on the vertex
@@ -203,7 +209,7 @@ def test_line_box_degeneracies():
     poly = nodes[faces[2]]
     a = Point(0.5, 0.75)
     b = Point(1.0, 1.0)
-    succes, c, d = cyrus_beck_line_polygon_clip(a, b, poly)
+    succes, c, d = line_clip(a, b, poly)
     assert succes
     assert c == a
     assert d == b

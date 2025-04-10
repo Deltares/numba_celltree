@@ -14,6 +14,16 @@ def ab(a, b, c):
     return (a, c, b)
 
 
+TOLERANCE = 1e-9
+
+
+def wraptol(function):
+    def f(a, b, poly):
+        return function(a, b, poly, TOLERANCE)
+
+    return f
+
+
 BOX = Box(0.0, 2.0, 0.0, 2.0)
 POLY = np.array(
     [
@@ -31,7 +41,7 @@ POLY_REVERSED = POLY[::-1, :]
     [
         (cohen_sutherland_line_box_clip, BOX),
         (liang_barsky_line_box_clip, BOX),
-        (cyrus_beck_line_polygon_clip, POLY),
+        (wraptol(cyrus_beck_line_polygon_clip), POLY),
     ],
 )
 def test_line_box_clip(line_clip, box):
@@ -114,8 +124,8 @@ def test_line_box_clip(line_clip, box):
     [
         (cohen_sutherland_line_box_clip, BOX),
         (liang_barsky_line_box_clip, BOX),
-        (cyrus_beck_line_polygon_clip, POLY),
-        (cyrus_beck_line_polygon_clip, POLY_REVERSED),
+        (wraptol(cyrus_beck_line_polygon_clip), POLY),
+        (wraptol(cyrus_beck_line_polygon_clip), POLY_REVERSED),
     ],
 )
 def test_line_box_clip_degeneracy(line_clip, box):
