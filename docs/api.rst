@@ -21,6 +21,15 @@ Added
   :class:`EdgeCellTree2d` constructor. This allows for more lenient queries when
   working with datasets with large spatial coordinates. 
 
+Changed
+~~~~~~~
+
+- There have been some changes to check edge cases in the algorithms. Instead of
+  comparing areas to a fixed tolerance value (1e-9), we now compare distances to
+  a small tolerance value, which is either estimated or set by the user. This
+  should improve the accuracy of the algorithms and reduce the number of false
+  negatives in edge cases.
+
 [0.3.0 2025-03-25]
 ------------------
 
