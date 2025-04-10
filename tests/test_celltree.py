@@ -704,4 +704,12 @@ def test_locate_point_on_edge():
             [4.0, 4.0],
         ]
     )
+    result = tree.locate_points(points)
+    assert (result != -1).all()
+    # Test tolerance check for points on the edge of a cell
+    points[points == 0.0] = -1e-9
+    points[points == 4.0] = 4.0 + 1e-9
+    result = tree.locate_points(points)
+    assert not (result != -1).all()
+    result = tree.locate_points(points, tolerance=1.1e-9)
     assert (result != -1).all()
