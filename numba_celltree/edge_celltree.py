@@ -39,13 +39,6 @@ class EdgeCellTree2d(CellTree2dBase):
         to only 1, but this doubles memory footprint for slightly faster
         lookup. Increase this to reduce memory usage at the cost of lookup
         performance.
-    tolerance: float, optional
-        Tolerance used to build edge bounding boxes, which are used to traverse
-        the celltree. Specifying a tolerance is mainly relevant when edges are
-        axis-aligned. If None, the method tries to estimate an appropriate
-        tolerance by multiplying the maximum diagonal of the bounding boxes with
-        1e-12.
-
     """
 
     def __init__(
@@ -54,12 +47,12 @@ class EdgeCellTree2d(CellTree2dBase):
         edges: IntArray,
         n_buckets: int = 4,
         cells_per_leaf: int = 2,
-        tolerance: Optional[float] = None,
     ):
-        if tolerance is None:
-            bb_coords_preliminary = build_edge_bboxes(edges, vertices, MIN_TOLERANCE)
-            distances = bbox_distances(bb_coords_preliminary)
-            tolerance = default_tolerance(distances[:, 2])
+        # Determine the tolerance for the bounding boxes. This is mainly
+        # relevant when edges are axis-aligned.
+        bb_coords_preliminary = build_edge_bboxes(edges, vertices, MIN_TOLERANCE)
+        distances_preliminary = bbox_distances(bb_coords_preliminary)
+        tolerance = default_tolerance(distances_preliminary[:, 2])
         if n_buckets < 2:
             raise ValueError("n_buckets must be >= 2")
         if cells_per_leaf < 1:
