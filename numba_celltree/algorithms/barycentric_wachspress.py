@@ -46,8 +46,10 @@ def compute_weights(
     b = as_point(polygon[0])
     U = to_vector(a, b)
     V = to_vector(a, p)
+    W = to_vector(b, p)
+    L2i = W.x * W.x + W.y * W.y
     Ai = abs(cross_product(U, V))
-    if Ai < tolerance:
+    if (Ai * Ai) < ((tolerance * L2i) * tolerance):
         # Note: weights may be differently sized than polygon! Hence n-1
         # instead of -1.
         interp_edge_case(a, U, p, weights, n - 1, 0)
@@ -62,9 +64,11 @@ def compute_weights(
 
         U = to_vector(b, p)
         V = to_vector(b, c)
+        W = to_vector(c, p)
+        L2j = W.x * W.x + W.y * W.y
         Aj = abs(cross_product(U, V))
 
-        if Aj < tolerance:
+        if (Aj * Aj) < ((tolerance * L2j) * tolerance):
             interp_edge_case(b, V, p, weights, i, i_next)
             return
 
