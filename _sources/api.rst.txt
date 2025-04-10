@@ -10,6 +10,30 @@ CellTree2d
 Changelog
 =========
 
+[0.4.0 2025-04-10]
+------------------
+
+Added
+~~~~~
+
+- ``tolerance`` argument to make tolerance configurable in
+  :meth:`CellTree2d.locate_points`, :meth:`EdgeCellTree2d.locate_points`, and
+  :class:`EdgeCellTree2d` constructor. This allows for more lenient queries when
+  working with datasets with large spatial coordinates. 
+
+Changed
+~~~~~~~
+
+- Edge case handling has been improved. Dynamic tolerances are now
+  automatically estimated or can be optionally provided for queries to handle
+  floating point errors. In previous versions, the size of a cross product was
+  compared with a static tolerance value of 1e-9, which made the tolerance
+  effectively an area measure, or relative depending on the length of the edge
+  rather than the perpendicular distance to the vertex. The current approach
+  computes an actual distance, making the tolerance straightforward to
+  interpret. The new defaults should result in fewer false positives and false
+  negatives.
+
 [0.3.0 2025-03-25]
 ------------------
 

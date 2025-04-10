@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CellTree2d &#8212; Numba Celltree 0.3.0 documentation</title>
+    <title>CellTree2d &#8212; Numba Celltree 0.4.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=e259d695"></script>
+    <script src="_static/documentation_options.js?v=6c02275b"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
@@ -52,7 +52,7 @@
     <link rel="prev" title="Spatial indexing of 2D grids" href="examples/spatial_indexing_2d_grids.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.3.0" />
+  <meta name="docsearch:version" content="0.4.0" />
   </head>
   
   
@@ -394,11 +394,18 @@ performance.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.compute_barycentric_weights">
-<span class="sig-name descname"><span class="pre">compute_barycentric_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.compute_barycentric_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.compute_barycentric_weights" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_barycentric_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.compute_barycentric_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.compute_barycentric_weights" title="Link to this definition">#</a></dt>
 <dd><p>Compute barycentric weights for points located inside of the grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Coordinates of the points to be located.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. If
+the distance from the point to the edge is smaller than this value,
+the point is considered to be on the edge. If None, the method tries
+to estimate an appropriate tolerance by multiplying the maximum
+diagonal of the bounding boxes with 1e-12.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
@@ -527,13 +534,20 @@ should be equal to <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.locate_points">
-<span class="sig-name descname"><span class="pre">locate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_points" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">locate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.locate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.locate_points" title="Link to this definition">#</a></dt>
 <dd><p>Find the index of a face that contains a point.</p>
 <p>Points that are very close near an edge of a face will also be
 identified as falling within that face.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Coordinates of the points to be located.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. If
+the distance from the point to the edge is smaller than this value,
+the point is considered to be on the edge. If None, the method tries
+to estimate an appropriate tolerance by multiplying the maximum
+diagonal of the bounding boxes with 1e-12.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>tree_face_indices</strong> – For every point, the index of the face it falls in. Points not
@@ -587,11 +601,18 @@ performance.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="numba_celltree.EdgeCellTree2d.locate_points">
-<span class="sig-name descname"><span class="pre">locate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/edge_celltree.html#EdgeCellTree2d.locate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.EdgeCellTree2d.locate_points" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">locate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/numba_celltree/edge_celltree.html#EdgeCellTree2d.locate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.EdgeCellTree2d.locate_points" title="Link to this definition">#</a></dt>
 <dd><p>Find the index of a face that contains a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Coordinates of the points to be located.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. If
+the distance from the point to the edge is smaller than this value,
+the point is considered to be on the edge. If None, the method tries
+to estimate an appropriate tolerance by multiplying the maximum
+diagonal of the bounding boxes with 1e-12.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>tree_edge_indices</strong> – For every point, the index of the edge it falls on. Points not
@@ -609,17 +630,43 @@ falling on any edge are marked with a value of <code class="docutils literal not
 <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
 <section id="id1">
-<h2>[0.3.0 2025-03-25]<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2>[0.4.0 2025-04-10]<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tolerance</span></code> argument to make tolerance configurable in
+<a class="reference internal" href="#numba_celltree.CellTree2d.locate_points" title="numba_celltree.CellTree2d.locate_points"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_points()</span></code></a>, <a class="reference internal" href="#numba_celltree.EdgeCellTree2d.locate_points" title="numba_celltree.EdgeCellTree2d.locate_points"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EdgeCellTree2d.locate_points()</span></code></a>, and
+<a class="reference internal" href="#numba_celltree.EdgeCellTree2d" title="numba_celltree.EdgeCellTree2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCellTree2d</span></code></a> constructor. This allows for more lenient queries when
+working with datasets with large spatial coordinates.</p></li>
+</ul>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Edge case handling has been improved. Dynamic tolerances are now
+automatically estimated or can be optionally provided for queries to handle
+floating point errors. In previous versions, the size of a cross product was
+compared with a static tolerance value of 1e-9, which made the tolerance
+effectively an area measure, or relative depending on the length of the edge
+rather than the perpendicular distance to the vertex. The current approach
+computes an actual distance, making the tolerance straightforward to
+interpret. The new defaults should result in fewer false positives and false
+negatives.</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.3.0 2025-03-25]<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add <a class="reference internal" href="#numba_celltree.EdgeCellTree2d" title="numba_celltree.EdgeCellTree2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCellTree2d</span></code></a> class to support 2D queries on 1D networks and
 linear features.</p></li>
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.2.2 2024-10-15]<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="id4">
+<h2>[0.2.2 2024-10-15]<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -631,8 +678,8 @@ vertex of the celltree. The logic has been updated and the while loop exits
 correctly now.</p></li>
 </ul>
 </section>
-<section id="changed">
-<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The parallellization strategy of <a class="reference internal" href="#numba_celltree.CellTree2d.locate_boxes" title="numba_celltree.CellTree2d.locate_boxes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_boxes()</span></code></a>,
 <a class="reference internal" href="#numba_celltree.CellTree2d.intersect_boxes" title="numba_celltree.CellTree2d.intersect_boxes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_boxes()</span></code></a>, <a class="reference internal" href="#numba_celltree.CellTree2d.locate_faces" title="numba_celltree.CellTree2d.locate_faces"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_faces()</span></code></a>,
@@ -703,13 +750,18 @@ should result in a net ~30% performance gain in most cases.</p></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[0.3.0 2025-03-25]</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[0.4.0 2025-04-10]</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">[0.2.2 2024-10-15]</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">[0.3.0 2025-03-25]</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Added</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">[0.2.2 2024-10-15]</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Changed</a></li>
 </ul>
 </li>
 </ul>

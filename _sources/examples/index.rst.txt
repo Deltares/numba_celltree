@@ -30,7 +30,7 @@ script or a Jupyter notebook for interactive exploration.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Spatial indexing of 1D networks and linear geometry"</div>
+      <div class="sphx-glr-thumbnail-title">Spatial indexing of 1D networks and linear geometry</div>
     </div>
 
 

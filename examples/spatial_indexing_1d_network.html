@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Spatial indexing of 1D networks and linear geometry” &#8212; Numba Celltree 0.3.0 documentation</title>
+    <title>Spatial indexing of 1D networks and linear geometry &#8212; Numba Celltree 0.4.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../_static/documentation_options.js?v=6c02275b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/spatial_indexing_1d_network';</script>
@@ -53,7 +53,7 @@
     <link rel="prev" title="Examples" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.3.0" />
+  <meta name="docsearch:version" content="0.4.0" />
   </head>
   
   
@@ -314,7 +314,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Spatial indexing of 1D networks and linear geometry”</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Spatial indexing of 1D networks and linear geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spatial_indexing_2d_grids.html">Spatial indexing of 2D grids</a></li>
 </ul>
 </div>
@@ -359,7 +359,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Spatial indexing of 1D networks and linear geometry”</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Spatial indexing of 1D networks and linear geometry</span></li>
   </ul>
 </nav>
 </div>
@@ -382,13 +382,13 @@
 to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="spatial-indexing-of-1d-networks-and-linear-geometry">
-<span id="sphx-glr-examples-spatial-indexing-1d-network-py"></span><h1>Spatial indexing of 1D networks and linear geometry”<a class="headerlink" href="#spatial-indexing-of-1d-networks-and-linear-geometry" title="Link to this heading">#</a></h1>
-<p>This example demonstrates how to use the <cite>numba_celltree</cite> package to index 1D
-grids. The package provides a <code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCellTree</span></code> class that constructs a cell
-tree for 1D networks and linear geometries. The package currently supports the
-following operations:</p>
+<span id="sphx-glr-examples-spatial-indexing-1d-network-py"></span><h1>Spatial indexing of 1D networks and linear geometry<a class="headerlink" href="#spatial-indexing-of-1d-networks-and-linear-geometry" title="Link to this heading">#</a></h1>
+<p>This example demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">numba_celltree</span></code> package to index 1D
+grids. The package provides a <code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCellTree</span></code> class that constructs a
+cell tree for 1D networks and linear geometries. The package currently supports
+the following operations:</p>
 <ul class="simple">
-<li><p>Location points</p></li>
+<li><p>Locating points</p></li>
 <li><p>Locating line segments</p></li>
 </ul>
 <p>This example provides an introduction to searching a cell tree for each of
@@ -432,9 +432,9 @@ these.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([ 7,  1, -1])
 </pre></div>
 </div>
-<p>This returns the indices of the edges in the network on which the points
-are located. Note that the last point is outside the grid, so it returns -1.
-We’ll have to filter those out first. Let’s plot them:</p>
+<p>This returns the indices of the edges that contain each point, with -1
+indicating points outside the network. We’ll have to filter those out first.
+Let’s plot them:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ii</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">i</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -460,12 +460,12 @@ some line segments.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">LineCollection</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_spatial_indexing_1d_network_003.png" srcset="../_images/sphx_glr_spatial_indexing_1d_network_003.png" alt="spatial indexing 1d network" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection object at 0x7f505e1b99a0&gt;
+<img src="../_images/sphx_glr_spatial_indexing_1d_network_003.png" srcset="../_images/sphx_glr_spatial_indexing_1d_network_003.png" alt="spatial indexing 1d network" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection object at 0x7ff288f6a8d0&gt;
 </pre></div>
 </div>
 <p>Let’s now intersect these line segments with the edges in the network.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">segment_index</span><span class="p">,</span> <span class="n">tree_edge_index</span><span class="p">,</span> <span class="n">xy_interesection</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_edges</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
-<span class="n">xy_interesection</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">segment_index</span><span class="p">,</span> <span class="n">tree_edge_index</span><span class="p">,</span> <span class="n">xy_intersection</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">intersect_edges</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+<span class="n">xy_intersection</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([[0.6       , 1.35      ],
@@ -474,21 +474,21 @@ some line segments.</p>
        [1.875     , 2.5       ]])
 </pre></div>
 </div>
-<p>The <cite>intersect_edges</cite> method returns the indices of the segments in the input
-that intersect with the edges in the network. It also returns the indices of
-the edges in the network that intersect with the segments, and the coordinates
-of the intersection points. Let’s plot the results:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">intersect_edges</span></code> method returns three arrays: which input segments
+intersect with the network, which network edges they intersect with, and the
+coordinates of each intersection point.</p>
+<p>Let’s plot the results:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 <span class="n">demo</span><span class="o">.</span><span class="n">plot_edges</span><span class="p">(</span><span class="n">node_x</span><span class="p">,</span> <span class="n">node_y</span><span class="p">,</span> <span class="n">edges</span><span class="p">[</span><span class="n">tree_edge_index</span><span class="p">],</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">LineCollection</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xy_interesection</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xy_intersection</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_spatial_indexing_1d_network_004.png" srcset="../_images/sphx_glr_spatial_indexing_1d_network_004.png" alt="spatial indexing 1d network" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection object at 0x7f505e112b40&gt;
+<img src="../_images/sphx_glr_spatial_indexing_1d_network_004.png" srcset="../_images/sphx_glr_spatial_indexing_1d_network_004.png" alt="spatial indexing 1d network" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection object at 0x7ff280a56f00&gt;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.232 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.233 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-spatial-indexing-1d-network-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3ae6d8c6e5e0e234344edd987e015a9e/spatial_indexing_1d_network.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">spatial_indexing_1d_network.ipynb</span></code></a></p>
