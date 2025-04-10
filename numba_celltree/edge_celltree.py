@@ -39,10 +39,13 @@ class EdgeCellTree2d(CellTree2dBase):
         to only 1, but this doubles memory footprint for slightly faster
         lookup. Increase this to reduce memory usage at the cost of lookup
         performance.
-    tolerance: float, optional, default: 1e-9
+    tolerance: float, optional
         Tolerance used to build edge bounding boxes, which are used to traverse
         the celltree. Specifying a tolerance is mainly relevant when edges are
-        axis-aligned.
+        axis-aligned. If None, the method tries to estimate an appropriate
+        tolerance by multiplying the maximum diagonal of the bounding boxes with
+        1e-12.
+
     """
 
     def __init__(
@@ -95,10 +98,13 @@ class EdgeCellTree2d(CellTree2dBase):
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
             Coordinates of the points to be located.
-        tolerance: float, optional, default: 1e-9
-            The tolerance used to determine whether a point is on an edge.
-            If the distance from the point to the edge is smaller than this
-            value, the point is considered to be on the edge.
+        tolerance: float, optional
+            The tolerance used to determine whether a point is on an edge. If
+            the distance from the point to the edge is smaller than this value,
+            the point is considered to be on the edge. If None, the method tries
+            to estimate an appropriate tolerance by multiplying the maximum
+            diagonal of the bounding boxes with 1e-12.
+
 
         Returns
         -------

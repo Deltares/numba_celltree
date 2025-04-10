@@ -105,10 +105,12 @@ class CellTree2d(CellTree2dBase):
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
             Coordinates of the points to be located.
-        tolerance: float, optional, default: 1e-9
-            The tolerance used to determine whether a point is on an edge.
-            If the distance from the point to the edge is smaller than this
-            value, the point is considered to be on the edge.
+        tolerance: float, optional
+            The tolerance used to determine whether a point is on an edge. If
+            the distance from the point to the edge is smaller than this value,
+            the point is considered to be on the edge. If None, the method tries
+            to estimate an appropriate tolerance by multiplying the maximum
+            diagonal of the bounding boxes with 1e-12.
 
         Returns
         -------
@@ -302,10 +304,12 @@ class CellTree2d(CellTree2dBase):
         ----------
         points: ndarray of floats with shape ``(n_point, 2)``
             Coordinates of the points to be located.
-        tolerance: float, optional, default: 1e-9
-            The tolerance used to determine whether a point is on an edge.
-            If the distance from the point to the edge is smaller than this
-            value, the point is considered to be on the edge.
+        tolerance: float, optional
+            The tolerance used to determine whether a point is on an edge. If
+            the distance from the point to the edge is smaller than this value,
+            the point is considered to be on the edge. If None, the method tries
+            to estimate an appropriate tolerance by multiplying the maximum
+            diagonal of the bounding boxes with 1e-12.
 
         Returns
         -------
