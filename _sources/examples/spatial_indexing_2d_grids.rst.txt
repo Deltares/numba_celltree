@@ -680,7 +680,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.741 seconds)
+   **Total running time of the script:** (0 minutes 0.738 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing_2d_grids.py:
