@@ -15,8 +15,7 @@ polygons) in a two dimensional unstructured mesh.
 .. code:: python
 
     import numpy as np
-    from numba_celltree import CellTree2d
-    from numba_celltree import demo
+    from numba_celltree import CellTree2d, demo
 
     vertices, faces = demo.generate_disk(5, 5)
     vertices += 1.0
