@@ -19,6 +19,7 @@ from numba_celltree.geometry_utils import (
     cross_product,
     dot_product,
     to_vector,
+    within_perpendicular_distance,
 )
 
 
@@ -46,9 +47,8 @@ def compute_weights(
     b = as_point(polygon[0])
     U = to_vector(a, b)
     V = to_vector(a, p)
-    L2i = U.x * U.x + U.y * U.y
     Ai = abs(cross_product(U, V))
-    if (Ai * Ai) < ((tolerance * L2i) * tolerance):
+    if within_perpendicular_distance(Ai, U, tolerance):
         # Note: weights may be differently sized than polygon! Hence n-1
         # instead of -1.
         interp_edge_case(a, U, p, weights, n - 1, 0)
@@ -63,10 +63,8 @@ def compute_weights(
 
         U = to_vector(b, c)
         V = to_vector(b, p)
-        L2j = U.x * U.x + U.y * U.y
         Aj = abs(cross_product(U, V))
-
-        if (Aj * Aj) < ((tolerance * L2j) * tolerance):
+        if within_perpendicular_distance(Aj, U, tolerance):
             interp_edge_case(b, U, p, weights, i, i_next)
             return
 

@@ -65,6 +65,11 @@ def dot_product(u: Vector, v: Vector) -> float:
 
 
 @nb.njit(inline="always")
+def length_squared(v: Vector) -> float:
+    return v.x * v.x + v.y * v.y
+
+
+@nb.njit(inline="always")
 def polygon_length(face: IntArray) -> int:
     # A minimal polygon is a triangle
     n = len(face)
@@ -143,14 +148,33 @@ def point_in_polygon(p: Point, poly: Sequence) -> bool:
 
 
 @nb.njit(inline="always")
+def within_perpendicular_distance(UxV: float, U: Vector, tolerance: float) -> bool:
+    """
+    Determine whether the perpendicular distance of an edge (vector U, from
+    point a to b) to a point (p) is less than the tolerance. Let V be the vector
+    of point a to p. The cross product is U x V.
+
+    The cross product magnitude represents the area of the parallelogram
+    formed by the vectors. Dividing by the vector length of U gives the
+    perpendicular distance. This function avoids square roots and divisions.
+
+    Note that this function does not answer whether a point lies close to an
+    edge: point p collinear with a and b will have a perpendicular distance of
+    0, but can very far away. If the point also lies within the bounds of the
+    edge (see: in_bounds), it is indeed nearby.
+    """
+    return (UxV * UxV) < ((tolerance * length_squared(U)) * tolerance)
+
+
+@nb.njit(inline="always")
 def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
     """
     Check whether point p falls within the bounding box created by a and b
-    (after we've checked the size of the cross product).
-    However, we must take into account that a line may be either vertical
-    (dx=0) or horizontal (dy=0) and only evaluate the non-zero value.
-    If the area created by p, a, b is tiny AND p is within the bounds of a and
-    b, the point lies very close to the edge.
+    (after we've checked the size of the cross product). However, we must take
+    into account that a line may be either vertical (dx=0) or horizontal (dy=0)
+    and only evaluate the non-zero value. If the area created by p, a, b is
+    tiny (see: within_perpendicular_distance) AND p is within the bounds of a
+    and b, the point lies very close to the edge.
 
     This is a branchless implementation.
     """
@@ -186,10 +210,9 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray, tolerance: float) ->
         # points v0 and v1.
         A = cross_product(U, V)
         W = to_vector(v0, v1)
-        L2 = W.x * W.x + W.y * W.y
-        # Compute optimized equivalent of A/length < tolerance (no sqrt, no
-        # division).
-        if (A * A) < ((tolerance * L2) * tolerance) and in_bounds(p, v0, v1, tolerance):
+        if within_perpendicular_distance(A, W, tolerance) and in_bounds(
+            p, v0, v1, tolerance
+        ):
             return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
@@ -211,13 +234,63 @@ def point_on_edge(p: Point, edge: FloatArray, tolerance: float) -> bool:
     U = to_vector(p, v0)
     V = to_vector(p, v1)
     W = to_vector(v0, v1)
-    L2 = W.x * W.x + W.y * W.y
     A = cross_product(U, V)
-    # Compute optimized equivalent of A/length < tolerance (no sqrt, no
-    # division).
-    if (A * A) < ((tolerance * L2) * tolerance) and in_bounds(p, v0, v1, tolerance):
+    if within_perpendicular_distance(A, W, tolerance) and in_bounds(
+        p, v0, v1, tolerance
+    ):
         return True
     return False
+
+
+@nb.njit(inline="always")
+def point_in_triangle(p: Point, t: Triangle, tolerance: float) -> bool:
+    ap = to_vector(t.a, p)
+    bp = to_vector(t.b, p)
+    cp = to_vector(t.c, p)
+    ab = to_vector(t.a, t.b)
+    bc = to_vector(t.b, t.c)
+    ca = to_vector(t.c, t.a)
+    # Do a half plane check.
+    A = cross_product(ab, ap)
+    B = cross_product(bc, bp)
+    C = cross_product(ca, cp)
+    signA = A > 0
+    signB = B > 0
+    signC = C > 0
+    if (signA == signB) and (signB == signC):
+        return True
+
+    # Test whether p is located on/very close to edges.
+    if (
+        within_perpendicular_distance(A, ab, tolerance)
+        and in_bounds(p, t.a, t.b, tolerance)
+        or within_perpendicular_distance(B, bc, tolerance)
+        and in_bounds(p, t.b, t.c, tolerance)
+        or within_perpendicular_distance(C, ca, tolerance)
+        and in_bounds(p, t.c, t.a, tolerance)
+    ):
+        return True
+
+    return False
+
+
+@nb.njit(parallel=PARALLEL, cache=True)
+def points_in_triangles(
+    points: FloatArray,
+    face_indices: IntArray,
+    faces: IntArray,
+    vertices: FloatArray,
+    tolerance: float,
+):
+    n_points = len(points)
+    inside = np.empty(n_points, dtype=np.bool_)
+    for i in nb.prange(n_points):
+        face_index = face_indices[i]
+        face = faces[face_index]
+        triangle = as_triangle(vertices, face)
+        point = as_point(points[i])
+        inside[i] = point_in_triangle(point, triangle, tolerance)
+    return inside
 
 
 @nb.njit(inline="always")
