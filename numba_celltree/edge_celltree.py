@@ -11,6 +11,8 @@ from numba_celltree.celltree_base import (
     default_tolerance,
 )
 from numba_celltree.constants import (
+    MIN_TOLERANCE,
+    TOLERANCE_FACTOR,
     CellTreeData,
     FloatArray,
     IntArray,
@@ -55,8 +57,11 @@ class EdgeCellTree2d(CellTree2dBase):
             raise ValueError("cells_per_leaf must be >= 1")
 
         vertices = cast_vertices(vertices, copy=True)
-
-        bb_coords = build_edge_bboxes(edges, vertices)
+        x, y = vertices.T
+        dx = x.max() - x.min()
+        dy = y.max() - y.min()
+        global_tolerance = max(MIN_TOLERANCE, TOLERANCE_FACTOR * max(dx, dy))
+        bb_coords = build_edge_bboxes(edges, vertices, global_tolerance)
         nodes, bb_indices = initialize(edges, bb_coords, n_buckets, cells_per_leaf)
         self.vertices = vertices
         self.edges = edges
