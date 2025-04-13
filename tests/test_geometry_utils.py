@@ -417,3 +417,57 @@ def test_lines_intersect(p, q, expected_intersects, expected_intersection_point)
     assert actual_intersects == expected_intersects
     np.testing.assert_allclose(x, expected_intersection_point.x)
     np.testing.assert_allclose(y, expected_intersection_point.y)
+
+
+def test_point_in_triangle():
+    tol = 1e-9
+    a = Point(0.1, 0.1)
+    b = Point(0.7, 0.5)
+    c = Point(0.4, 0.7)
+    # Should work for clockwise and ccw orientation.
+    triangle = Triangle(a, b, c)
+    rtriangle = Triangle(c, b, a)
+    p = Point(0.5, 0.5)
+    assert gu.point_in_triangle(p, triangle, tol)
+    assert gu.point_in_triangle(p, rtriangle, tol)
+
+    p = Point(0.0, 0.0)
+    assert not gu.point_in_triangle(p, triangle, tol)
+    assert not gu.point_in_triangle(p, rtriangle, tol)
+
+
+def test_points_in_triangle():
+    vertices = np.array(
+        [
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+            [2.0, 0.0],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 2],
+            [1, 3, 2],
+        ]
+    )
+    points = np.array(
+        [
+            [-0.5, 0.25],
+            [0.0, 0.0],  # on vertex
+            [0.5, 0.5],  # on edge
+            [0.5, 0.25],
+            [1.5, 0.25],
+            [2.5, 0.25],
+        ]
+    )
+    face_indices = np.array([0, 0, 0, 0, 1, 1])
+    expected = [False, True, True, True, True, False]
+    actual = gu.points_in_triangles(
+        points=points,
+        face_indices=face_indices,
+        faces=faces,
+        vertices=vertices,
+        tolerance=1e-9,
+    )
+    assert np.array_equal(expected, actual)
