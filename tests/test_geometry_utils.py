@@ -222,7 +222,7 @@ def test_build_edge_bboxes():
     vertices = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [2.0, 1.0]], dtype=float)
     edges = np.array([[0, 1], [1, 2], [2, 3]], dtype=np.int32)
 
-    bb_coords = gu.build_edge_bboxes(edges, vertices)
+    bb_coords = gu.build_edge_bboxes(edges, vertices, tolerance=1e-9)
     expected_bb_coords = np.array(
         [
             [0.0, 1.0, 0.0, 0.0],

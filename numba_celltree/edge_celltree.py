@@ -11,6 +11,8 @@ from numba_celltree.celltree_base import (
     default_tolerance,
 )
 from numba_celltree.constants import (
+    MIN_TOLERANCE,
+    TOLERANCE_FACTOR,
     CellTreeData,
     FloatArray,
     IntArray,
@@ -55,8 +57,11 @@ class EdgeCellTree2d(CellTree2dBase):
             raise ValueError("cells_per_leaf must be >= 1")
 
         vertices = cast_vertices(vertices, copy=True)
-
-        bb_coords = build_edge_bboxes(edges, vertices)
+        x, y = vertices.T
+        dx = x.max() - x.min()
+        dy = y.max() - y.min()
+        global_tolerance = max(MIN_TOLERANCE, TOLERANCE_FACTOR * max(dx, dy))
+        bb_coords = build_edge_bboxes(edges, vertices, global_tolerance)
         nodes, bb_indices = initialize(edges, bb_coords, n_buckets, cells_per_leaf)
         self.vertices = vertices
         self.edges = edges
@@ -88,11 +93,11 @@ class EdgeCellTree2d(CellTree2dBase):
         points: ndarray of floats with shape ``(n_point, 2)``
             Coordinates of the points to be located.
         tolerance: float, optional
-            The tolerance used to determine whether a point is on an edge. If
-            the distance from the point to the edge is smaller than this value,
-            the point is considered to be on the edge. If None, the method tries
-            to estimate an appropriate tolerance by multiplying the maximum
-            diagonal of the bounding boxes with 1e-12.
+            The tolerance used to determine whether a point is on an edge. This
+            is a floating point precision criterion, thus cannot be directly be
+            interpreted as a distance. If None, the method tries to estimate an
+            appropriate tolerance by multiplying the maximum diagonal of the
+            bounding boxes with 1e-12.
 
 
         Returns

@@ -167,7 +167,7 @@ def within_perpendicular_distance(UxV: float, U: Vector, tolerance: float) -> bo
 
 
 @nb.njit(inline="always")
-def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
+def in_bounds(p: Point, a: Point, b: Point) -> bool:
     """
     Check whether point p falls within the bounding box created by a and b
     (after we've checked the size of the cross product). However, we must take
@@ -178,10 +178,10 @@ def in_bounds(p: Point, a: Point, b: Point, tolerance: float) -> bool:
 
     This is a branchless implementation.
     """
-    xmin = min(a.x, b.x) - tolerance
-    xmax = max(a.x, b.x) + tolerance
-    ymin = min(a.y, b.y) - tolerance
-    ymax = max(a.y, b.y) + tolerance
+    xmin = min(a.x, b.x)
+    xmax = max(a.x, b.x)
+    ymin = min(a.y, b.y)
+    ymax = max(a.y, b.y)
     dx = xmax - xmin
     dy = ymax - ymin
     # Determine which bound to use based on which dimension is larger
@@ -210,9 +210,7 @@ def point_in_polygon_or_on_edge(p: Point, poly: FloatArray, tolerance: float) ->
         # points v0 and v1.
         A = cross_product(U, V)
         W = to_vector(v0, v1)
-        if within_perpendicular_distance(A, W, tolerance) and in_bounds(
-            p, v0, v1, tolerance
-        ):
+        if within_perpendicular_distance(A, W, tolerance) and in_bounds(p, v0, v1):
             return True
 
         if (v0.y > p.y) != (v1.y > p.y) and p.x < (
@@ -235,9 +233,7 @@ def point_on_edge(p: Point, edge: FloatArray, tolerance: float) -> bool:
     V = to_vector(p, v1)
     W = to_vector(v0, v1)
     A = cross_product(U, V)
-    if within_perpendicular_distance(A, W, tolerance) and in_bounds(
-        p, v0, v1, tolerance
-    ):
+    if within_perpendicular_distance(A, W, tolerance) and in_bounds(p, v0, v1):
         return True
     return False
 
@@ -263,11 +259,11 @@ def point_in_triangle(p: Point, t: Triangle, tolerance: float) -> bool:
     # Test whether p is located on/very close to edges.
     if (
         within_perpendicular_distance(A, ab, tolerance)
-        and in_bounds(p, t.a, t.b, tolerance)
+        and in_bounds(p, t.a, t.b)
         or within_perpendicular_distance(B, bc, tolerance)
-        and in_bounds(p, t.b, t.c, tolerance)
+        and in_bounds(p, t.b, t.c)
         or within_perpendicular_distance(C, ca, tolerance)
-        and in_bounds(p, t.c, t.a, tolerance)
+        and in_bounds(p, t.c, t.a)
     ):
         return True
 
@@ -339,7 +335,7 @@ def intersection_location_point(
 ) -> Point:
     # Calculate intersection point
     denom = cross_product(V, U)
-    if abs(denom) < tolerance:
+    if within_perpendicular_distance(denom, V, tolerance):
         return np.nan, np.nan  # Parallel lines
 
     R = to_vector(a, p)
@@ -413,9 +409,9 @@ def lines_intersect(
     # Detect collinear case, where segments lie on the same infite line.
     R = to_vector(a, p)
     S = to_vector(a, q)
-    if (abs(cross_product(V, R)) < tolerance) and (
-        abs(cross_product(V, S) < tolerance)
-    ):
+    if within_perpendicular_distance(
+        cross_product(V, R), V, tolerance
+    ) and within_perpendicular_distance(cross_product(V, S), V, tolerance):
         x, y = midpoint_collinear_lines(a, b, p, q)
         return True, x, y
 
@@ -462,13 +458,10 @@ def build_face_bboxes(
 
 @nb.njit(inline="always")
 def edge_bounding_box(
-    edge: IntArray, vertices: FloatArray
+    edge: IntArray, vertices: FloatArray, tolerance: float
 ) -> Tuple[float, float, float, float]:
     x0, y0 = vertices[edge[0]]
     x1, y1 = vertices[edge[1]]
-    dx = abs(x1 - x0)
-    dy = abs(y1 - y0)
-    tolerance = max(MIN_TOLERANCE, TOLERANCE_FACTOR * max(dx, dy))
     # Edges may be axis-aligned. Create a fictitious width in this case.
     xmin = min(x0 - tolerance, x1 - tolerance)
     xmax = max(x0 + tolerance, x1 + tolerance)
@@ -481,6 +474,7 @@ def edge_bounding_box(
 def build_edge_bboxes(
     edges: IntArray,
     vertices: FloatArray,
+    tolerance: float,
 ) -> FloatArray:
     # Make room for the bounding box of every polygon.
     n_polys = len(edges)
@@ -488,7 +482,7 @@ def build_edge_bboxes(
 
     for i in nb.prange(n_polys):  # pylint: disable=not-an-iterable
         edge = edges[i]
-        bbox_coords[i] = edge_bounding_box(edge, vertices)
+        bbox_coords[i] = edge_bounding_box(edge, vertices, tolerance)
 
     return bbox_coords
 

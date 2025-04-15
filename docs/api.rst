@@ -17,9 +17,10 @@ Added
 ~~~~~
 
 - ``tolerance`` argument to make tolerance configurable in
-  :meth:`CellTree2d.locate_points`, :meth:`EdgeCellTree2d.locate_points`, and
-  :class:`EdgeCellTree2d` constructor. This allows for more lenient queries when
-  working with datasets with large spatial coordinates. 
+  :meth:`CellTree2d.locate_points`,
+  :meth:`CellTree2d.compute_barycentric_weights`, and
+  :meth:`EdgeCellTree2d.locate_points`. This allows for more lenient queries
+  when working with datasets with large spatial coordinates. 
 
 Changed
 ~~~~~~~

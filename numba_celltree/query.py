@@ -68,9 +68,6 @@ def locate_point(point: Point, tree: CellTreeData, tolerance: float):
     return_value = -1
     size = 1
 
-    point_left = Point(point[0] - tolerance, point[1] - tolerance)
-    point_right = Point(point[0] + tolerance, point[1] + tolerance)
-
     while size > 0:
         node_index, size = pop(stack, size)
         node = tree.nodes[node_index]
@@ -88,15 +85,15 @@ def locate_point(point: Point, tree: CellTreeData, tolerance: float):
             continue
 
         dim = 1 if node["dim"] else 0
-        left = point_left[dim] <= node["Lmax"]
-        right = point_right[dim] >= node["Rmin"]
+        left = point[dim] <= node["Lmax"]
+        right = point[dim] >= node["Rmin"]
         left_child = node["child"]
         right_child = left_child + 1
 
         if left and right:
             # This heuristic is worthwhile because a point will fall into a
             # single face -- if found, we can stop.
-            if (node["Lmax"] - point[dim]) < (point_right[dim] - node["Rmin"]):
+            if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
                 stack, size = push(stack, left_child, size)
                 stack, size = push(stack, right_child, size)
             else:
@@ -130,9 +127,6 @@ def locate_point_on_edge(point: Point, tree: CellTreeData, tolerance: float):
     # TODO: Rename allocate_polygon or assess if we can allocate a smaller array.
     edge_work_array = allocate_polygon()
 
-    point_left = Point(point[0] - tolerance, point[1] - tolerance)
-    point_right = Point(point[0] + tolerance, point[1] + tolerance)
-
     while size > 0:
         node_index, size = pop(stack, size)
         node = tree.nodes[node_index]
@@ -148,15 +142,15 @@ def locate_point_on_edge(point: Point, tree: CellTreeData, tolerance: float):
             continue
 
         dim = 1 if node["dim"] else 0
-        left = point_left[dim] <= node["Lmax"]
-        right = point_right[dim] >= node["Rmin"]
+        left = point[dim] <= node["Lmax"]
+        right = point[dim] >= node["Rmin"]
         left_child = node["child"]
         right_child = left_child + 1
 
         if left and right:
             # This heuristic is worthwhile because a point will fall into a
             # single face -- if found, we can stop.
-            if (node["Lmax"] - point[dim]) < (point_right[dim] - node["Rmin"]):
+            if (node["Lmax"] - point[dim]) < (point[dim] - node["Rmin"]):
                 stack, size = push(stack, left_child, size)
                 stack, size = push(stack, right_child, size)
             else:
