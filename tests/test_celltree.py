@@ -697,21 +697,14 @@ def test_locate_point_on_edge():
     tree = CellTree2d(nodes, faces, fill_value, n_buckets=4)
     points = np.array(
         [
-            [0.0, 0.0],
-            [0.0, 4.0],
+            [-1e-9, 1.0],
+            [4.0 + 1e-9, 1.0],
             [2.0, 2.0],
-            [4.0, 0.0],
-            [4.0, 4.0],
+            [3.0, -1e-9],
+            [3.0, 4.0 + 1e-9],
         ]
     )
-    result = tree.locate_points(points)
+    result = tree.locate_points(points, tolerance=0.9e-9)
+    np.testing.assert_array_equal(result, [-1, -1, 2, -1, -1])
+    result = tree.locate_points(points, tolerance=1.1e-9)
     assert (result != -1).all()
-    # Test tolerance check for points on the edge of a cell
-    points[points == 0.0] = -1e-9
-    points[points == 4.0] = 4.0 + 1e-9
-    result = tree.locate_points(points)
-    np.testing.assert_array_equal(result, [-1, -1, 2, -1, -1])
-    # Tolerance shouldn't affect bbox checks, so we should still get -1 for the
-    # first two points and last two points.
-    result = tree.locate_points(points, tolerance=1e-8)
-    np.testing.assert_array_equal(result, [-1, -1, 2, -1, -1])
