@@ -471,11 +471,11 @@
 <span class="sd">        points: ndarray of floats with shape ``(n_point, 2)``</span>
 <span class="sd">            Coordinates of the points to be located.</span>
 <span class="sd">        tolerance: float, optional</span>
-<span class="sd">            The tolerance used to determine whether a point is on an edge. If</span>
-<span class="sd">            the distance from the point to the edge is smaller than this value,</span>
-<span class="sd">            the point is considered to be on the edge. If None, the method tries</span>
-<span class="sd">            to estimate an appropriate tolerance by multiplying the maximum</span>
-<span class="sd">            diagonal of the bounding boxes with 1e-12.</span>
+<span class="sd">            The tolerance used to determine whether a point is on an edge. This</span>
+<span class="sd">            is a floating point precision criterion, thus cannot be directly be</span>
+<span class="sd">            interpreted as a distance. If None, the method tries to estimate an</span>
+<span class="sd">            appropriate tolerance by multiplying the maximum diagonal of the</span>
+<span class="sd">            bounding boxes with 1e-12.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -688,11 +688,11 @@
 <span class="sd">        points: ndarray of floats with shape ``(n_point, 2)``</span>
 <span class="sd">            Coordinates of the points to be located.</span>
 <span class="sd">        tolerance: float, optional</span>
-<span class="sd">            The tolerance used to determine whether a point is on an edge. If</span>
-<span class="sd">            the distance from the point to the edge is smaller than this value,</span>
-<span class="sd">            the point is considered to be on the edge. If None, the method tries</span>
-<span class="sd">            to estimate an appropriate tolerance by multiplying the maximum</span>
-<span class="sd">            diagonal of the bounding boxes with 1e-12.</span>
+<span class="sd">            The tolerance used to determine whether a point is on an edge. This</span>
+<span class="sd">            is a floating point precision criterion, thus cannot be directly be</span>
+<span class="sd">            interpreted as a distance. If None, the method tries to estimate an</span>
+<span class="sd">            appropriate tolerance by multiplying the maximum diagonal of the</span>
+<span class="sd">            bounding boxes with 1e-12.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>

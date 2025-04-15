@@ -372,6 +372,8 @@
     <span class="n">default_tolerance</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numba_celltree.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MIN_TOLERANCE</span><span class="p">,</span>
+    <span class="n">TOLERANCE_FACTOR</span><span class="p">,</span>
     <span class="n">CellTreeData</span><span class="p">,</span>
     <span class="n">FloatArray</span><span class="p">,</span>
     <span class="n">IntArray</span><span class="p">,</span>
@@ -418,8 +420,11 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cells_per_leaf must be &gt;= 1&quot;</span><span class="p">)</span>
 
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">bb_coords</span> <span class="o">=</span> <span class="n">build_edge_bboxes</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">global_tolerance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">MIN_TOLERANCE</span><span class="p">,</span> <span class="n">TOLERANCE_FACTOR</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">))</span>
+        <span class="n">bb_coords</span> <span class="o">=</span> <span class="n">build_edge_bboxes</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">global_tolerance</span><span class="p">)</span>
         <span class="n">nodes</span><span class="p">,</span> <span class="n">bb_indices</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">bb_coords</span><span class="p">,</span> <span class="n">n_buckets</span><span class="p">,</span> <span class="n">cells_per_leaf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span>
@@ -453,11 +458,11 @@
 <span class="sd">        points: ndarray of floats with shape ``(n_point, 2)``</span>
 <span class="sd">            Coordinates of the points to be located.</span>
 <span class="sd">        tolerance: float, optional</span>
-<span class="sd">            The tolerance used to determine whether a point is on an edge. If</span>
-<span class="sd">            the distance from the point to the edge is smaller than this value,</span>
-<span class="sd">            the point is considered to be on the edge. If None, the method tries</span>
-<span class="sd">            to estimate an appropriate tolerance by multiplying the maximum</span>
-<span class="sd">            diagonal of the bounding boxes with 1e-12.</span>
+<span class="sd">            The tolerance used to determine whether a point is on an edge. This</span>
+<span class="sd">            is a floating point precision criterion, thus cannot be directly be</span>
+<span class="sd">            interpreted as a distance. If None, the method tries to estimate an</span>
+<span class="sd">            appropriate tolerance by multiplying the maximum diagonal of the</span>
+<span class="sd">            bounding boxes with 1e-12.</span>
 
 
 <span class="sd">        Returns</span>

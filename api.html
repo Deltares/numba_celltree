@@ -400,11 +400,11 @@ performance.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Coordinates of the points to be located.</p></li>
-<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. If
-the distance from the point to the edge is smaller than this value,
-the point is considered to be on the edge. If None, the method tries
-to estimate an appropriate tolerance by multiplying the maximum
-diagonal of the bounding boxes with 1e-12.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. This
+is a floating point precision criterion, thus cannot be directly be
+interpreted as a distance. If None, the method tries to estimate an
+appropriate tolerance by multiplying the maximum diagonal of the
+bounding boxes with 1e-12.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -542,11 +542,11 @@ identified as falling within that face.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Coordinates of the points to be located.</p></li>
-<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. If
-the distance from the point to the edge is smaller than this value,
-the point is considered to be on the edge. If None, the method tries
-to estimate an appropriate tolerance by multiplying the maximum
-diagonal of the bounding boxes with 1e-12.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. This
+is a floating point precision criterion, thus cannot be directly be
+interpreted as a distance. If None, the method tries to estimate an
+appropriate tolerance by multiplying the maximum diagonal of the
+bounding boxes with 1e-12.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -607,11 +607,11 @@ performance.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_point,</span> <span class="pre">2)</span></code>) – Coordinates of the points to be located.</p></li>
-<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. If
-the distance from the point to the edge is smaller than this value,
-the point is considered to be on the edge. If None, the method tries
-to estimate an appropriate tolerance by multiplying the maximum
-diagonal of the bounding boxes with 1e-12.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance used to determine whether a point is on an edge. This
+is a floating point precision criterion, thus cannot be directly be
+interpreted as a distance. If None, the method tries to estimate an
+appropriate tolerance by multiplying the maximum diagonal of the
+bounding boxes with 1e-12.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -635,9 +635,10 @@ falling on any edge are marked with a value of <code class="docutils literal not
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">tolerance</span></code> argument to make tolerance configurable in
-<a class="reference internal" href="#numba_celltree.CellTree2d.locate_points" title="numba_celltree.CellTree2d.locate_points"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_points()</span></code></a>, <a class="reference internal" href="#numba_celltree.EdgeCellTree2d.locate_points" title="numba_celltree.EdgeCellTree2d.locate_points"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EdgeCellTree2d.locate_points()</span></code></a>, and
-<a class="reference internal" href="#numba_celltree.EdgeCellTree2d" title="numba_celltree.EdgeCellTree2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCellTree2d</span></code></a> constructor. This allows for more lenient queries when
-working with datasets with large spatial coordinates.</p></li>
+<a class="reference internal" href="#numba_celltree.CellTree2d.locate_points" title="numba_celltree.CellTree2d.locate_points"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_points()</span></code></a>,
+<a class="reference internal" href="#numba_celltree.CellTree2d.compute_barycentric_weights" title="numba_celltree.CellTree2d.compute_barycentric_weights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.compute_barycentric_weights()</span></code></a>, and
+<a class="reference internal" href="#numba_celltree.EdgeCellTree2d.locate_points" title="numba_celltree.EdgeCellTree2d.locate_points"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EdgeCellTree2d.locate_points()</span></code></a>. This allows for more lenient queries
+when working with datasets with large spatial coordinates.</p></li>
 </ul>
 </section>
 <section id="changed">
