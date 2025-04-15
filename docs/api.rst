@@ -10,6 +10,17 @@ CellTree2d
 Changelog
 =========
 
+[0.4.1 2025-04-15]
+------------------
+
+Changed
+~~~~~~~
+
+- If tolerances are not provided, they are now estimated by the package. This
+  should be a good default for most cases, but can be overridden by providing a
+  custom value :meth:`CellTree2d.locate_points` and
+  :meth:`EdgeCellTree2d.locate_points`.
+
 [0.4.0 2025-04-10]
 ------------------
 
