@@ -189,7 +189,7 @@ some line segments.
  .. code-block:: none
 
 
-    <matplotlib.collections.LineCollection object at 0x7f5c7907f410>
+    <matplotlib.collections.LineCollection object at 0x7f8cfd4b8110>
 
 
 
@@ -253,14 +253,14 @@ Let's plot the results:
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f5c791c80e0>
+    <matplotlib.collections.PathCollection object at 0x7f8cfd56a870>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.242 seconds)
+   **Total running time of the script:** (0 minutes 0.243 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing_1d_network.py:
