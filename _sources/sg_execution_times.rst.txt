@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.964** total execution time for 2 files **from all galleries**:
+**00:01.030** total execution time for 2 files **from all galleries**:
 
 .. container::
 
@@ -33,8 +33,8 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_spatial_indexing_2d_grids.py` (``../examples/spatial_indexing_2d_grids.py``)
-     - 00:00.745
+     - 00:00.796
      - 0.0
    * - :ref:`sphx_glr_examples_spatial_indexing_1d_network.py` (``../examples/spatial_indexing_1d_network.py``)
-     - 00:00.219
+     - 00:00.234
      - 0.0
