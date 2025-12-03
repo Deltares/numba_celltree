@@ -26,7 +26,7 @@ script or a Jupyter notebook for interactive exploration.
   .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_1d_network_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_spatial_indexing_1d_network.py`
+  :doc:`/examples/spatial_indexing_1d_network`
 
 .. raw:: html
 
@@ -43,7 +43,7 @@ script or a Jupyter notebook for interactive exploration.
   .. image:: /examples/images/thumb/sphx_glr_spatial_indexing_2d_grids_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_spatial_indexing_2d_grids.py`
+  :doc:`/examples/spatial_indexing_2d_grids`
 
 .. raw:: html
 
