@@ -37,7 +37,6 @@ jobs:
           - py312
           - py311
           - py310 
-          - py309
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
@@ -53,6 +52,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
