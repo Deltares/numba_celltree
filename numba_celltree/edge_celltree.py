@@ -18,7 +18,7 @@ from numba_celltree.constants import (
     IntArray,
 )
 from numba_celltree.creation import initialize
-from numba_celltree.geometry_utils import build_edge_bboxes
+from numba_celltree.geometry_utils import build_edge_bboxes, sort_intersections_by_edge
 from numba_celltree.query import locate_edge_edges, locate_points_on_edge
 
 
@@ -118,6 +118,8 @@ class EdgeCellTree2d(CellTree2dBase):
         """
         Find the index of an edge intersecting with an edge.
 
+        Results for each edge are ordered by distance along the edge.
+
         Parameters
         ----------
         edge_coords: ndarray of floats with shape ``(n_edge, 2, 2)``
@@ -136,6 +138,9 @@ class EdgeCellTree2d(CellTree2dBase):
         n_chunks = nb.get_num_threads()
         edge_indices, tree_edge_indices, xy = locate_edge_edges(
             edge_coords, self.celltree_data, n_chunks
+        )
+        edge_indices, tree_edge_indices, xy = sort_intersections_by_edge(
+            edge_indices, tree_edge_indices, xy, edge_coords
         )
         intersection_xy = np.ascontiguousarray(xy[:, 0])
         return edge_indices, tree_edge_indices, intersection_xy

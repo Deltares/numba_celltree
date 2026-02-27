@@ -471,3 +471,35 @@ def test_points_in_triangle():
         tolerance=1e-9,
     )
     assert np.array_equal(expected, actual)
+
+
+def test_sort_intersections_by_edge():
+    edge_coords = np.array(
+        [
+            [[0.0, 0.0], [1.0, 1.0]],
+            [[2.0, 2.0], [3.0, 2.0]],
+        ]
+    )
+    _ii = np.array([0, 0, 1, 1])
+    _jj = np.array([0, 1, 2, 3])
+    _xy = np.array(
+        [
+            [[0.5, 0.5], [1.0, 1.0]],
+            [[0.0, 0.0], [0.5, 0.5]],
+            [[2.0, 2.0], [2.5, 2.0]],
+            [[2.5, 3.0], [3.0, 2.0]],
+        ]
+    )
+    ii, jj, xy = gu.sort_intersections_by_edge(_ii, _jj, _xy, edge_coords)
+    np.testing.assert_array_equal(ii, _ii)
+    np.testing.assert_array_equal(jj, [1, 0, 2, 3])
+
+    expected_xy = np.array(
+        [
+            [[0.0, 0.0], [0.5, 0.5]],
+            [[0.5, 0.5], [1.0, 1.0]],
+            [[2.0, 2.0], [2.5, 2.0]],
+            [[2.5, 3.0], [3.0, 2.0]],
+        ]
+    )
+    np.testing.assert_array_equal(xy, expected_xy)

@@ -559,3 +559,16 @@ def counter_clockwise(vertices: FloatArray, faces: IntArray) -> None:
             else:
                 break
     return
+
+
+def sort_intersections_by_edge(ii, jj, xy, edge_coords):
+    # Compute t: the unnormalized projection of the intersection point onto each edge.
+    a = edge_coords[ii, 0]
+    b = edge_coords[ii, 1]
+    c = xy[:, 0]
+    ab = b - a
+    ac = c - a
+    t = np.sum(ac * ab, axis=1)
+    # Sort by (edge index, t)
+    order = np.lexsort((t, ii))
+    return ii[order], jj[order], xy[order]

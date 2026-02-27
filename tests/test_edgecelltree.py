@@ -84,8 +84,8 @@ def test_intersect_edges():
     )
     actual_edge, actual_tree_edge, actual_xy = tree.intersect_edges(edge_coords)
     expected_edge = np.array([0, 1, 1], dtype=np.int32)
-    expected_tree_edge = np.array([0, 1, 2], dtype=np.int32)
-    expected_xy = np.array([[1.0, 0.0], [1.0, 0.0], [2.0, 0.5]], dtype=float)
+    expected_tree_edge = np.array([0, 2, 1], dtype=np.int32)
+    expected_xy = np.array([[1.0, 0.0], [2.0, 0.5], [1.0, 0.0]], dtype=float)
 
     np.testing.assert_array_equal(actual_edge, expected_edge)
     np.testing.assert_array_equal(actual_tree_edge, expected_tree_edge)

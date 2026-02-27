@@ -22,7 +22,11 @@ from numba_celltree.constants import (
     IntArray,
 )
 from numba_celltree.creation import initialize
-from numba_celltree.geometry_utils import build_face_bboxes, counter_clockwise
+from numba_celltree.geometry_utils import (
+    build_face_bboxes,
+    counter_clockwise,
+    sort_intersections_by_edge,
+)
 from numba_celltree.query import (
     locate_boxes,
     locate_edge_faces,
@@ -271,6 +275,8 @@ class CellTree2d(CellTree2dBase):
         """
         Find the index of a face intersecting with an edge.
 
+        Results for each edge are ordered by distance along the edge.
+
         Parameters
         ----------
         edge_coords: ndarray of floats with shape ``(n_edge, 2, 2)``
@@ -290,7 +296,12 @@ class CellTree2d(CellTree2dBase):
         """
         edge_coords = cast_edges(edge_coords)
         n_chunks = nb.get_num_threads()
-        return locate_edge_faces(edge_coords, self.celltree_data, n_chunks)
+        edge_indices, tree_face_indices, xy = locate_edge_faces(
+            edge_coords, self.celltree_data, n_chunks
+        )
+        return sort_intersections_by_edge(
+            edge_indices, tree_face_indices, xy, edge_coords
+        )
 
     def compute_barycentric_weights(
         self,
