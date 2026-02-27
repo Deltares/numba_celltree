@@ -10,6 +10,17 @@ CellTree2d
 Changelog
 =========
 
+
+[0.4.2 2026-02-27]
+------------------
+
+Changed
+~~~~~~~
+
+- :meth:`CellTree2d.intersect_edges` and `EdgeCellTree2d.intersect_edges` will
+  now return results for each edge are ordered by distance along the edge
+  instead of in arbitrary order.
+
 [0.4.1 2025-04-15]
 ------------------
 

@@ -189,7 +189,7 @@ some line segments.
  .. code-block:: none
 
 
-    <matplotlib.collections.LineCollection object at 0x7f713586cd10>
+    <matplotlib.collections.LineCollection object at 0x7fb7648f2bd0>
 
 
 
@@ -213,10 +213,10 @@ Let's now intersect these line segments with the edges in the network.
  .. code-block:: none
 
 
-    array([[0.6       , 1.35      ],
-           [0.25      , 1.29166667],
-           [2.02173913, 2.89130435],
-           [1.875     , 2.5       ]])
+    array([[0.25      , 1.29166667],
+           [0.6       , 1.35      ],
+           [1.875     , 2.5       ],
+           [2.02173913, 2.89130435]])
 
 
 
@@ -253,14 +253,14 @@ Let's plot the results:
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f713560caa0>
+    <matplotlib.collections.PathCollection object at 0x7fb764597f80>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.188 seconds)
+   **Total running time of the script:** (0 minutes 0.200 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing_1d_network.py:

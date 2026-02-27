@@ -636,9 +636,9 @@ This once again returns three arrays of equal length:
 
 
     (array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 71,  23,  24,  25,  84,  86,  89,  87,  90,  55,  63,  64,  47,
-            60, 118, 116, 117,  54, 105,  41,  40, 106, 103,  98, 101,  88,
-           100,  16,  31,  92,  94,  96,  91,  14,  15,  65]))
+           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), array([ 54, 116, 117, 118,  47,  60,  64,  63,  55,  87,  90,  89,  84,
+            86,  25,  23,  24,  71,  65,  15,  14,  16,  96,  94,  91,  92,
+            31,  88, 101, 100,  98, 103, 105, 106,  40,  41]))
 
 
 
@@ -680,7 +680,7 @@ with the Euclidian norm (Pythagorean distance):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.639 seconds)
+   **Total running time of the script:** (0 minutes 0.654 seconds)
 
 
 .. _sphx_glr_download_examples_spatial_indexing_2d_grids.py:

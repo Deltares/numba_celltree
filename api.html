@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CellTree2d &#8212; Numba Celltree 0.4.1 documentation</title>
+    <title>CellTree2d &#8212; Numba Celltree 0.4.2 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=c87aa342"></script>
+    <script src="_static/documentation_options.js?v=ff822928"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
@@ -52,7 +52,7 @@
     <link rel="prev" title="Spatial indexing of 2D grids" href="examples/spatial_indexing_2d_grids.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1" />
+  <meta name="docsearch:version" content="0.4.2" />
   </head>
   
   
@@ -444,6 +444,7 @@ of intersection.</p>
 <dt class="sig sig-object py" id="numba_celltree.CellTree2d.intersect_edges">
 <span class="sig-name descname"><span class="pre">intersect_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/celltree.html#CellTree2d.intersect_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.CellTree2d.intersect_edges" title="Link to this definition">#</a></dt>
 <dd><p>Find the index of a face intersecting with an edge.</p>
+<p>Results for each edge are ordered by distance along the edge.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>edge_coords</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_edge,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>) – Every row containing <code class="docutils literal notranslate"><span class="pre">((x0,</span> <span class="pre">y0),</span> <span class="pre">(x1,</span> <span class="pre">y1))</span></code>.</p>
@@ -584,6 +585,7 @@ performance.</p></li>
 <dt class="sig sig-object py" id="numba_celltree.EdgeCellTree2d.intersect_edges">
 <span class="sig-name descname"><span class="pre">intersect_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/numba_celltree/edge_celltree.html#EdgeCellTree2d.intersect_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#numba_celltree.EdgeCellTree2d.intersect_edges" title="Link to this definition">#</a></dt>
 <dd><p>Find the index of an edge intersecting with an edge.</p>
+<p>Results for each edge are ordered by distance along the edge.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>edge_coords</strong> (ndarray of floats with shape <code class="docutils literal notranslate"><span class="pre">(n_edge,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>) – Every row containing <code class="docutils literal notranslate"><span class="pre">((x0,</span> <span class="pre">y0),</span> <span class="pre">(x1,</span> <span class="pre">y1))</span></code>.</p>
@@ -630,9 +632,20 @@ falling on any edge are marked with a value of <code class="docutils literal not
 <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
 <section id="id1">
-<h2>[0.4.1 2025-04-15]<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2>[0.4.2 2026-02-27]<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#numba_celltree.CellTree2d.intersect_edges" title="numba_celltree.CellTree2d.intersect_edges"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_edges()</span></code></a> and <cite>EdgeCellTree2d.intersect_edges</cite> will
+now return results for each edge are ordered by distance along the edge
+instead of in arbitrary order.</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.4.1 2025-04-15]<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="id3">
+<h3>Changed<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>If tolerances are not provided, they are now estimated by the package. This
 should be a good default for most cases, but can be overridden by providing a
@@ -641,8 +654,8 @@ custom value <a class="reference internal" href="#numba_celltree.CellTree2d.loca
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.4.0 2025-04-10]<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="id4">
+<h2>[0.4.0 2025-04-10]<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -653,8 +666,8 @@ custom value <a class="reference internal" href="#numba_celltree.CellTree2d.loca
 when working with datasets with large spatial coordinates.</p></li>
 </ul>
 </section>
-<section id="id3">
-<h3>Changed<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Edge case handling has been improved. Dynamic tolerances are now
 automatically estimated or can be optionally provided for queries to handle
@@ -668,18 +681,18 @@ negatives.</p></li>
 </ul>
 </section>
 </section>
-<section id="id4">
-<h2>[0.3.0 2025-03-25]<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
-<section id="id5">
-<h3>Added<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h2>[0.3.0 2025-03-25]<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>Added<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add <a class="reference internal" href="#numba_celltree.EdgeCellTree2d" title="numba_celltree.EdgeCellTree2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCellTree2d</span></code></a> class to support 2D queries on 1D networks and
 linear features.</p></li>
 </ul>
 </section>
 </section>
-<section id="id6">
-<h2>[0.2.2 2024-10-15]<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="id8">
+<h2>[0.2.2 2024-10-15]<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -691,8 +704,8 @@ vertex of the celltree. The logic has been updated and the while loop exits
 correctly now.</p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>Changed<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>Changed<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The parallellization strategy of <a class="reference internal" href="#numba_celltree.CellTree2d.locate_boxes" title="numba_celltree.CellTree2d.locate_boxes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_boxes()</span></code></a>,
 <a class="reference internal" href="#numba_celltree.CellTree2d.intersect_boxes" title="numba_celltree.CellTree2d.intersect_boxes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.intersect_boxes()</span></code></a>, <a class="reference internal" href="#numba_celltree.CellTree2d.locate_faces" title="numba_celltree.CellTree2d.locate_faces"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CellTree2d.locate_faces()</span></code></a>,
@@ -763,22 +776,26 @@ should result in a net ~30% performance gain in most cases.</p></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[0.4.1 2025-04-15]</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[0.4.2 2026-02-27]</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">[0.4.0 2025-04-10]</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">[0.4.1 2025-04-15]</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Changed</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">[0.3.0 2025-03-25]</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Added</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">[0.4.0 2025-04-10]</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Changed</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">[0.2.2 2024-10-15]</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">[0.3.0 2025-03-25]</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Added</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">[0.2.2 2024-10-15]</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Changed</a></li>
 </ul>
 </li>
 </ul>
