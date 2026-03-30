@@ -64,7 +64,7 @@ jobs:
       - name: Run Tests
         run: pixi run test
       - name: Publish Code Coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
       - name: Build Docs
         run: pixi run docs
       - name: Deploy to Github Pages
