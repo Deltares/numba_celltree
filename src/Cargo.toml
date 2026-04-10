@@ -1,0 +1,15 @@
+[package]
+name = "numba_celltree_rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "numba_celltree_rust"
+crate-type = ["cdylib"]
+
+[dependencies]
+numpy = "0.21"
+ndarray = { version = "0.15", features = ["rayon"] }
+pyo3 = { version = "0.21", features = ["extension-module"] }
+rayon = "1.9"
+tinyvec = { version = "1.6", features = ["alloc"] }

@@ -36,3 +36,5 @@ coverage.xml
 
 # Environments
 .pixi/
+
+src/target/

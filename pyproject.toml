@@ -80,6 +80,7 @@ sphinx = "*"
 sphinx-gallery = "*"
 twine = "*"
 pytest-cases = ">=3.8.6,<4"
+maturin = "*"
 
 [tool.pixi.tasks]
 pre-commit = "prek run --all-files"
