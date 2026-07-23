@@ -122,32 +122,41 @@ def sort_bbox_indices(
 ):
     current = node.ptr
     end = node.ptr + node.size
+    n = len(buckets)
 
-    b = buckets[0]
-    buckets[0] = Bucket(b.Max, b.Min, b.Rmin, b.Lmax, node.ptr, b.size)
-
-    i = 1
-    while current != end:
-        bucket = buckets[i - 1]
-        current = stable_partition(bb_indices, bb_coords, current, end, bucket, dim)
-        start = bucket.index
-
-        b = buckets[i - 1]
-        buckets[i - 1] = Bucket(b.Max, b.Min, b.Rmin, b.Lmax, b.index, current - start)
-
-        if i < len(buckets):
-            b = buckets[i]
-            buckets[i] = Bucket(
-                b.Max,
-                b.Min,
-                b.Rmin,
-                b.Lmax,
-                buckets[i - 1].index + buckets[i - 1].size,
-                b.size,
-            )
-
+    # Explicitly partition into the first n - 1 buckets.
+    for i in range(n - 1):
         start = current
-        i += 1
+        bucket = buckets[i]
+
+        current = stable_partition(
+            bb_indices,
+            bb_coords,
+            current,
+            end,
+            bucket,
+            dim,
+        )
+
+        buckets[i] = Bucket(
+            bucket.Max,
+            bucket.Min,
+            bucket.Rmin,
+            bucket.Lmax,
+            start,
+            current - start,
+        )
+
+    # Everything not matched earlier belongs to the final bucket.
+    bucket = buckets[n - 1]
+    buckets[n - 1] = Bucket(
+        bucket.Max,
+        bucket.Min,
+        bucket.Rmin,
+        bucket.Lmax,
+        current,
+        end - current,
+    )
 
 
 @nb.njit(inline="never", cache=True)
