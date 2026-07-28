@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 
 from numba_celltree import CellTree2d, demo
+from numba_celltree.creation import initialize
 
 
 @pytest.fixture
@@ -110,6 +111,37 @@ def test_init_larger_mesh(datadir):
     nodes = np.loadtxt(datadir / "xy.txt", dtype=float)
     faces = np.loadtxt(datadir / "triangles.txt", dtype=int)
     CellTree2d(nodes, faces, fill_value, n_buckets=2)
+
+
+def test_three_boxes_cover_final_bucket_endpoint():
+    x_min = np.float64(131_072.0)
+    x_max = np.float64(262_144.0)
+
+    boxes = np.array(
+        [
+            [x_min, np.nextafter(x_min, np.inf), 0.0, 1.0],
+            [196_000.0, 196_001.0, 0.0, 1.0],
+            [np.nextafter(x_max, -np.inf), x_max, 0.0, 1.0],
+        ],
+        dtype=np.float64,
+    )
+
+    special_midpoint = boxes[-1, 0] + 0.5 * (boxes[-1, 1] - boxes[-1, 0])
+    assert special_midpoint == x_max
+
+    elements = np.zeros((len(boxes), 3), dtype=np.int64)
+
+    _, permutation = initialize(
+        elements,
+        boxes,
+        n_buckets=4,
+        cells_per_leaf=2,
+    )
+
+    np.testing.assert_array_equal(
+        np.sort(permutation),
+        np.arange(len(boxes), dtype=permutation.dtype),
+    )
 
 
 def test_lists():
