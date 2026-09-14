@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/theme-deltares.css?v=6c159e45" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ff822928"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -420,7 +420,7 @@
 <div class="viewcode-block" id="CellTree2d">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CellTree2d</span><span class="p">(</span><span class="n">CellTree2dBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Construct a cell tree from 2D vertices and a faces indexing array.</span>
 
 <span class="sd">    Parameters</span>
@@ -432,7 +432,7 @@
 <span class="sd">        face has less corner nodes than ``n_max_vert``, its last indices should</span>
 <span class="sd">        be equal to ``fill_value``.</span>
 <span class="sd">    n_buckets: int, optional, default: 4</span>
-<span class="sd">        The number of &quot;buckets&quot; used in tree construction. Must be higher</span>
+<span class="sd">        The number of "buckets" used in tree construction. Must be higher</span>
 <span class="sd">        or equal to 2. Values over 8 provide diminishing returns.</span>
 <span class="sd">    cells_per_leaf: int, optional, default: 2</span>
 <span class="sd">        The number of cells in the leaf nodes of the cell tree. Can be set</span>
@@ -441,7 +441,7 @@
 <span class="sd">        performance.</span>
 <span class="sd">    fill_value: int, optional, default: -1</span>
 <span class="sd">        Fill value marking empty nodes in ``faces``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -452,9 +452,9 @@
         <span class="n">cells_per_leaf</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">n_buckets</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_buckets must be &gt;= 2&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n_buckets must be &gt;= 2"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cells_per_leaf</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cells_per_leaf must be &gt;= 1&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"cells_per_leaf must be &gt;= 1"</span><span class="p">)</span>
 
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">faces</span> <span class="o">=</span> <span class="n">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
@@ -486,7 +486,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">locate_points</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntArray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Find the index of a face that contains a point.</span>
 
 <span class="sd">        Points that are very close near an edge of a face will also be</span>
@@ -508,7 +508,7 @@
 <span class="sd">        tree_face_indices: ndarray of integers with shape ``(n_point,)``</span>
 <span class="sd">            For every point, the index of the face it falls in. Points not</span>
 <span class="sd">            falling in any faces are marked with a value of ``-1``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">tolerance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">tolerance</span> <span class="o">=</span> <span class="n">default_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bb_distances</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">cast_vertices</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -518,7 +518,7 @@
 <div class="viewcode-block" id="CellTree2d.locate_boxes">
 <a class="viewcode-back" href="../../api.html#numba_celltree.CellTree2d.locate_boxes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">locate_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Find the index of a face intersecting with a bounding box.</span>
 
 <span class="sd">        Parameters</span>
@@ -532,7 +532,7 @@
 <span class="sd">            Indices of the bounding box.</span>
 <span class="sd">        tree_face_indices: ndarray of integers with shape ``(n_found,)``</span>
 <span class="sd">            Indices of the face.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">cast_bboxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">)</span>
         <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">locate_boxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">)</span></div>
@@ -543,7 +543,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">intersect_boxes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">bbox_coords</span><span class="p">:</span> <span class="n">FloatArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Find the index of a box intersecting with a face, and the area</span>
 <span class="sd">        of intersection.</span>
 
@@ -560,7 +560,7 @@
 <span class="sd">            Indices of the tree faces.</span>
 <span class="sd">        area: ndarray of floats with shape ``(n_found,)``</span>
 <span class="sd">            Area of intersection between the two intersecting faces.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">cast_bboxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">)</span>
         <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">locate_boxes</span><span class="p">(</span><span class="n">bbox_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltree_data</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">)</span>
@@ -582,7 +582,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">locate_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Find the index of a face intersecting with another face.</span>
 
 <span class="sd">        Only sharing an edge also counts as an intersection, due to the use of</span>
@@ -604,7 +604,7 @@
 <span class="sd">            Indices of the faces.</span>
 <span class="sd">        tree_face_indices: ndarray of integers with shape ``(n_found,)``</span>
 <span class="sd">            Indices of the tree faces.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">counter_clockwise</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
         <span class="n">bbox_coords</span> <span class="o">=</span> <span class="n">build_face_bboxes</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
         <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
@@ -627,7 +627,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">intersect_faces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span> <span class="n">faces</span><span class="p">:</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Find the index of a face intersecting with another face, and the area</span>
 <span class="sd">        of intersection.</span>
 
@@ -650,7 +650,7 @@
 <span class="sd">            Indices of the tree faces.</span>
 <span class="sd">        area: ndarray of floats with shape ``(n_found,)``</span>
 <span class="sd">            Area of intersection between the two intersecting faces.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">cast_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
         <span class="n">faces</span> <span class="o">=</span> <span class="n">cast_faces</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate_faces</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
@@ -674,7 +674,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">edge_coords</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Find the index of a face intersecting with an edge.</span>
 
 <span class="sd">        Results for each edge are ordered by distance along the edge.</span>
@@ -695,7 +695,7 @@
 <span class="sd">            ``((x0, y0), (x1, y1))``.</span>
 <span class="sd">            The length of each intersected edge can be computed with:</span>
 <span class="sd">            ``np.linalg.norm(intersections[:, 1] - intersections[:, 0], axis=1)``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">edge_coords</span> <span class="o">=</span> <span class="n">cast_edges</span><span class="p">(</span><span class="n">edge_coords</span><span class="p">)</span>
         <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">get_num_threads</span><span class="p">()</span>
         <span class="n">edge_indices</span><span class="p">,</span> <span class="n">tree_face_indices</span><span class="p">,</span> <span class="n">xy</span> <span class="o">=</span> <span class="n">locate_edge_faces</span><span class="p">(</span>
@@ -713,7 +713,7 @@
         <span class="n">points</span><span class="p">:</span> <span class="n">FloatArray</span><span class="p">,</span>
         <span class="n">tolerance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IntArray</span><span class="p">,</span> <span class="n">FloatArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Compute barycentric weights for points located inside of the grid.</span>
 
 <span class="sd">        Parameters</span>
@@ -736,7 +736,7 @@
 <span class="sd">            For every point, the barycentric weights of the vertices of the</span>
 <span class="sd">            face in which the point is located. For points not falling in any</span>
 <span class="sd">            faces, the weight of all vertices is 0.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">tolerance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">tolerance</span> <span class="o">=</span> <span class="n">default_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bb_distances</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">face_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
@@ -785,8 +785,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -820,7 +820,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>
