@@ -72,7 +72,7 @@ numpy = "*"
 pip = "*"
 prek = "*"
 pydata-sphinx-theme = "*"
-pytest = "*"
+pytest = "<9.1" # Pin pytest until pytest-cases is fixed: https://github.com/smarie/python-pytest-cases/issues/385
 pytest-cov = "*"
 python = ">=3.10"
 ruff = "*"
